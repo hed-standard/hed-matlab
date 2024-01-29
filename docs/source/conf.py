@@ -37,6 +37,7 @@ currentdir = os.path.abspath(os.path.dirname(__file__))
 # ones.
 extensions = [
     "myst_parser",
+    "sphinxcontrib.matlab",
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.autosectionlabel",
