@@ -6,7 +6,7 @@ HED API reference
 .. autosummary::
    :toctree: _autosummary
    :recursive:
-
-    hedmat
+   
+   hedmat
 
 
