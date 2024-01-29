@@ -1,4 +1,4 @@
-function errors = testEventServices(host)
+function errors = demoEventServices(host)
 
 %% Shows how to call hed-services to process a BIDS events file.
 % 
@@ -17,7 +17,7 @@ function errors = testEventServices(host)
 
 %% Get the options and data
 [servicesUrl, options] = getHostOptions(host);
-data = getTestData();
+data = getDemoData();
 errors = {};
 
 %% Example 1: Validate valid events file using HED version.

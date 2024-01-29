@@ -16,10 +16,10 @@ function filteredList = filterFiles(fileList, namePrefix, ...
     lowerExtensions = cellfun(@lower, extensions, 'UniformOutput', false);
     filters = true(length(fileList), 1);
     for k = 1:length(fileList)
-        [~, basename, ext] = fileparts(fileList{k});
-        if ~endsWith(basename, nameSuffix) || ...
-           ~startsWith(basename, namePrefix) || ...
-           ~ismember(lower(ext), lowerExtensions)
+        [~, base, ext] = fileparts(fileList{k});
+        if ~endsWith(base, nameSuffix) || ~startsWith(base, namePrefix) 
+            filters(k) = false;
+        elseif ~isempty(lowerExtensions) && ~ismember(lower(ext), lowerExtensions)
             filters(k) = false;
         end
     end

@@ -1,5 +1,5 @@
-function data = getTestData()
-%% Return the test data in a struct for running the services.
+function data = getDemoData()
+%% Return the demo data in a struct for running the services.
 
     %% Read the JSON sidecar into a string for all examples
     data = struct('descPrefix', '', 'eventsText', '', ...
@@ -9,11 +9,11 @@ function data = getTestData()
     myPath = mfilename("fullpath");  
     [curDir, ~, ~] = fileparts(myPath);
     dataPath = fullfile(curDir, filesep, '..', ...
-                        filesep, '..', filesep, 'data', filesep)
+                        filesep, '..', filesep, 'data', filesep);
 
     demoPath = fullfile(dataPath, 'eeg_ds003645s_hed_demo', filesep);
     eventsFile = ['sub-002' filesep 'ses-1' filesep 'eeg' filesep ...
-                  'sub-002_ses-1_task-FacePerception_run-1_events.tsv']
+                  'sub-002_ses-1_task-FacePerception_run-1_events.tsv'];
     % libraryPath = '../../../datasets/eeg_ds003645s_hed_library/';
     % data.jsonLibrary = fileread(...
     %     [libraryPath 'task-FacePerception_events.json']);

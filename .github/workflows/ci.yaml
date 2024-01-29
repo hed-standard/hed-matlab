@@ -1,0 +1,30 @@
+name: MATLAB CI
+
+on:
+  push:
+    branches: ["*"]
+  pull_request:
+    branches: ["*"]
+
+env:
+  BRANCH_NAME: ${{ github.event.pull_request.base.ref || github.ref_name }}
+
+jobs:
+  matlab-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      # Set up MATLAB. By default, the latest release of MATLAB is used.
+      - name: Set up MATLAB
+        uses: matlab-actions/setup-matlab@v1
+
+      # Run all MATLAB tests in the file runAllTests.m
+      - name: Run MATLAB tests
+        uses: matlab-actions/run-tests@v1
+        with:
+          test-file: runAllTests.m
+
+      # Add additional steps as required for your workflow.
+      # For example, publishing test results or additional MATLAB commands.

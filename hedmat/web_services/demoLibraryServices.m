@@ -1,4 +1,4 @@
-function errors = testLibraryServices(host)
+function errors = demoLibraryServices(host)
 
 %% Shows how to call hed-services using libraries.
 % 
@@ -8,7 +8,7 @@ function errors = testLibraryServices(host)
 
 %% Get the options and data
 [servicesUrl, options] = getHostOptions(host);
-data = getTestData();
+data = getDemoData();
 errors = {};
 
 %% Example 1: Validate valid events file using HED versions no library tags.

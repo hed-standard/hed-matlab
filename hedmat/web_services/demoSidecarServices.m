@@ -1,4 +1,4 @@
-function errors = testSidecarServices(host)
+function errors = demoSidecarServices(host)
 %% Shows how to call hed-services to process a BIDS JSON sidecar.
 % 
 %  Example 1: Validate valid JSON sidecar using a HED version.
@@ -15,7 +15,7 @@ function errors = testSidecarServices(host)
 
 %% Get the options and data
 [servicesUrl, options] = getHostOptions(host);
-data = getTestData();
+data = getDemoData();
 errors = {};
 
 %% Example 1: Validate valid JSON sidecar using a HED version.

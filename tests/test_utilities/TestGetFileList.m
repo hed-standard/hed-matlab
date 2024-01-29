@@ -28,6 +28,7 @@ classdef TestGetFileList < matlab.unittest.TestCase
                     fclose(fopen(fullfile(subDirPath, files{j}), 'w'));
                 end
             end
+            mkdir(fullfile(testCase.TestRootPath, 'subDir1', 'subDir3'));
         end
     end
 
@@ -40,36 +41,86 @@ classdef TestGetFileList < matlab.unittest.TestCase
 
     methods (Test)
 
-        function testBasicFunctionality(testCase)
+        function testNoRestrictions(testCase)
+            % Pass through all of the files
             namePrefix = '';
             nameSuffix = '';
             extensions = {};
             excludeDirs = {};
             selectedFiles = getFileList(testCase.TestRootPath, ...
                       namePrefix, nameSuffix, extensions, excludeDirs);
-            disp(length(selectedFiles))
-            Test basic file finding functionality
-    
-        end
-   
-        % function testCheckDirExclusions(testCase)
-        %     %
-        %     nextDir 
-
-        function testNoMatchingFiles(testCase)
-            % Test when no files should match
+            testCase.verifyEqual(length(selectedFiles), 12);
         end
 
-        function testExcludeDirectories(testCase)
-            % Test excluding certain directories
+        function testNameRestrictions(testCase)
+            % Pass through all of the files
+            namePrefix = 'file';
+            nameSuffix = '';
+            extensions = {};
+            excludeDirs = {};
+            selectedFiles = getFileList(testCase.TestRootPath, ...
+                namePrefix, nameSuffix, extensions, excludeDirs);
+            testCase.verifyEqual(length(selectedFiles), 3);
+            nameSuffix = 'file2';
+            selectedFiles = getFileList(testCase.TestRootPath, ...
+                namePrefix, nameSuffix, extensions, excludeDirs);
+            testCase.verifyEqual(length(selectedFiles), 0);
+            namePrefix = 'da';
+            nameSuffix = 'ta';
+            selectedFiles = getFileList(testCase.TestRootPath, ...
+                namePrefix, nameSuffix, extensions, excludeDirs);
+            testCase.verifyEqual(length(selectedFiles), 3);
         end
+
+        function testExtRestrictions(testCase)
+            % Pass through all of the files
+            namePrefix = '';
+            nameSuffix = '';
+            extensions = {'.m'};
+            excludeDirs = {};
+            selectedFiles = getFileList(testCase.TestRootPath, ...
+                namePrefix, nameSuffix, extensions, excludeDirs);
+            testCase.verifyEqual(length(selectedFiles), 6);
+            extensions = {'.m', '.mat', '.txt'};
+            selectedFiles = getFileList(testCase.TestRootPath, ...
+                namePrefix, nameSuffix, extensions, excludeDirs);
+            testCase.verifyEqual(length(selectedFiles), 12);
+            extensions = {'.pdf'};
+            selectedFiles = getFileList(testCase.TestRootPath, ...
+                namePrefix, nameSuffix, extensions, excludeDirs);
+            testCase.verifyEqual(length(selectedFiles), 0);
+        end
+
+       function testDirRestrictions(testCase)
+            % Pass through all of the files
+            namePrefix = '';
+            nameSuffix = '';
+            extensions = {};
+            excludeDirs = {'subDir1'; 'subDir2'};
+            selectedFiles = getFileList(testCase.TestRootPath, ...
+                namePrefix, nameSuffix, extensions, excludeDirs);
+            testCase.verifyEqual(length(selectedFiles), 4);
+            excludeDirs = {'subDir1/subDir3'; 'subDir2'};
+            selectedFiles = getFileList(testCase.TestRootPath, ...
+                namePrefix, nameSuffix, extensions, excludeDirs);
+            testCase.verifyEqual(length(selectedFiles), 8);
+       end
 
         function testInvalidInputHandling(testCase)
             % Test the function's response to invalid inputs
+           f = @() getFileList();
+           testCase.verifyError(f, 'MATLAB:minrhs')
+
+           f = @() getFileList('', 1, 2, 3, 4);
+           testCase.verifyError(f, 'getFileList:RootDirIsEmpty')
+
+           f = @() getFileList(testCase.TestRootPath, 1, 2, 3, 4);
+           testCase.verifyError(f, 'MATLAB:cellfun:NotACell')
+
+           f = @() filterFiles(1, 2, 3, 4, 5, 6);
+           testCase.verifyError(f, 'MATLAB:TooManyInputs')
+
         end
 
-        function testEmptyArguments(testCase)
-            % Test function behavior with empty arguments
-        end
     end
 end

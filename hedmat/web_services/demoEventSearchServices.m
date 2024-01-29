@@ -1,4 +1,4 @@
-function errors = testEventSearchServices(host)
+function errors = demoEventSearchServices(host)
 %% Shows how to call hed-services to search a BIDS events file.
 %
 %  Example 1: Search an events file for HED using a valid query.
@@ -7,7 +7,7 @@ function errors = testEventSearchServices(host)
 
 %% Get the options and data
 [servicesUrl, options] = getHostOptions(host);
-data = getTestData();
+data = getDemoData();
 errors = {};
 
 %% Example 1: Search an events file for HED

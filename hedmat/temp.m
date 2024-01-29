@@ -7,7 +7,7 @@ rootPath = 'G:/HEDMatlab/hed-matlab/data/eeg_ds003645s_hed_demo';
 % [x1, y1] = separateFiles(rootPath)
 
 try
-    filterFiles(1, 2, 3, 4, 5);
+    filterDirectories('')
 catch ME
     disp(ME)
 end

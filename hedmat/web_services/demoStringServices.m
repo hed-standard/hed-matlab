@@ -1,4 +1,4 @@
-function errors = testStringServices(host)
+function errors = demoStringServices(host)
 %% Shows how to call hed-services to process a list of hedstrings.
 % 
 %  Example 1: Validate valid list of strings using HED version.
@@ -12,7 +12,7 @@ function errors = testStringServices(host)
 
 %% Get the options and data
 [servicesUrl, options] = getHostOptions(host);
-data = getTestData();
+data = getDemoData();
 errors = {};
 
 

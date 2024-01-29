@@ -29,7 +29,7 @@ function selectedFiles = getFileList(rootPath, namePrefix, nameSuffix, ...
     nextDir = rootPath;
     while ~isempty(nextDir)
         [sep_files, sep_dirs] = separateFiles(nextDir);
-        filteredDirs = filterDirectories(nextDir, sep_dirs, excludePaths);
+        filteredDirs = filterDirectories(sep_dirs, excludePaths);
         filteredFiles = filterFiles(sep_files, namePrefix, ...
             nameSuffix, extensions);
         if ~isempty(filteredFiles)

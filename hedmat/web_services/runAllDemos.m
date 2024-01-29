@@ -4,14 +4,14 @@ host = 'http://127.0.0.1:5000';
 
 
 errorMap = containers.Map('KeyType', 'char', 'ValueType', 'any');
-errorMap('testGetServices') = testGetServices(host);
-errorMap('testEventServices') = testEventServices(host);
-errorMap('testEventSearchServices') = testEventSearchServices(host);
-errorMap('testEventRemodelingServices') = testEventRemodelingServices(host);
-errorMap('testSidecarServices') = testSidecarServices(host);
-errorMap('testSpreadsheetServices') = testSpreadsheetServices(host);
-errorMap('testStringServices') = testStringServices(host);
-%errorMap('testLibraryServices') = testLibraryServices(host);
+errorMap('demoGetServices') = demoGetServices(host);
+errorMap('demoEventServices') = demoEventServices(host);
+errorMap('demolEventSearchServices') = demoEventSearchServices(host);
+errorMap('demoEventRemodelingServices') = demoEventRemodelingServices(host);
+errorMap('demoSidecarServices') = demoSidecarServices(host);
+errorMap('demoSpreadsheetServices') = demoSpreadsheetServices(host);
+errorMap('demoStringServices') = demoStringServices(host);
+%errorMap('demoLibraryServices') = demoLibraryServices(host);
 
 %% Output the errors
 fprintf('\n\nOverall error report:\n');

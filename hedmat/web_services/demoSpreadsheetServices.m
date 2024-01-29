@@ -1,4 +1,4 @@
-function errors = testSpreadsheetServices(host)
+function errors = demoSpreadsheetServices(host)
 %% Shows how to call hed-services to process a spreadsheet of event tags.
 % 
 %  Example 1: Validate valid spreadsheet file using schema version.
@@ -11,7 +11,7 @@ function errors = testSpreadsheetServices(host)
 %
 %% Get the options and data
 [servicesUrl, options] = getHostOptions(host);
-data = getTestData();
+data = getDemoData();
 errors = {};
 
 %% Example 1: Validate valid spreadsheet file using schema version.

@@ -6,7 +6,7 @@ host = 'http://127.0.0.1:5000/';
 dataPath = 'D:/test1/';
 jsonText = fileread([dataPath 'events.json']);
 eventsText =  fileread([dataPath 'events.tsv']);
-data = getTestData();
+data = getDemoData();
 errors = {};
 %%  Example 4: Assemble valid event HED strings(expand defs on).
 request4 = struct('service', 'events_assemble', ...

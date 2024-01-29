@@ -1,4 +1,4 @@
-function errors = testEventRemodelingServices(host)
+function errors = demoEventRemodelingServices(host)
 %% Shows how to call hed-services to remodel an events file.
 %
 %  Example 1: Remodeling an events file with no summary or HED
@@ -7,7 +7,7 @@ function errors = testEventRemodelingServices(host)
 
 %% Get the options and data
 [servicesUrl, options] = getHostOptions(host);
-data = getTestData();
+data = getDemoData();
 errors = {};
 
 % %% Example 1: Remodel an events file with no summary or HED.
