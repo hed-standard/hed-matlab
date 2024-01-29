@@ -25,6 +25,7 @@ jobs:
         uses: matlab-actions/run-tests@v1
         with:
           test-file: runAllTests.m
+          matlab-command(addpath(genpath('hedmat'))
 
       # Add additional steps as required for your workflow.
       # For example, publishing test results or additional MATLAB commands.
