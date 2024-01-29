@@ -12,20 +12,13 @@ env:
 jobs:
   matlab-test:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
-
-      # Set up MATLAB. By default, the latest release of MATLAB is used.
+      - name: Check out repository
+      - uses: actions/checkout@v4
       - name: Set up MATLAB
         uses: matlab-actions/setup-matlab@v1
-
-      # Run all MATLAB tests in the file runAllTests.m
-      - name: Run MATLAB tests
+      - name: Run tests
         uses: matlab-actions/run-tests@v1
         with:
-          test-file: runAllTests.m
-          matlab-command: addpath(genpath('hedmat')); runAllTests
-
-      # Add additional steps as required for your workflow.
-      # For example, publishing test results or additional MATLAB commands.
+          source-folder: 'hedcode'
+          select-by-folder: 'test'
