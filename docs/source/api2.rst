@@ -1,12 +1,16 @@
 HED API reference
 =================
 
-.. currentmodule:: hed
+.. currentmodule:: hedmat
 
 .. autosummary::
    :toctree: _autosummary
+   :template: custom-module-template.rst
    :recursive:
    
-   hedmat
+   data_cleaning
+   hedtools_wrappers
+   utilities
+   web_services
 
 

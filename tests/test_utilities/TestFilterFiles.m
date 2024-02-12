@@ -40,7 +40,7 @@ classdef TestFilterFiles < matlab.unittest.TestCase
         end
 
         function testInvalidInputHandling(testCase)
-            % Test the function's response to invalid inputs
+            % Test the functions response to invalid inputs
            f = @() filterFiles();
            testCase.verifyError(f, 'MATLAB:minrhs')
 

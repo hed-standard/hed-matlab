@@ -11,12 +11,13 @@ data = getDemoData();
 errors = {};
 
 %% Example 1: Search an events file for HED
-request1 = struct('service', 'events_search', ...
-                  'schema_version', '8.2.0', ...
-                  'sidecar_string', data.jsonText, ...
-                  'events_string', data.eventsText, ...
-                  'query', '{Intended-effect, Cue}');
-
+request1 = getRequestTemplate();
+request1.service = 'events_search';
+request1.schema_version = '8.2.0';
+request1.events_string = data.eventsText;
+request1.sidecar_string = data.jsonText;
+request1.queries = {'Intended-effect, Cue'};
+request1.expand_defs = true;
 response1 = webwrite(servicesUrl, request1, options);
 response1 = jsondecode(response1);
 outputReport(response1, 'Example 1 Querying an events file');
@@ -26,13 +27,20 @@ if ~isempty(response1.error_type) || ...
 end
 
 %% Example 2: Search an events file for HED
+request2 = getRequestTemplate();
+request2.service = 'events_search';
+request2.schema_version = '8.2.0';
+request2.events_string = data.eventsText;
+request1.sidecar_string = data.jsonText;
+request1.queries = {'Intended-effect, Cue', 'Sensory-event'};
+request1.expand_defs = true;
 request2 = struct('service', 'events_search', ...
                   'schema_version', '8.2.0', ...
                   'sidecar_string', data.jsonText, ...
                   'events_string', data.eventsText, ...
-                  'columns_included', '', ...
-                  'query', '{Intended-effect, Cue}');
-request2.columns_included = {'onset'};
+                  'expand_defs', true, ...
+                  'queries', '');
+request2.queries = {'Intended-effect, Cue', 'Sensory-event'};
 response2 = webwrite(servicesUrl, request2, options);
 response2 = jsondecode(response2);
 outputReport(response2, 'Example 2 Querying an events file with extra columns');

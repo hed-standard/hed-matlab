@@ -31,7 +31,7 @@ release = '0.0.1'
 
 currentdir = os.path.abspath(os.path.dirname(__file__))
 # -- General configuration ---------------------------------------------------
-
+matlab_src_dir = os.path.abspath(os.path.join(currentdir, '../../hedmat'))
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
@@ -49,6 +49,8 @@ extensions = [
     "sphinx.ext.napoleon"
 ]
 
+
+primary_domain = "mat"
 autosummary_generate = True
 autodoc_default_flags = ['members', 'inherited-members']
 add_module_names = False
