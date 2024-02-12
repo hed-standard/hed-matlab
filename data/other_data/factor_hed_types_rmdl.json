@@ -1,0 +1,7 @@
+[{ 
+    "operation": "factor_hed_type",
+    "description": "Factor-variables based on condition.",
+    "parameters": {
+        "type_tag": "Condition-variable"
+    }
+}]

@@ -5,7 +5,10 @@ function eventTable = getEventTable(eventsFile, typeMap, renameMap)
 %     eventsFile - the path of a BIDS tabular events file.
 %     typeMap - map of non-string column types: (column-name, column-type)
 %     renameMap - map of columns to be renamed: (old-name, new-name)
-%                      
+% 
+% Returns:
+%     table with the events as read from a BIDS tabular file.
+
   
    optsDect = detectImportOptions(eventsFile, 'FileType', 'delimitedtext');
   
