@@ -1,13 +1,14 @@
-function eventTable = getEventTable(eventsFile, nonCharColumns, sampleRate)
+function eventTable = getEventTable(eventsFile, typeMap, renameMap)
 % Read the table of events from the events file
 %
 % Parameters:
 %     eventsFile - the path of a BIDS tabular events file.
-%     nonCharColumns - list of non char columns.
+%     typeMap - map of non-string column types: (column-name, column-type)
+%     renameMap - map of columns to be renamed: (old-name, new-name)
 % 
 % Returns:
 %     table with the events as read from a BIDS tabular file.
-% 
+
   
    optsDect = detectImportOptions(eventsFile, 'FileType', 'delimitedtext');
   

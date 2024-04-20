@@ -9,5 +9,9 @@ function hedSchema = getHedSchema(hedVersion)
 %     hedSchema - A hedSchema object
 %
     py.importlib.import_module('hed');
-    
+
+   if ~py.isinstance(hedSchema, hedModule.HedSchema) && ...
+       ~py.isinstance(hedSchema, hedModule.HedSchemaGroup)
+        hedSchema = getHedSchema(hedSchema);
+    end
     hedSchema = py.hed.schema.load_schema_version(hedVersion);

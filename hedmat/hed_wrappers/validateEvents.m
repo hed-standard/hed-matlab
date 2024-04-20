@@ -1,9 +1,10 @@
-function issueString = validateSidecar(sidecar, hedSchema, checkForWarnings)
+function issueString = validateEvents(events, hedSchema, sidecar, checkForWarnings)
 % Validate a sidecar containing HED tags.
 % 
 % Parameters:
-%    sidecar - JSON file, struct, or a Sidecar object
+%    events - string path to events file or events struct or events table
 %    hedSchema - A HED schema object or HedVersion
+%    sidecar - JSON file, struct, or a Sidecar object
 %    checkForWarnings - Boolean indicating checking for warnings
 %
 % Returns:
