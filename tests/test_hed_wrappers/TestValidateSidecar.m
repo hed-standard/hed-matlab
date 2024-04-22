@@ -31,22 +31,36 @@ classdef TestValidateSidecar < matlab.unittest.TestCase
     methods (Test)
 
         function testValidSidecar(testCase)
-            % Test with schema object passed
+            % Test on Sidecar obj with schema object passed
             issues = validateSidecar(testCase.goodSidecar, ...
                 testCase.hedSchema, true);
             testCase.verifyEqual(strlength(issues), 0, ...
                 'Valid sidecar should not have issues.');
             
-            % Test with schema version passed
+            % Test on Sidecar obj with schema version passed
             issues = validateSidecar(testCase.goodSidecar, '8.2.0', true);
             testCase.verifyEqual(strlength(issues), 0, ...
                 'Valid sidecar should not have issues.');
         end
 
         function testValidFromPath(testCase)
-            % Test with schema object passed
+            % Test Json path with schema object passed
             issues = validateSidecar(testCase.goodPath, ...
                 testCase.hedSchema, true);
+            testCase.verifyEqual(strlength(issues), 0, ...
+                'Valid sidecar should not have issues.');
+            
+            % Test with schema version passed
+            issues = validateSidecar(testCase.goodPath, '8.2.0', true);
+            testCase.verifyEqual(strlength(issues), 0, ...
+                'Valid sidecar should not have issues.');
+        end
+
+        function testValidFromString(testCase)
+            % Test Json path with schema object passed
+            json_str = fileread(testCase.goodPath);
+            sidecar = testCase.hedModule.tools.analysis.annotation.util.strs_to_sidecar(json_str);
+            issues = validateSidecar(sidecar, testCase.hedSchema, true);
             testCase.verifyEqual(strlength(issues), 0, ...
                 'Valid sidecar should not have issues.');
             

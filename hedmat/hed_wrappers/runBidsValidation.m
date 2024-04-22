@@ -1,6 +1,6 @@
 %% A test script for a wrapper function to validate HED in a BIDS dataset.
 
-dataPath = 'G:\eeg_ds003645s_hed\';
+dataPath = 'G:\eeg_ds003645s_hed_test\';
 issueString = validateHedInBids(dataPath);
 if isempty(issueString)
     fprintf('Dataset %s has no HED validation errors\n', dataPath);

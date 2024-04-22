@@ -12,15 +12,8 @@ function issueString = validateEvents(events, hedSchema, sidecar, checkForWarnin
 %                   printing (has newlines).
 %
     hedModule = py.importlib.import_module('hed');
-    if ~py.isinstance(hedSchema, hedModule.HedSchema) && ...
-       ~py.isinstance(hedSchema, hedModule.HedSchemaGroup)
-        hedSchema = getHedSchema(hedSchema);
-    end
-    if py.isinstance(sidecar, hedModule.Sidecar)
-        sidecarObj = sidecar;
-    elseif ischar(sidecar)
-        sidecarObj = hedModule.Sidecar(sidecar);
-    end
+    hedSchema = getHedSchema(hedSchema);
+    sidecar = getSidecar(sidecar);
     errorHandler = py.hed.errors.error_reporter.ErrorHandler(...
                     check_for_warnings=checkForWarnings);
     issues = sidecarObj.validate(hedSchema, error_handler=errorHandler);
@@ -29,3 +22,21 @@ function issueString = validateEvents(events, hedSchema, sidecar, checkForWarnin
     else
         issueString = string(py.hed.get_printable_issue_string(issues));
     end
+   % eventTable = struct2table(events);
+   % columnNames = eventTable.Properties.VariableNames;
+   % if ~ismember('onset', columnNames)
+   %     eventTable.onset = (eventTable.latency - 1)./srate;
+   % end
+   % for k=1:length(columnNames)
+   %     thisColumn = columnNames{k};
+   %     if ismember(thisColumn, {'onset', 'duration', 'sample', 'latency'})
+   %         continue;
+   %     end
+   %     % Convert other columns to string and replace missing with `n/a`.
+   %     eventTable.(thisColumn) = string(eventTable.(thisColumn));
+   %     eventTable.(thisColumn)(eventTable.(thisColumn) == "" | ...
+   %         ismissing(eventTable.(thisColumn))) = "n/a";
+   % end
+   
+
+   

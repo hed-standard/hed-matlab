@@ -1,4 +1,4 @@
-function issueString = validateString(hedtags, hedSchema, ...
+function issueString = validateOldString(hedtags, hedSchema, ...
                                       checkForWarnings, hedDefinitions)
 % Validate a string containing HED tags.
 % 
@@ -14,13 +14,13 @@ function issueString = validateString(hedtags, hedSchema, ...
 % ToDo:  Make hedDefinitions optional.
 %
     hedModule = py.importlib.import_module('hed');
-    if ~py.isinstance(hedSchema, hedModule.HedSchema)
-        hedSchema = getHedSchema(hedSchema);
+    valModule = py.importlib.import_module('hed.validator');
+    schema = getHedSchema(hedSchema);
     end
-    hedString = hedModule.HedString(hedtags, hedSchema);
+    hedString = hedModule.HedString(hedtags, schema);
     errorHandler = py.hed.errors.error_reporter.ErrorHandler(...
                     check_for_warnings=checkForWarnings);
-    validator = hedModule.validator.hed_validator.HedValidator(hedSchema, hedDefinitions);
+    validator = valModule.HedValidator(schema);
     issues = validator.validate(hedString, false, error_handler=errorHandler);
     if isempty(issues)
         issueString = '';
