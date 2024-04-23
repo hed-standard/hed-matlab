@@ -10,7 +10,7 @@ function issueString = validateSidecar(sidecar, hedSchema, checkForWarnings)
 %     issueString - A string with the validation issues suitable for
 %                   printing (has newlines).
 %
-    hedModule = py.importlib.import_module('hed');
+    % hedModule = py.importlib.import_module('hed');
     hedSchema = getHedSchema(hedSchema);
     sidecarObj = getSidecar(sidecar);
     errorHandler = py.hed.errors.error_reporter.ErrorHandler(...

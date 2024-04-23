@@ -43,42 +43,29 @@ classdef TestValidateSidecar < matlab.unittest.TestCase
                 'Valid sidecar should not have issues.');
         end
 
-        function testValidFromPath(testCase)
-            % Test Json path with schema object passed
-            issues = validateSidecar(testCase.goodPath, ...
-                testCase.hedSchema, true);
-            testCase.verifyEqual(strlength(issues), 0, ...
-                'Valid sidecar should not have issues.');
-            
-            % Test with schema version passed
-            issues = validateSidecar(testCase.goodPath, '8.2.0', true);
-            testCase.verifyEqual(strlength(issues), 0, ...
-                'Valid sidecar should not have issues.');
-        end
-
         function testValidFromString(testCase)
             % Test Json path with schema object passed
             json_str = fileread(testCase.goodPath);
-            sidecar = testCase.hedModule.tools.analysis.annotation.util.strs_to_sidecar(json_str);
+            sidecar = testCase.hedModule.tools.analysis.annotation_util.strs_to_sidecar(json_str);
             issues = validateSidecar(sidecar, testCase.hedSchema, true);
             testCase.verifyEqual(strlength(issues), 0, ...
                 'Valid sidecar should not have issues.');
             
             % Test with schema version passed
-            issues = validateSidecar(testCase.goodPath, '8.2.0', true);
+            issues = validateSidecar(json_str, '8.2.0', true);
             testCase.verifyEqual(strlength(issues), 0, ...
                 'Valid sidecar should not have issues.');
         end
 
         function testInvalidSidecar(testCase)
             % Test with schema object passed
-            issues = validateSidecar(testCase.badPath, ...
+            issues = validateSidecar(testCase.badSidecar, ...
                 testCase.hedSchema, true);
             testCase.verifyGreaterThan(strlength(issues), 0, ...
                 'Invalid sidecar should have issues.');
             
             % Test with schema version passed
-            issues = validateSidecar(testCase.badPath, '8.2.0', true);
+            issues = validateSidecar(testCase.badSidecar, '8.2.0', true);
             testCase.verifyGreaterThan(strlength(issues), 0, ...
                 'Invalid sidecar should have issues.');
         end

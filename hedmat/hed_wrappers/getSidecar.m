@@ -18,4 +18,9 @@ function sidecarObj = getSidecar(sidecar)
         sidecarObj = sidecar;
     elseif ischar(sidecar)
         sidecarObj = utilModule.strs_to_sidecar(sidecar);
+    elseif isstruct(sidecar)
+        sidecar1 = jsonencode(sidecar);
+        sidecarObj = utilModule.strs_to_sidecar(sidecar1);
+    else
+        sidecarObj = py.None;
     end
