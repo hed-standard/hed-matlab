@@ -1,9 +1,9 @@
-function issueString = validateString(hedtags, hedSchema, ...
-                                      checkForWarnings, hedDefinitions)
+function issueString = validateHedString(hedTags, hedSchema, ...
+    checkForWarnings, hedDefinitions)
 % Validate a string containing HED tags.
 % 
 % Parameters:
-%    hedString - A MATLAB string or character array.
+%    hedTags - A MATLAB string or character array.
 %    hedSchema - A HED schema object or HedVersion
 %    checkForWarnings - Boolean indicating checking for warnings
 %    hedDefinitions - A structure with HED definitions.
@@ -14,13 +14,13 @@ function issueString = validateString(hedtags, hedSchema, ...
 % ToDo:  Make hedDefinitions optional.
 %
     hedModule = py.importlib.import_module('hed');
-    if ~py.isinstance(hedSchema, hedModule.HedSchema)
-        hedSchema = getHedSchema(hedSchema);
-    end
-    hedString = hedModule.HedString(hedtags, hedSchema);
+    valModule = py.importlib.import_module('hed.validator');
+    schema = getHedSchema(hedSchema);
+
+    hedString = hedModule.HedString(hedTags, schema);
     errorHandler = py.hed.errors.error_reporter.ErrorHandler(...
                     check_for_warnings=checkForWarnings);
-    validator = hedModule.validator.hed_validator.HedValidator(hedSchema, hedDefinitions);
+    validator = valModule.HedValidator(schema);
     issues = validator.validate(hedString, false, error_handler=errorHandler);
     if isempty(issues)
         issueString = '';

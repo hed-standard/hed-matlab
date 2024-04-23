@@ -4,51 +4,71 @@ classdef TestValidateSidecar < matlab.unittest.TestCase
         hedModule
         hedSchema
         goodSidecar
+        badSidecar
+        goodPath
+        badPath
     end
 
     methods (TestClassSetup)
         function importPythonModules(testCase)
             testCase.hedModule = py.importlib.import_module('hed');
             testCase.hedSchema = getHedSchema('8.2.0');
+                myPath = mfilename("fullpath");  
+            [curDir, ~, ~] = fileparts(myPath);
+            dataPath = fullfile(curDir, filesep, '..', filesep, '..', ...
+                filesep, 'data', filesep);
+            testCase.goodPath = fullfile(dataPath, 'eeg_ds003645s_hed_demo', ...
+                filesep, 'task-FacePerception_events.json');
+            testCase.badPath = fullfile(dataPath, filesep, 'other_data', ...
+                'both_types_events_errors.json');
+            testCase.goodSidecar = ...
+                testCase.hedModule.Sidecar(testCase.goodPath);
+            testCase.badSidecar = ...
+                testCase.hedModule.Sidecar(testCase.badPath);
         end
     end
 
     methods (Test)
 
-        function testBasicValid(testCase)
-            % Test a simple string
-            % issues = validateString('Red, Blue', testCase.hedSchema, ...
-            %                          true, struct());
-            % testCase.verifyEqual(strlength(issues), 0, ...
-            %                      'Valid HED string has issues.');
-            % % Test with extension and check for warnings is true
-            % issues = validateString('Red, Blue/Apple', ...
-            %     testCase.hedSchema, true, struct());
-            % testCase.verifyGreaterThan(strlength(issues), 0, ...
-            %     'Valid HED string with ext has warning.');
-            % 
-            % % Test with extension and check for warnings is false
-            % issues = validateString('Red, Blue/Apple', ...
-            %     testCase.hedSchema, false, struct());
-            % testCase.verifyEqual(strlength(issues), 0, ...
-            %     'Valid HED string with ext has no errors.');
+        function testValidSidecar(testCase)
+            % Test on Sidecar obj with schema object passed
+            issues = validateSidecar(testCase.goodSidecar, ...
+                testCase.hedSchema, true);
+            testCase.verifyEqual(strlength(issues), 0, ...
+                'Valid sidecar should not have issues.');
+            
+            % Test on Sidecar obj with schema version passed
+            issues = validateSidecar(testCase.goodSidecar, '8.2.0', true);
+            testCase.verifyEqual(strlength(issues), 0, ...
+                'Valid sidecar should not have issues.');
         end
 
-        function testBasicInvalid(testCase)
-            % Test a simple string
-            % issues = validateString('Red, Yikes', testCase.hedSchema, ...
-            %     true, struct());
-            % testCase.verifyGreaterThan(strlength(issues), 0, ...
-            %     'Invalid HED string has no issues.');
-            % % Test with extension and check for warnings is true
-            % issues = validateString('Red, Blue/Apple, Yikes', ...
-            %     testCase.hedSchema, false, struct());
-            % testCase.verifyGreaterThan(strlength(issues), 0, ...
-            %     'Invalid HED string hs no issues.');
+        function testValidFromString(testCase)
+            % Test Json path with schema object passed
+            json_str = fileread(testCase.goodPath);
+            sidecar = testCase.hedModule.tools.analysis.annotation_util.strs_to_sidecar(json_str);
+            issues = validateSidecar(sidecar, testCase.hedSchema, true);
+            testCase.verifyEqual(strlength(issues), 0, ...
+                'Valid sidecar should not have issues.');
+            
+            % Test with schema version passed
+            issues = validateSidecar(json_str, '8.2.0', true);
+            testCase.verifyEqual(strlength(issues), 0, ...
+                'Valid sidecar should not have issues.');
         end
 
-        % Todo: test with and without schema
-        % Todo: test with definitions
+        function testInvalidSidecar(testCase)
+            % Test with schema object passed
+            issues = validateSidecar(testCase.badSidecar, ...
+                testCase.hedSchema, true);
+            testCase.verifyGreaterThan(strlength(issues), 0, ...
+                'Invalid sidecar should have issues.');
+            
+            % Test with schema version passed
+            issues = validateSidecar(testCase.badSidecar, '8.2.0', true);
+            testCase.verifyGreaterThan(strlength(issues), 0, ...
+                'Invalid sidecar should have issues.');
+        end
 
     end
 end
