@@ -32,14 +32,14 @@ classdef TestValidateSidecar < matlab.unittest.TestCase
 
         function testValidSidecar(testCase)
             % Test on Sidecar obj with schema object passed
-            issues = validateSidecar(testCase.goodSidecar, ...
+            issueString = validateSidecar(testCase.goodSidecar, ...
                 testCase.hedSchema, true);
-            testCase.verifyEqual(strlength(issues), 0, ...
+            testCase.verifyEqual(strlength(issueString), 0, ...
                 'Valid sidecar should not have issues.');
             
             % Test on Sidecar obj with schema version passed
-            issues = validateSidecar(testCase.goodSidecar, '8.2.0', true);
-            testCase.verifyEqual(strlength(issues), 0, ...
+            issueString = validateSidecar(testCase.goodSidecar, '8.2.0', true);
+            testCase.verifyEqual(strlength(issueString), 0, ...
                 'Valid sidecar should not have issues.');
         end
 
@@ -47,27 +47,35 @@ classdef TestValidateSidecar < matlab.unittest.TestCase
             % Test Json path with schema object passed
             json_str = fileread(testCase.goodPath);
             sidecar = testCase.hedModule.tools.analysis.annotation_util.strs_to_sidecar(json_str);
-            issues = validateSidecar(sidecar, testCase.hedSchema, true);
-            testCase.verifyEqual(strlength(issues), 0, ...
+            issueString = validateSidecar(sidecar, testCase.hedSchema, true);
+            testCase.verifyEqual(strlength(issueString), 0, ...
                 'Valid sidecar should not have issues.');
             
             % Test with schema version passed
-            issues = validateSidecar(json_str, '8.2.0', true);
-            testCase.verifyEqual(strlength(issues), 0, ...
+            issueString = validateSidecar(sidecar, '8.2.0', true);
+            testCase.verifyEqual(strlength(issueString), 0, ...
                 'Valid sidecar should not have issues.');
         end
 
         function testInvalidSidecar(testCase)
             % Test with schema object passed
-            issues = validateSidecar(testCase.badSidecar, ...
+            issueString = validateSidecar(testCase.badSidecar, ...
                 testCase.hedSchema, true);
-            testCase.verifyGreaterThan(strlength(issues), 0, ...
+            testCase.verifyGreaterThan(strlength(issueString), 0, ...
                 'Invalid sidecar should have issues.');
             
             % Test with schema version passed
-            issues = validateSidecar(testCase.badSidecar, '8.2.0', true);
-            testCase.verifyGreaterThan(strlength(issues), 0, ...
+            issueString = validateSidecar(testCase.badSidecar, '8.2.0', true);
+            testCase.verifyGreaterThan(strlength(issueString), 0, ...
                 'Invalid sidecar should have issues.');
+        end
+
+        function testMultipleOutput(testCase)
+            % Test with schema object passed
+            [issueString, hasErrors] = validateSidecar(testCase.badSidecar, ...
+                testCase.hedSchema, true);
+            testCase.verifyTrue(hasErrors);
+            testCase.verifyTrue(isstring(issueString));
         end
 
     end

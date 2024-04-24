@@ -26,7 +26,7 @@ classdef TestGetHedSchema < matlab.unittest.TestCase
 
         function testMultipleVersions(testCase)
             % Test complex version with prefix and partnered library
-            hedVersion = py.list({'ts:8.2.0', 'score_1.1.0'});
+            hedVersion = {'ts:8.2.0', 'score_1.1.0'};
             hedSchema = getHedSchema(hedVersion);
             assertTrue(testCase, py.isinstance(hedSchema, ...
                        testCase.hedModule.schema.HedSchemaGroup), ...

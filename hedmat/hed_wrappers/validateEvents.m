@@ -1,42 +1,33 @@
-function issueString = validateEvents(events, hedSchema, sidecar, checkForWarnings)
+function [issueString, hasErrors] = validateEvents(events, hedSchema, ...
+                                        checkForWarnings)
 % Validate a sidecar containing HED tags.
 % 
 % Parameters:
-%    events - string path to events file or events struct or events table
+%    events - HEDTools TabularInput object
 %    hedSchema - A HED schema object or HedVersion
-%    sidecar - JSON file, struct, or a Sidecar object
 %    checkForWarnings - Boolean indicating checking for warnings
 %
 % Returns:
 %     issueString - A string with the validation issues suitable for
 %                   printing (has newlines).
+%     hasErrors - boolean true if there were errors not just warnings
 %
-    hedModule = py.importlib.import_module('hed');
-    hedSchema = getHedSchema(hedSchema);
-    sidecar = getSidecar(sidecar);
-    errorHandler = py.hed.errors.error_reporter.ErrorHandler(...
-                    check_for_warnings=checkForWarnings);
-    issues = sidecarObj.validate(hedSchema, error_handler=errorHandler);
-    if isempty(issues)
-        issueString = '';
-    else
-        issueString = string(py.hed.get_printable_issue_string(issues));
+    hasErrors = false;
+    issueString = "";
+    errorMod = py.importlib.import_module('hed.errors.error_reporter');
+    hedSchema = getHedSchema(hedSchema); 
+    sidecar = events.get_sidecar();
+    if ~isempty(sidecar) && ~isequal(sidecar, py.None)
+        [issueString, hasErrors] = ...
+            validateSidecar(sidecar, hedSchema, checkForWarnings);
     end
-   % eventTable = struct2table(events);
-   % columnNames = eventTable.Properties.VariableNames;
-   % if ~ismember('onset', columnNames)
-   %     eventTable.onset = (eventTable.latency - 1)./srate;
-   % end
-   % for k=1:length(columnNames)
-   %     thisColumn = columnNames{k};
-   %     if ismember(thisColumn, {'onset', 'duration', 'sample', 'latency'})
-   %         continue;
-   %     end
-   %     % Convert other columns to string and replace missing with `n/a`.
-   %     eventTable.(thisColumn) = string(eventTable.(thisColumn));
-   %     eventTable.(thisColumn)(eventTable.(thisColumn) == "" | ...
-   %         ismissing(eventTable.(thisColumn))) = "n/a";
-   % end
+    if ~hasErrors
+        errorHandler = errorMod.ErrorHandler(check_for_warnings=checkForWarnings);
+        issues = events.validate(hedSchema, error_handler=errorHandler);
+        hasErrors = errorMod.check_for_any_errors(issues);
+        issueString = issueString + string(py.hed.get_printable_issue_string(issues));
+    end
+end
    
 
    

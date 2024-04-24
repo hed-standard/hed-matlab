@@ -32,7 +32,7 @@ classdef TestGetSidecar < matlab.unittest.TestCase
                        'Object not a Sidecar after getSidecar.');
             jsonString = fileread(testCase.jsonPath);
             sidecarObj1 = getSidecar(jsonString);
-            assertTrue(testCase, py.isinstance(sidecarObj1, ...
+            testCase.verifyTrue(py.isinstance(sidecarObj1, ...
                        testCase.hedModule.Sidecar), ...
                        'Object not a Sidecar after getSidecar to string.');
             sidecarObj2 = getSidecar(jsondecode(jsonString));
@@ -44,8 +44,7 @@ classdef TestGetSidecar < matlab.unittest.TestCase
         function testNone(testCase)
     
             % Test single version
-            sidecarObj = getSidecar([]);
-            testCase.assertEqual(sidecarObj, py.None)
+            testCase.verifyError(@() getSidecar([]), 'getSidecar:EmptySidecar');
         end
 
     end

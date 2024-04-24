@@ -1,8 +1,8 @@
-function hedSchema = getHedSchema(hed)
+function hedSchema = getHedSchema(schema)
 % Return a HedSchema or HedSchemaGroup object based on hedVersion
 % 
 % Parameters:
-%    hed  - a single string or a cell array of strings representing
+%    schema - a single string or a cell array of strings representing
 %           the HED schema version or a schema object.
 %
 % Returns:
@@ -10,9 +10,13 @@ function hedSchema = getHedSchema(hed)
 %
    hedModule = py.importlib.import_module('hed');
 
-   if ~py.isinstance(hed, hedModule.HedSchema) && ...
-       ~py.isinstance(hed, hedModule.HedSchemaGroup)
-        hedSchema = hedModule.load_schema_version(hed);
+   if py.isinstance(schema, hedModule.HedSchema) || ...
+       py.isinstance(schema, hedModule.HedSchemaGroup)
+       hedSchema = schema;
+   elseif ischar(schema)
+       hedSchema = hedModule.schema.load_schema_version(schema);
+   elseif iscell(schema)
+       hedSchema = hedModule.schema.load_schema_version(py.list(schema));
    else
-       hedSchema = hed;
+       hedSchema = py.None;
    end

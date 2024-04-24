@@ -22,5 +22,6 @@ function sidecarObj = getSidecar(sidecar)
         sidecar1 = jsonencode(sidecar);
         sidecarObj = utilModule.strs_to_sidecar(sidecar1);
     else
-        sidecarObj = py.None;
+        throw(MException('getSidecar:EmptySidecar', ...
+            'Sidecar must not be empty'));
     end

@@ -3,19 +3,25 @@ function eventsObj = getEvents(events, sidecar)
 % 
 % Parameters:
 %    events - string, table or Pandas DataFrame
-%    sidecar - Sidecar object, string, or struct
+%    sidecar - Sidecar object, string, or struct or py.None
 %
 % Returns:
 %     TabularInput - HEDTools object representing an events file.
 %
     hedModule = py.importlib.import_module('hed'); 
     utilModule = py.importlib.import_module('hed.tools.analysis.annotation_util'); 
-    sidecarObj = getSidecar(sidecar);
     if py.isinstance(events, hedModule.TabularInput)
         eventsObj = events;
-    elseif ischar(events)
+        return;
+    end
+    if isempty(sidecar) || (isa(sidecar, 'py.NoneType') && sidecar == py.None)
+        sidecarObj = py.None;
+    else
+        sidecarObj = getSidecar(sidecar);
+    end
+    if ischar(events)
         eventsObj = utilModule.str_to_tabular(events, sidecarObj);
     else
-        eventsObj = py.None;
+        throw(MException('getEvents:Invalid input'))
     end
 end

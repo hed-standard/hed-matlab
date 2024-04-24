@@ -33,5 +33,15 @@ classdef TestGetEvents < matlab.unittest.TestCase
 
         end
 
+        function testNoSidecar(testCase)
+            % Test single version
+            events = fileread(testCase.eventsPath);
+            sidecar = py.None;
+            eventsObj = getEvents(events, sidecar);
+            testCase.assertTrue(py.isinstance(eventsObj, ...
+                testCase.hedModule.TabularInput));
+
+        end
+
     end
 end
