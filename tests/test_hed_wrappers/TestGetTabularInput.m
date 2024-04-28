@@ -1,4 +1,4 @@
-classdef TestGetEvents < matlab.unittest.TestCase
+classdef TestGetTabularInput < matlab.unittest.TestCase
 
     properties
         hedModule
@@ -27,8 +27,8 @@ classdef TestGetEvents < matlab.unittest.TestCase
             % Test single version
             events = fileread(testCase.eventsPath);
             sidecar = fileread(testCase.jsonPath);
-            eventsObj = getEvents(events, sidecar);
-            testCase.assertTrue(py.isinstance(eventsObj, ...
+            tabObj = getTabularInput(events, sidecar);
+            testCase.assertTrue(py.isinstance(tabObj, ...
                 testCase.hedModule.TabularInput));
 
         end
@@ -37,8 +37,8 @@ classdef TestGetEvents < matlab.unittest.TestCase
             % Test single version
             events = fileread(testCase.eventsPath);
             sidecar = py.None;
-            eventsObj = getEvents(events, sidecar);
-            testCase.assertTrue(py.isinstance(eventsObj, ...
+            tabObj = getTabularInput(events, sidecar);
+            testCase.assertTrue(py.isinstance(tabObj, ...
                 testCase.hedModule.TabularInput));
 
         end

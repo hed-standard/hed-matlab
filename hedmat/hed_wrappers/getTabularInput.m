@@ -1,17 +1,17 @@
-function eventsObj = getEvents(events, sidecar)
-% Returns a HEDTools TabularInput object representing events.
+function tabObj = getTabularInput(events, sidecar)
+% Returns a TabularInput object representing events or other columnar item.
 % 
 % Parameters:
-%    events - string, table or Pandas DataFrame
+%    events - string, table, struct or Pandas DataFrame for tabular data.
 %    sidecar - Sidecar object, string, or struct or py.None
 %
 % Returns:
-%     TabularInput - HEDTools object representing an events file.
+%     tabObj - HEDTools TabularInputobject representing tabular data.
 %
     hedModule = py.importlib.import_module('hed'); 
     utilModule = py.importlib.import_module('hed.tools.analysis.annotation_util'); 
     if py.isinstance(events, hedModule.TabularInput)
-        eventsObj = events;
+        tabObj = events;
         return;
     end
     if isempty(sidecar) || (isa(sidecar, 'py.NoneType') && sidecar == py.None)
@@ -20,8 +20,8 @@ function eventsObj = getEvents(events, sidecar)
         sidecarObj = getSidecar(sidecar);
     end
     if ischar(events)
-        eventsObj = utilModule.str_to_tabular(events, sidecarObj);
+        tabObj = utilModule.str_to_tabular(events, sidecarObj);
     else
-        throw(MException('getEvents:Invalid input'))
+        throw(MException('getTabularInput:Invalid input'))
     end
 end

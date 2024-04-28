@@ -38,7 +38,7 @@ classdef TestValidateEvents < matlab.unittest.TestCase
 
         function testValidEvents(testCase)
             % Test on valid Sidecar
-            events = getEvents(testCase.eventString, testCase.goodSidecar);
+            events = getTabularInput(testCase.eventString, testCase.goodSidecar);
             [issues, hasErrors] = validateEvents(events, ...
                 testCase.hedSchema, true);
             testCase.verifyEqual(strlength(issues), 0, ...
@@ -47,7 +47,7 @@ classdef TestValidateEvents < matlab.unittest.TestCase
         end
 
         function testInvalidEvents(testCase)
-            events = getEvents(testCase.eventString, testCase.badSidecar);
+            events = getTabularInput(testCase.eventString, testCase.badSidecar);
             [issueString, hasErrors] = validateEvents(events, ...
                 testCase.hedSchema, true);
             testCase.verifyTrue(isstring(issueString));
@@ -56,7 +56,7 @@ classdef TestValidateEvents < matlab.unittest.TestCase
 
         function testNoSidecar(testCase)
             % Test with schema object passed
-            events = getEvents(testCase.eventString, py.None);
+            events = getTabularInput(testCase.eventString, py.None);
             [issues, hasErrors] = validateEvents(events, ...
                 testCase.hedSchema, false);
             testCase.verifyEqual(strlength(issues), 0, ...

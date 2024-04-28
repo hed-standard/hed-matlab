@@ -2,14 +2,10 @@ function sidecarObj = getSidecar(sidecar)
 % Returns a HEDTools Sidecar object extracted from input.
 % 
 % Parameters:
-%    sidecar - Sidecar object, string, cell array
-%    srate - the EEG sampling rate in Hz
+%    sidecar - Sidecar object, string, struct
 %
 % Returns:
-%     eventTable - a table representing the events structure
-%
-% Notes:  If events doesn't have an onset column, it adds it based on
-% the latency column. It converts columns other than 
+%     sidecarObj - a HEDTools Sidecar object.
 %
 
     hedModule = py.importlib.import_module('hed');
