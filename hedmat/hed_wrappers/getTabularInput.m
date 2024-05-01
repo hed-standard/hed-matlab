@@ -19,7 +19,7 @@ function tabObj = getTabularInput(events, sidecar)
     else
         sidecarObj = getSidecar(sidecar);
     end
-    if ischar(events)
+    if ischar(events) || isstring(events)
         tabObj = utilModule.str_to_tabular(events, sidecarObj);
     else
         throw(MException('getTabularInput:Invalid input'))
