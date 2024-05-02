@@ -18,11 +18,16 @@ classdef TestRectifyEvents < matlab.unittest.TestCase
             events(1) = struct('onset', 1.1, 'duration', NaN,  'latency', 4234, ...
                  'response', 1.5, 'type', 'banana');
             fields = fieldnames(events);
-            eventsNew = rectifyEvents(events, 100.0);
-            fieldsNew = fieldnames(eventsNew);
-            testCase.verifyEqual(length(fields), length(fieldsNew));
-            testCase.verifyEmpty(setdiff(fields, fieldsNew));
-            testCase.verifyEqual(eventsNew(3).response, 2.1)
+            events_rectified = rectify_events(events, 100.0);
+            fields_new = fieldnames(events_rectified);
+            testCase.verifyEqual(length(fields), length(fields_new));
+            testCase.verifyEmpty(setdiff(fields, fields_new));
+            testCase.verifyEqual(events_rectified(3).response, 2.1)
+            events_rectified = rectify_events(events);
+            fields_new = fieldnames(events_rectified);
+            testCase.verifyEqual(length(fields), length(fields_new));
+            testCase.verifyEmpty(setdiff(fields, fields_new));
+            testCase.verifyEqual(events_rectified(3).response, 2.1)
         end
 
         function testNoOnset(testCase)
@@ -37,13 +42,13 @@ classdef TestRectifyEvents < matlab.unittest.TestCase
                               'response', 1.5, 'type', 'banana', ...
                               'duration', NaN);
             fields = fieldnames(events);
-            eventsNew = rectifyEvents(events, 100.0);
-            fieldsNew = fieldnames(eventsNew);
-            testCase.verifyEqual(length(fields) + 1, length(fieldsNew));
-            testCase.verifyEqual(setdiff(fieldsNew, fields), {'onset'});
-            testCase.verifyEqual(eventsNew(3).response, 2.1);
-            testCase.verifyEqual(fieldsNew{1}, 'onset');
-            testCase.verifyTrue(isnan(eventsNew(1).duration));
+            events_rectified = rectify_events(events, 100.0);
+            fields_new = fieldnames(events_rectified);
+            testCase.verifyEqual(length(fields) + 1, length(fields_new));
+            testCase.verifyEqual(setdiff(fields_new, fields), {'onset'});
+            testCase.verifyEqual(events_rectified(3).response, 2.1);
+            testCase.verifyEqual(fields_new{1}, 'onset');
+            testCase.verifyTrue(isnan(events_rectified(1).duration));
         end
 
         function testNoOnsetNoDuration(testCase)
@@ -55,13 +60,24 @@ classdef TestRectifyEvents < matlab.unittest.TestCase
             events(1) = struct('latency', "4234", ...
                              'response', 1.5, 'type', 'banana');
             fields = fieldnames(events);
-            eventsNew = rectifyEvents(events, 100.0);
-            fieldsNew = fieldnames(eventsNew);
-            testCase.verifyEqual(length(fields) + 2, length(fieldsNew));
-            testCase.verifyEqual(setdiff(fieldsNew', fields'), {'duration', 'onset'});
-            testCase.verifyEqual(eventsNew(3).response, 2.1);
-            testCase.verifyEqual(fieldsNew{1}, 'onset');
-            testCase.verifyTrue(isnan(eventsNew(1).duration));
+            events_rectified = rectify_events(events, 100.0);
+            fields_new = fieldnames(events_rectified);
+            testCase.verifyEqual(length(fields) + 2, length(fields_new));
+            testCase.verifyEqual(...
+                setdiff(fields_new', fields'), {'duration', 'onset'});
+            testCase.verifyEqual(events_rectified(3).response, 2.1);
+            testCase.verifyEqual(fields_new{1}, 'onset');
+            testCase.verifyTrue(isnan(events_rectified(1).duration));
+        end
+
+        function testBadInputs(testCase)
+            % Test for errors with bad inputs
+            testCase.verifyError(@() rectify_events(struct()), ...
+                'rectify_events:NeedSamplingRate');
+            testCase.verifyError(@() rectify_events(struct(), 100), ...
+                'rectify_events:MissingLatency');
+            testCase.verifyError(@() rectify_events([]), ...
+                'rectify_events:InvalidEventStruct');
         end
 
     end

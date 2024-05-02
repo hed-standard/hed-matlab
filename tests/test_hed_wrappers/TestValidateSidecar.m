@@ -1,30 +1,32 @@
 classdef TestValidateSidecar < matlab.unittest.TestCase
 
     properties
-        hedModule
-        hedSchema
-        goodSidecar
-        badSidecar
-        goodPath
-        badPath
+        hmod
+        umod
+        schema
+        good_sidecar
+        bad_sidecar
+        good_path
+        bad_path
     end
 
     methods (TestClassSetup)
         function importPythonModules(testCase)
-            testCase.hedModule = py.importlib.import_module('hed');
-            testCase.hedSchema = getHedSchema('8.2.0');
-                myPath = mfilename("fullpath");  
-            [curDir, ~, ~] = fileparts(myPath);
-            dataPath = fullfile(curDir, filesep, '..', filesep, '..', ...
+            testCase.hmod = py.importlib.import_module('hed');
+            testCase.umod = py.importlib.import_module(...
+                'hed.tools.analysis.annotation_util');
+            testCase.schema = get_schema_obj('8.2.0');  
+            [cur_dir, ~, ~] = fileparts(mfilename("fullpath"));
+            data_path = fullfile(cur_dir, filesep, '..', filesep, '..', ...
                 filesep, 'data', filesep);
-            testCase.goodPath = fullfile(dataPath, 'eeg_ds003645s_hed_demo', ...
+            testCase.good_path = fullfile(data_path, 'eeg_ds003645s_hed_demo', ...
                 filesep, 'task-FacePerception_events.json');
-            testCase.badPath = fullfile(dataPath, filesep, 'other_data', ...
+            testCase.bad_path = fullfile(data_path, filesep, 'other_data', ...
                 'both_types_events_errors.json');
-            testCase.goodSidecar = ...
-                testCase.hedModule.Sidecar(testCase.goodPath);
-            testCase.badSidecar = ...
-                testCase.hedModule.Sidecar(testCase.badPath);
+            testCase.good_sidecar = ...
+                testCase.hmod.Sidecar(testCase.good_path);
+            testCase.bad_sidecar = ...
+                testCase.hmod.Sidecar(testCase.bad_path);
         end
     end
 
@@ -32,50 +34,52 @@ classdef TestValidateSidecar < matlab.unittest.TestCase
 
         function testValidSidecar(testCase)
             % Test on Sidecar obj with schema object passed
-            issueString = validateSidecar(testCase.goodSidecar, ...
-                testCase.hedSchema, true);
-            testCase.verifyEqual(strlength(issueString), 0, ...
+            issue_string = validate_sidecar(testCase.good_sidecar, ...
+                testCase.schema, true);
+            testCase.verifyEqual(strlength(issue_string), 0, ...
                 'Valid sidecar should not have issues.');
             
             % Test on Sidecar obj with schema version passed
-            issueString = validateSidecar(testCase.goodSidecar, '8.2.0', true);
-            testCase.verifyEqual(strlength(issueString), 0, ...
+            issue_string = validate_sidecar(testCase.good_sidecar, ...
+                '8.2.0', true);
+            testCase.verifyEqual(strlength(issue_string), 0, ...
                 'Valid sidecar should not have issues.');
         end
 
         function testValidFromString(testCase)
             % Test Json path with schema object passed
-            json_str = fileread(testCase.goodPath);
-            sidecar = testCase.hedModule.tools.analysis.annotation_util.strs_to_sidecar(json_str);
-            issueString = validateSidecar(sidecar, testCase.hedSchema, true);
-            testCase.verifyEqual(strlength(issueString), 0, ...
+            json_str = fileread(testCase.good_path);
+            sidecar = testCase.umod.strs_to_sidecar(json_str);
+            issue_string = validate_sidecar(sidecar, testCase.schema, true);
+            testCase.verifyEqual(strlength(issue_string), 0, ...
                 'Valid sidecar should not have issues.');
             
             % Test with schema version passed
-            issueString = validateSidecar(sidecar, '8.2.0', true);
-            testCase.verifyEqual(strlength(issueString), 0, ...
+            issue_string = validate_sidecar(sidecar, '8.2.0', true);
+            testCase.verifyEqual(strlength(issue_string), 0, ...
                 'Valid sidecar should not have issues.');
         end
 
         function testInvalidSidecar(testCase)
             % Test with schema object passed
-            issueString = validateSidecar(testCase.badSidecar, ...
-                testCase.hedSchema, true);
-            testCase.verifyGreaterThan(strlength(issueString), 0, ...
+            issue_string = validate_sidecar(testCase.bad_sidecar, ...
+                testCase.schema, true);
+            testCase.verifyGreaterThan(strlength(issue_string), 0, ...
                 'Invalid sidecar should have issues.');
             
             % Test with schema version passed
-            issueString = validateSidecar(testCase.badSidecar, '8.2.0', true);
-            testCase.verifyGreaterThan(strlength(issueString), 0, ...
+            issue_string = validate_sidecar(testCase.bad_sidecar, ...
+                '8.2.0', true);
+            testCase.verifyGreaterThan(strlength(issue_string), 0, ...
                 'Invalid sidecar should have issues.');
         end
 
         function testMultipleOutput(testCase)
             % Test with schema object passed
-            [issueString, hasErrors] = validateSidecar(testCase.badSidecar, ...
-                testCase.hedSchema, true);
-            testCase.verifyTrue(hasErrors);
-            testCase.verifyTrue(isstring(issueString));
+            [issue_string, has_errors] = validate_sidecar( ...
+                testCase.bad_sidecar, testCase.schema, true);
+            testCase.verifyTrue(has_errors);
+            testCase.verifyTrue(isstring(issue_string));
         end
 
     end

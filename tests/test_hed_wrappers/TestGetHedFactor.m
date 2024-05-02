@@ -1,29 +1,28 @@
 classdef TestGetHedFactor < matlab.unittest.TestCase
 
     properties
-        hedMod
-        tabObj
-        hedSchema
+        hmod
+        tabular_obj
+        schema
     end
 
     methods (TestClassSetup)
         function importPythonModules(testCase)
     
-            testCase.hedMod = py.importlib.import_module('hed');
-            myPath = mfilename("fullpath");  
-            [curDir, ~, ~] = fileparts(myPath);
-            dataPath = fullfile(curDir, filesep, '..', filesep, '..', ...
+            testCase.hmod = py.importlib.import_module('hed');
+            [cur_dir, ~, ~] = fileparts(mfilename("fullpath"));
+            data_path = fullfile(cur_dir, filesep, '..', filesep, '..', ...
                 filesep, 'data', filesep, 'eeg_ds003645s_hed_demo');
-            jsonPath = fullfile(dataPath, filesep, ...
+            json_path = fullfile(data_path, filesep, ...
                 'task-FacePerception_events.json'); 
-            eventsPath = fullfile(dataPath, filesep, 'sub-002', ...
+            events_path = fullfile(data_path, filesep, 'sub-002', ...
                 filesep, 'ses-1', filesep, 'EEG', filesep,...
                 'sub-002_ses-1_task-FacePerception_run-1_events.tsv'); 
-            events = fileread(eventsPath);
-            sidecar = fileread(jsonPath);
-            testCase.tabObj = getTabularInput(events, sidecar);
-            testCase.hedSchema = ...
-                testCase.hedMod.schema.load_schema_version('8.2.0');
+            events = fileread(events_path);
+            sidecar = fileread(json_path);
+            testCase.tabular_obj = get_tabular_obj(events, sidecar);
+            testCase.schema = ...
+                testCase.hmod.schema.load_schema_version('8.2.0');
         end
     end
 
@@ -32,38 +31,41 @@ classdef TestGetHedFactor < matlab.unittest.TestCase
         function testNoConditionsContextNoDefs(testCase)
             % Test single version
             remove_types = {'Condition-variable', 'Task'};
-            hedObjs1 = getHedStringObjs(testCase.tabObj, ...
-               testCase.hedSchema, remove_types, true, true);
-            result1a = getHedFactor('Sensory-presentation', hedObjs1);
+            hed_string_objs = get_string_objs(testCase.tabular_obj, ...
+               testCase.schema, remove_types, true, true);
+            result1a = get_hed_factor('Sensory-presentation', hed_string_objs);
             testCase.verifyEqual(length(result1a), sum(result1a));
-            result1b = getHedFactor('Agent-action', hedObjs1);
+            result1b = get_hed_factor('Agent-action', hed_string_objs);
             testCase.verifyEqual(sum(result1b), 44)
         end
 
         function testConditionsContextNoDefs(testCase)
-            hedObjs2 = getHedStringObjs(testCase.tabObj, ...
-               testCase.hedSchema, {}, true, true);
-            result2a = getHedFactor('Sensory-presentation', hedObjs2);
-            testCase.verifyEqual(length(result2a), sum(result2a));
-            result2b = getHedFactor('Agent-action', hedObjs2);
-            testCase.verifyEqual(sum(result2b), 44);
+            hed_string_objs = get_string_objs(testCase.tabular_obj, ...
+               testCase.schema, {}, true, true);
+            resulta = ...
+                get_hed_factor('Sensory-presentation', hed_string_objs);
+            testCase.verifyEqual(length(resulta), sum(resulta));
+            resultb = get_hed_factor('Agent-action', hed_string_objs);
+            testCase.verifyEqual(sum(resultb), 44);
         end
 
         function testConditionsNoContextNoDefs(testCase)
-            hedObjs3 = getHedStringObjs(testCase.tabObj, ...
-               testCase.hedSchema, {}, false, true);
-            result3a = getHedFactor('Sensory-presentation', hedObjs3);
-            testCase.verifyEqual(sum(result3a), 155);
-            result3b = getHedFactor('Agent-action', hedObjs3);
-            testCase.verifyEqual(sum(result3b), 44);
+            hed_string_objs = get_string_objs(testCase.tabular_obj, ...
+               testCase.schema, {}, false, true);
+            resulta = ...
+                get_hed_factor('Sensory-presentation', hed_string_objs);
+            testCase.verifyEqual(sum(resulta), 155);
+            resultb = get_hed_factor('Agent-action', hed_string_objs);
+            testCase.verifyEqual(sum(resultb), 44);
         end
 
         function testConditionsNoContextDefs(testCase)
-            hedObjs4 = getHedStringObjs(testCase.tabObj, ...
-               testCase.hedSchema, {}, false, false);
-            result4a = getHedFactor('Sensory-presentation', hedObjs4);
+            hed_string_objs = get_string_objs(testCase.tabular_obj, ...
+               testCase.schema, {}, false, false);
+            result4a = ...
+                get_hed_factor('Sensory-presentation', hed_string_objs);
             testCase.verifyEqual(sum(result4a), 0);
-            result4b = getHedFactor('Agent-action', hedObjs4);
+            result4b = get_hed_factor('Agent-action', hed_string_objs);
             testCase.verifyEqual(sum(result4b), 44);
         end
 
