@@ -1,14 +1,14 @@
 classdef TestValidateHedString < matlab.unittest.TestCase
 
     properties
-        hedModule
-        hedSchema
+        hmod
+        schema
     end
 
     methods (TestClassSetup)
         function importPythonModules(testCase)
-            testCase.hedModule = py.importlib.import_module('hed');
-            testCase.hedSchema = getHedSchema('8.2.0');
+            testCase.hmod = py.importlib.import_module('hed');
+            testCase.schema = get_schema_obj('8.2.0');
         end
     end
 
@@ -16,32 +16,32 @@ classdef TestValidateHedString < matlab.unittest.TestCase
 
         function testBasicValid(testCase)
             % Test a simple string
-            issues = validateHedString('Red, Blue', testCase.hedSchema, ...
-                                     true, struct());
+            issues = validate_hed_string('Red, Blue', ...
+                 testCase.schema, true, struct());
             testCase.verifyEqual(strlength(issues), 0, ...
                                  'Valid HED string has issues.');
             % Test with extension and check for warnings is true
-            issues = validateHedString('Red, Blue/Apple', ...
-                testCase.hedSchema, true, struct());
+            issues = validate_hed_string('Red, Blue/Apple', ...
+                testCase.schema, true, struct());
             testCase.verifyGreaterThan(strlength(issues), 0, ...
                 'Valid HED string with ext has warning.');
 
             % Test with extension and check for warnings is false
-            issues = validateHedString('Red, Blue/Apple', ...
-                testCase.hedSchema, false, struct());
+            issues = validate_hed_string('Red, Blue/Apple', ...
+                testCase.schema, false, struct());
             testCase.verifyEqual(strlength(issues), 0, ...
                 'Valid HED string with ext has no errors.');
         end
 
         function testBasicInvalid(testCase)
             % Test a simple string
-            issues = validateHedString('Red, Yikes', testCase.hedSchema, ...
+            issues = validate_hed_string('Red, Yikes', testCase.schema, ...
                 true, struct());
             testCase.verifyGreaterThan(strlength(issues), 0, ...
                 'Invalid HED string has no issues.');
             % Test with extension and check for warnings is true
-            issues = validateHedString('Red, Blue/Apple, Yikes', ...
-                testCase.hedSchema, false, struct());
+            issues = validate_hed_string('Red, Blue/Apple, Yikes', ...
+                testCase.schema, false, struct());
             testCase.verifyGreaterThan(strlength(issues), 0, ...
                 'Invalid HED string hs no issues.');
         end
