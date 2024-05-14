@@ -8,7 +8,8 @@ function issue_string = validate_bids(data_root)
 %     issue_string - A string with the validation issues suitable for
 %                   printing (has newlines).
 %
-    py.importlib.import_module('hed');
-    bids = py.hed.tools.BidsDataset(data_root);
+    hed = py.importlib.import_module('hed')
+    % amod = py.importlib.import_module('hed.tools.analysis.annotation_util');
+    bids = hed.get_bids_dataset(data_root);
     issues = bids.validate();
     issue_string = string(py.hed.get_printable_issue_string(issues));
