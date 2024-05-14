@@ -21,8 +21,7 @@ classdef TestGetHedFactor < matlab.unittest.TestCase
             events = fileread(events_path);
             sidecar = fileread(json_path);
             testCase.tabular_obj = get_tabular_obj(events, sidecar);
-            testCase.schema = ...
-                testCase.hmod.schema.load_schema_version('8.2.0');
+            testCase.schema = testCase.hmod.load_schema_version('8.2.0');
         end
     end
 

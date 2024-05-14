@@ -8,15 +8,14 @@ function schema_obj = get_schema_obj(schema)
 % Returns:
 %     schema_obj - A hedSchema object
 %
-   hedModule = py.importlib.import_module('hed');
-
-   if py.isinstance(schema, hedModule.HedSchema) || ...
-       py.isinstance(schema, hedModule.HedSchemaGroup)
-       schema_obj = schema;
-   elseif ischar(schema)
-       schema_obj = hedModule.schema.load_schema_version(schema);
+   hmod = py.importlib.import_module('hed');
+   if ischar(schema)
+       schema_obj = hmod.load_schema_version(schema);
    elseif iscell(schema)
-       schema_obj = hedModule.schema.load_schema_version(py.list(schema));
+       schema_obj = hmod.load_schema_version(py.list(schema));
+   elseif py.isinstance(schema, hmod.HedSchema) || ...
+       py.isinstance(schema, hmod.HedSchemaGroup)
+       schema_obj = schema;
    else
        schema_obj = py.None;
    end

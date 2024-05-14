@@ -1,13 +1,11 @@
 classdef TestValidateBids < matlab.unittest.TestCase
 
     properties
-        hmod
         data_root
     end
 
     methods (TestClassSetup)
         function importPythonModules(testCase)
-            testCase.hmod = py.importlib.import_module('hed');
             [cur_dir, ~, ~] = fileparts(mfilename("fullpath"));
             testCase.data_root = fullfile(cur_dir, filesep, '..', ...
                 filesep, '..', filesep, 'data', filesep, ...
