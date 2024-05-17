@@ -1,9 +1,9 @@
-function hed = getHedTools(host)
+function hed = getHedTools(hedVersion, host)
 % Factory method that returns either a HedService or a HedDirect object
-    if nargin == 1
-        hed = HedToolsService(host);
+    if nargin == 2
+        hed = HedToolsService(hedVersion, host);
     else
-        hed = HedToolsPython();
+        hed = HedToolsPython(hedVersion);
     end
 end
 

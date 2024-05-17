@@ -1,5 +1,5 @@
 function issue_string = validate_hedtags(hed_string, schema, ...
-                                        check_warnings, hed_defs)
+                                         check_warnings, hed_defs)
 % Validate a string containing HED tags.
 % 
 % Parameters:

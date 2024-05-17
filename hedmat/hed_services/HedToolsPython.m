@@ -1,28 +1,31 @@
-classdef HedToolsPython < HEDToolsBase
+classdef HedToolsPython < HedToolsBase
     % Creates a concrete class that uses direct calls to Python for its
     % implementation.
 
     properties
         HedVersion
+        HedSchema
         hmod
     end
 
     methods
-        function obj = HedToolsPython()
+        function obj = HedToolsPython(version)
             % Construct a HedToolsPython object for calling HedTools.
             %
             % Parameters:
-            %  host - string or char array with the host name of service
+            %  version - string or char array or cellstr
+            %               representing a valid HED version.
             %
             obj.hmod = py.importlib.import_module('hed');
+            obj.resetHedVersion(version)
         end
 
-        function [] = setHedVersion(obj, version)
+        function [] = resetHedVersion(obj, version)
             obj.HedVersion = version;
-            obj.HedSchema = obj.getHedSchema(version);
+            obj.setHedSchema(version);
         end
 
-        function schema = getHedSchema(obj, schema)
+        function [] = setHedSchema(obj, schema)
             % Set a HedSchema or HedSchemaGroup object based on hedVersion
             %
             % Parameters:
@@ -46,36 +49,44 @@ classdef HedToolsPython < HEDToolsBase
         end
 
 
-        function issues = validate_hedtags(obj, hedtags, ...
-                schema_version, check_warnings)
-            request = getRequestTemplate();
-            request.service = 'strings_validate';
-            request.schema_version = schema_version;
-            if ~iscell(hedtags)
-                hedtags = {hedtags};
+        function issue_string = validate_hedtags(obj, hedtags,  ...
+                check_warnings)
+            % Validate a string containing HED tags.
+            %
+            % Parameters:
+            %    hedtags - A MATLAB string or character array.
+            %    check_warnings - Boolean indicating checking for warnings
+            %
+            % Returns:
+            %     issue_string - A string with the validation issues suitable for
+            %                   printing (has newlines).
+            % ToDo:  Make hedDefinitions optional.
+            %
+           
+            % vmod = py.importlib.import_module('hed.validator');
+            
+            if ~ischar(hedtags) && ~isstring(hedtags)
+                throw(MException('HedToolsPython:validate_hedtags', ...
+                    'Must provide a string or char array as input'))
             end
-            request.string_list = hedtags;
-            request.check_for_warnings = check_warnings;
-            response = webwrite(obj.ServicesUrl, request, obj.WebOptions);
-            response = jsondecode(response);
-            error_msg = HedService.getResponseError(response);
-            if error_msg
-                throw(MException('HedService:UnableToPerformOperation', ...
-                    error_msg));
-            end
-            if strcmpi(response.results.msg_category, 'warning')
-                issues = response.results.data;
+               
+            hed_string_obj = py.hed.HedString(hedtags, obj.HedSchema);
+            ehandler = py.hed.errors.error_reporter.ErrorHandler(...
+                check_for_warnings=check_warnings);
+            validator = ...
+                py.hed.validator.hed_validator.HedValidator(obj.HedSchema);
+            issues = ...
+                validator.validate(hed_string_obj, false, ...
+                error_handler=ehandler);
+            if isempty(issues)
+                issue_string = '';
             else
-                issues = '';
+                issue_string = ...
+                    string(py.hed.get_printable_issue_string(issues));
             end
 
         end
-    end
-
-
-
 
     end
 
 end
-

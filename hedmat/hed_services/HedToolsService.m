@@ -1,23 +1,28 @@
-classdef HedToolsService < HEDToolsBase
+classdef HedToolsService < HedToolsBase
     % Creates a connection object for the HED web online services.
     
     properties
         ServicesUrl
         WebOptions
         HedVersion
+        Cookie
+        CSRFToken
     end
     
     methods
-        function obj = HedService(host)
+        function obj = HedToolsService(hedversion, host)
             % Construct a HedConnection that can be used for web services.
             %
             % Parameters:
+            %  hedversion - valid version specification
             %  host - string or char array with the host name of service
             %
-            obj.setHostOptions(host);
+            %  Note, the version could be an array.
+            obj.HedVersion = hedversion;
+            obj.setSessionInfo(host);
         end
 
-        function [] = setHedVersion(obj, version)
+        function [] = resetHedVersion(obj, hedversion)
              obj.HedVersion = version;
         end
 
@@ -28,49 +33,77 @@ classdef HedToolsService < HEDToolsBase
             %      host  = URL for the services
             %
             %  Notes:  sets obj.cookie, obj.csrftoken and obj.optons.
-            obj.ServicesUrl = [host '/services'];
+            obj.ServicesUrl = [host '/services_submit'];
             request = matlab.net.http.RequestMessage;
             uri = matlab.net.URI([host '/services']);
             response1 = send(request,uri);
             cookies = response1.getFields('Set-Cookie');
-            obj.cookie = cookies.Value;
+            obj.Cookie = cookies.Value;
             data = response1.Body.char;
             csrfIdx = strfind(data,'csrf_token');
             tmp = data(csrfIdx(1)+length('csrf_token')+1:end);
             csrftoken = regexp(tmp,'".*?"','match');
-            obj.csrftoken = string(csrftoken{1}(2:end-1));
+            obj.CSRFToken = string(csrftoken{1}(2:end-1));
             header = ["Content-Type" "application/json"; ...
                 "Accept" "application/json"; ...
-                "X-CSRFToken" obj.csrftoken; "Cookie" obj.cookie];
+                "X-CSRFToken" obj.CSRFToken; "Cookie" obj.Cookie];
 
-            obj.options = weboptions('MediaType', 'application/json', ...
+            obj.WebOptions = weboptions('MediaType', 'application/json', ...
                 'Timeout', 120, 'HeaderFields', header);
 
         end
 
         
-        function issues = validate_hedtags(obj, hedtags, check_warnings)
+        function issue_string = validate_hedtags(obj, hedtags, check_warnings)
+            % Validate a single string of HED tags 
             request = obj.getRequestTemplate();
             request.service = 'strings_validate';
-            request.schema_version = obj.HedVerson;
-            if ~iscell(hedtags)
-                hedtags = {hedtags};
+            request.schema_version = obj.HedVersion;
+            if ~ischar(hedtags) && ~isstring(hedtags)
+                throw(MException('HedToolsService:validate_hedtags', ...
+                    'Must provide a string or char array as input'))
+               
             end
-            request.string_list = hedtags;
+            request.string_list = {hedtags};
             request.check_for_warnings = check_warnings;
             response = webwrite(obj.ServicesUrl, request, obj.WebOptions);
             response = jsondecode(response);
-            error_msg = HedService.getResponseError(response);
+            error_msg = HedToolsService.getResponseError(response);
             if error_msg
                 throw(MException('HedService:UnableToPerformOperation', ...
                     error_msg));
             end
             if strcmpi(response.results.msg_category, 'warning')
-                issues = response.results.data;
+                issue_string = response.results.data;
             else
-                issues = '';
+                issue_string = '';
+            end    
+        end
+
+        function issue_string = validate_sidecar(obj, sidecar, ...
+                input_type, check_warnings)
+            request = obj.getRequestTemplate();
+            request.service = 'sidecar_validate';
+            request.schema_version = obj.HedVersion;
+            if ~ischar(hedtags) && ~isstring(hedtags)
+                throw(MException('HedToolsService:validate_hedtags', ...
+                    'Must provide a string or char array as input'))
+               
             end
-            
+            request.string_list = {hedtags};
+            request.check_for_warnings = check_warnings;
+            response = webwrite(obj.ServicesUrl, request, obj.WebOptions);
+            response = jsondecode(response);
+            error_msg = HedToolsService.getResponseError(response);
+            if error_msg
+                throw(MException('HedService:UnableToPerformOperation', ...
+                    error_msg));
+            end
+            if strcmpi(response.results.msg_category, 'warning')
+                issue_string = response.results.data;
+            else
+                issue_string = '';
+            end    
         end
     end
 
@@ -98,7 +131,15 @@ classdef HedToolsService < HEDToolsBase
                 'include_summaries', false, ...
                 'include_descriptions', true, ...
                 'replace_defs', false);
+        end
 
+        function msg = getResponseError(response)
+            if ~isempty(response.error_type)
+                msg = sprintf('%s error %s: %s', response.service, ...
+                    response.error_type, response.error_msg);
+            else
+                msg = '';
+            end
         end
     end
 
