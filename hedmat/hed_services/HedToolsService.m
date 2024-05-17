@@ -70,8 +70,8 @@ classdef HedToolsService < HedToolsBase
             response = jsondecode(response);
             error_msg = HedToolsService.getResponseError(response);
             if error_msg
-                throw(MException('HedService:UnableToPerformOperation', ...
-                    error_msg));
+                throw(MException(...
+                    'HedToolsService:UnableToValidateString', error_msg));
             end
             if strcmpi(response.results.msg_category, 'warning')
                 issue_string = response.results.data;
@@ -90,13 +90,13 @@ classdef HedToolsService < HedToolsBase
                     'Must provide a string or char array as input'))
                
             end
-            request.string_list = {hedtags};
+            request.string_string = ;
             request.check_for_warnings = check_warnings;
             response = webwrite(obj.ServicesUrl, request, obj.WebOptions);
             response = jsondecode(response);
             error_msg = HedToolsService.getResponseError(response);
             if error_msg
-                throw(MException('HedService:UnableToPerformOperation', ...
+                throw(MException('HedService:UnableValidateSidecar', ...
                     error_msg));
             end
             if strcmpi(response.results.msg_category, 'warning')
