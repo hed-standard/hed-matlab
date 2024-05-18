@@ -1,4 +1,4 @@
-classdef HedToolsService < HedToolsBase
+classdef HedToolsService < HedTools
     % Creates a connection object for the HED web online services.
     
     properties
@@ -10,7 +10,7 @@ classdef HedToolsService < HedToolsBase
     end
     
     methods
-        function obj = HedToolsService(hedversion, host)
+        function obj = HedToolsService(hedVersion, host)
             % Construct a HedConnection that can be used for web services.
             %
             % Parameters:
@@ -18,21 +18,21 @@ classdef HedToolsService < HedToolsBase
             %  host - string or char array with the host name of service
             %
             %  Note, the version could be an array.
-            obj.HedVersion = hedversion;
-            obj.setSessionInfo(host);
+            obj.HedVersion = hedVersion;
+            obj.resetSessionInfo(host);
         end
 
-        function [] = resetHedVersion(obj, hedversion)
-             obj.HedVersion = version;
+        function [] = resetHedVersion(obj, hedVersion)
+             obj.HedVersion = hedVersion;
         end
 
             
-        function [] = setSessionInfo(obj, host)
-            %% Setup the session for accessing the HED webservices
+        function [] = resetSessionInfo(obj, host)
+            %% Reset the session for accessing the HED webservices
             %  Parameters:
             %      host  = URL for the services
             %
-            %  Notes:  sets obj.cookie, obj.csrftoken and obj.optons.
+            %  Notes:  sets obj.Cookie, obj.CRSFToken and obj.Options.
             obj.ServicesUrl = [host '/services_submit'];
             request = matlab.net.http.RequestMessage;
             uri = matlab.net.URI([host '/services']);
@@ -48,20 +48,29 @@ classdef HedToolsService < HedToolsBase
                 "Accept" "application/json"; ...
                 "X-CSRFToken" obj.CSRFToken; "Cookie" obj.Cookie];
 
-            obj.WebOptions = weboptions('MediaType', 'application/json', ...
-                'Timeout', 120, 'HeaderFields', header);
-
+            obj.WebOptions = weboptions('MediaType', 'application/json',...
+                 'Timeout', 120, 'HeaderFields', header);
         end
 
         
-        function issue_string = validate_hedtags(obj, hedtags, check_warnings)
-            % Validate a single string of HED tags 
+        function issue_string = validateHedTags(obj, hedtags, check_warnings)
+            % Validate a single string of HED tags.
+            %
+            % Parameters:
+            %    hedtags - a string or char array with a hed tag string.
+            %    check_warnings - boolean indicating whether to include
+            %                     warnings.
+            %
+            %  Returns:
+            %    issue_string - printable string with issues or an empty
+            %                   string if no issues.
             request = obj.getRequestTemplate();
             request.service = 'strings_validate';
             request.schema_version = obj.HedVersion;
             if ~ischar(hedtags) && ~isstring(hedtags)
-                throw(MException('HedToolsService:validate_hedtags', ...
-                    'Must provide a string or char array as input'))
+                throw(MException(...
+                    'HedToolsServiceValidateHedTags:InvalidHedTagInput', ...
+                    'Must provide HED tags as string or char'))
                
             end
             request.string_list = {hedtags};
@@ -71,7 +80,7 @@ classdef HedToolsService < HedToolsBase
             error_msg = HedToolsService.getResponseError(response);
             if error_msg
                 throw(MException(...
-                    'HedToolsService:UnableToValidateString', error_msg));
+                    'HedToolsServiceValidateHedTags:ServiceError', error_msg));
             end
             if strcmpi(response.results.msg_category, 'warning')
                 issue_string = response.results.data;
@@ -80,24 +89,30 @@ classdef HedToolsService < HedToolsBase
             end    
         end
 
-        function issue_string = validate_sidecar(obj, sidecar, ...
-                input_type, check_warnings)
+        function issue_string = ...
+                validateSidecar(obj, sidecar, check_warnings)
+            % Validate a sidecar
+            % 
+            % Parameters:
+            %    sidecar - a string, struct, or char array representing
+            %              a sidecar
+            %    check_warnings - boolean indicating whether warnings 
+            %              should also be reported.
+            %
+            % Returns:
+            %    issue_string - printable issue string or empty
+            %
             request = obj.getRequestTemplate();
             request.service = 'sidecar_validate';
             request.schema_version = obj.HedVersion;
-            if ~ischar(hedtags) && ~isstring(hedtags)
-                throw(MException('HedToolsService:validate_hedtags', ...
-                    'Must provide a string or char array as input'))
-               
-            end
-            request.string_string = ;
+            request.sidecar_string = HedTools.formatSidecar(sidecar);
             request.check_for_warnings = check_warnings;
             response = webwrite(obj.ServicesUrl, request, obj.WebOptions);
             response = jsondecode(response);
             error_msg = HedToolsService.getResponseError(response);
             if error_msg
-                throw(MException('HedService:UnableValidateSidecar', ...
-                    error_msg));
+                throw(MException(...
+                    'HedToolsServiceValidateSidecar:ServiceError', error_msg));
             end
             if strcmpi(response.results.msg_category, 'warning')
                 issue_string = response.results.data;

@@ -1,4 +1,4 @@
-classdef HedToolsPython < HedToolsBase
+classdef HedToolsPython < HedTools
     % Creates a concrete class that uses direct calls to Python for its
     % implementation.
 
@@ -49,44 +49,64 @@ classdef HedToolsPython < HedToolsBase
         end
 
 
-        function issue_string = validate_hedtags(obj, hedtags,  ...
-                check_warnings)
+        function issueString = validateHedTags(obj, hedTags, checkWarnings)
             % Validate a string containing HED tags.
             %
             % Parameters:
-            %    hedtags - A MATLAB string or character array.
-            %    check_warnings - Boolean indicating checking for warnings
+            %    hedTags - A MATLAB string or character array.
+            %    checkWarnings - Boolean indicating checking for warnings
             %
             % Returns:
-            %     issue_string - A string with the validation issues suitable for
+            %     issueString - A string with the validation issues suitable for
             %                   printing (has newlines).
             % ToDo:  Make hedDefinitions optional.
             %
            
             % vmod = py.importlib.import_module('hed.validator');
             
-            if ~ischar(hedtags) && ~isstring(hedtags)
-                throw(MException('HedToolsPython:validate_hedtags', ...
+            if ~ischar(hedTags) && ~isstring(hedTags)
+                throw(MException(...
+                    'HedToolsPythonValidateHedTags:InvalidHedTagInput', ...
                     'Must provide a string or char array as input'))
             end
                
-            hed_string_obj = py.hed.HedString(hedtags, obj.HedSchema);
+            hedStringObj = py.hed.HedString(hedTags, obj.HedSchema);
             ehandler = py.hed.errors.error_reporter.ErrorHandler(...
-                check_for_warnings=check_warnings);
+                check_for_warnings=checkWarnings);
             validator = ...
                 py.hed.validator.hed_validator.HedValidator(obj.HedSchema);
             issues = ...
-                validator.validate(hed_string_obj, false, ...
+                validator.validate(hedStringObj, false, ...
                 error_handler=ehandler);
             if isempty(issues)
-                issue_string = '';
+                issueString = '';
             else
-                issue_string = ...
+                issueString = ...
                     string(py.hed.get_printable_issue_string(issues));
             end
-
         end
 
+        function issueString = validateSidecar(obj, sidecar, checkWarnings)
+            % Validate a sidecar containing HED tags.
+            %
+            % Parameters:
+            %    sidecar - string, struct or char of sidecar
+            %    checkWarnings - boolean indicating checking for warnings
+            %
+            % Returns:
+            %     issueString - A string with the validation issues suitable for
+            %                   printing (has newlines).
+           
+            ehandler = py.hed.errors.error_reporter.ErrorHandler(...
+                check_for_warnings=checkWarnings);
+            sidecarObj = py.hed.strs_to_sidecar(...
+                HedTools.formatSidecar(sidecar));
+            issues = sidecarObj.validate(obj.HedSchema, error_handler=ehandler);
+            if isempty(issues)
+                issueString = '';
+            else
+                issueString = string(py.hed.get_printable_issue_string(issues));
+            end
+        end
     end
-
 end
