@@ -10,26 +10,50 @@ classdef HedTools < handle
     end
 
     methods (Static)
-        function sidecar = formatSidecar(sidecar_in)
+        function sidecar = formatSidecar(sidecarIn)
             % Convert the sidecar to a char array if necessary.
             %
             % Parameters:
-            %    sidecar - a sidecar as a 
-            if ischar(sidecar_in)
-                sidecar = sidecar_in;
-            elseif isstring(sidecar_in)
-                sidecar = char(sidecar_in);
-            elseif isstruct(sidecar_in)
-                sidecar = jsonencode(sidecar_in);
+            %    sidecarIn - a sidecar as a char, string, or struct
+            %
+            % Returns:
+            %    sidecar converted to a char.
+            if ischar(sidecarIn)
+                sidecar = sidecarIn;
+            elseif isstring(sidecarIn)
+                sidecar = char(sidecarIn);
+            elseif isstruct(sidecarIn)
+                sidecar = jsonencode(sidecarIn);
             else
-                throw(MException('HedTools:BadSidecarFormat', ...
-                   'Sidecar must be char, string, or struct'));
+                throw(MException('HedToolsFormatSidecar:BadSidecarFormat', ...
+                    'Sidecar must be char, string, or struct'));
+            end
+        end
+
+        function events = formatEvents(eventsIn)
+            % Convert eventsIn to a char array if necessary.
+            %
+            % Parameters:
+            %    eventsIn - events as a char, string, or struct
+            %
+            % Returns:
+            %    events converted to a char.
+            
+            if ischar(eventsIn)
+                events = eventsIn;
+            elseif isstring(eventsIn)
+                events = char(eventsIn);
+            elseif isstruct(eventsIn)
+                events = char(events2string(eventsIn));
+            else
+                throw(MException('HedToolsFormatEvents:BadEventsFormat', ...
+                    'events must be string, char, or struct'))
             end
         end
     end
 
     methods (Abstract)
-         resetHedVersion(obj)
+        resetHedVersion(obj)
     end
 
 end

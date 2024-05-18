@@ -25,8 +25,8 @@ classdef TestHedToolsService < matlab.unittest.TestCase
 
         function testCreateConnection(testCase)
             % Test a simple string
-            hed = HedToolsService('8.2.0', 'https://hedtools.org/hed_dev');
-            testCase.verifyTrue(isa(hed, 'HedToolsService'));   
+            hed1 = HedToolsService('8.2.0', 'https://hedtools.org/hed_dev');
+            testCase.verifyTrue(isa(hed1, 'HedToolsService'));   
         end
             
         function testValidHedTgs(testCase)
@@ -80,11 +80,11 @@ classdef TestHedToolsService < matlab.unittest.TestCase
             sidecarChar = fileread(testCase.goodSidecarPath);
             testCase.verifyTrue(ischar(sidecarChar))
             issueString = testCase.hed.validateSidecar( ...
-                sidecarChar, false);
+                HedTools.formatSidecar(sidecarChar), false);
             testCase.verifyEqual(strlength(issueString), 0, ...
                 'Valid char sidecar should not have errors.');
             issueString = testCase.hed.validateSidecar(...
-                sidecarChar, true);
+                HedTools.formatSidecar(sidecarChar), true);
             testCase.verifyEqual(strlength(issueString), 0, ...
                 'Valid char sidecar should not have warnings.');
 
@@ -118,11 +118,11 @@ classdef TestHedToolsService < matlab.unittest.TestCase
             sidecarChar = fileread(testCase.badSidecarPath);
             testCase.verifyTrue(ischar(sidecarChar))
             issueString = testCase.hed.validateSidecar( ...
-                sidecarChar, false);
+                HedTools.formatSidecar(sidecarChar), false);
             testCase.verifyGreaterThan(strlength(issueString), 0, ...
                 'Invalid char sidecar should not have errors.');
             issueString = testCase.hed.validateSidecar(...
-                sidecarChar, true);
+                HedTools.formatSidecar(sidecarChar), true);
             testCase.verifyGreaterThan(strlength(issueString), 0, ...
                 'Invalid char sidecar should not have warnings.');
 
@@ -130,11 +130,11 @@ classdef TestHedToolsService < matlab.unittest.TestCase
             sidecarString = string(sidecarChar);
             testCase.verifyTrue(isstring(sidecarString))
             issueString = testCase.hed.validateSidecar( ...
-                sidecarString, false);
+                HedTools.formatSidecar(sidecarString), false);
             testCase.verifyGreaterThan(strlength(issueString), 0, ...
                 'Invalid char sidecar should have errors.');
             issueString = testCase.hed.validateSidecar(...
-                sidecarString, true);
+                HedTools.formatSidecar(sidecarString), true);
             testCase.verifyGreaterThan(strlength(issueString), 0, ...
                 'Invalid char sidecar should have warnings.');
 
@@ -142,11 +142,11 @@ classdef TestHedToolsService < matlab.unittest.TestCase
             sidecarStruct = jsondecode(sidecarChar);
             testCase.verifyTrue(isstruct(sidecarStruct))
             issueString = testCase.hed.validateSidecar( ...
-                sidecarStruct, false);
+                HedTools.formatSidecar(sidecarStruct), false);
             testCase.verifyGreaterThan(strlength(issueString), 0, ...
                 'Invalid char sidecar should have errors.');
             issueString = testCase.hed.validateSidecar(...
-                sidecarStruct, true);
+                HedTools.formatSidecar(sidecarStruct), true);
             testCase.verifyGreaterThan(strlength(issueString), 0, ...
                 'Invalid char sidecar should have warnings.');
         end

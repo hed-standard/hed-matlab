@@ -52,8 +52,40 @@ classdef HedToolsService < HedTools
                  'Timeout', 120, 'HeaderFields', header);
         end
 
-        
-        function issue_string = validateHedTags(obj, hedtags, check_warnings)
+        function issueString = ...
+                validateEvents(obj, events, sidecar, checkWarnings)
+            % Validate HED in events or other tabular-type input.
+            %
+            % Parameters:
+            %    events - char, string or rectified struct.
+            %    sidecar - char, string or struct representing sidecar
+            %    checkWarnings - Boolean indicating checking for warnings
+            %
+            % Returns:
+            %     issueString - A string with the validation issues suitable for
+            %                   printing (has newlines).
+            
+            request = obj.getRequestTemplate();
+            request.service = 'events_validate';
+            request.schema_version = obj.HedVersion;
+            request.events_string = HedTools.formatEvents(events);
+            request.sidecar_string = HedTools.formatSidecar(sidecar);
+            request.check_for_warnings = check_warnings;
+            response = webwrite(obj.ServicesUrl, request, obj.WebOptions);
+            response = jsondecode(response);
+            error_msg = HedToolsService.getResponseError(response);
+            if error_msg
+                throw(MException(...
+                    'HedToolsServiceValidateEvents:ServiceError', error_msg));
+            end
+            if strcmpi(response.results.msg_category, 'warning')
+                issueString = response.results.data;
+            else
+                issueString = '';
+            end    
+        end
+    
+        function issueString = validateHedTags(obj, hedtags, check_warnings)
             % Validate a single string of HED tags.
             %
             % Parameters:
@@ -62,7 +94,7 @@ classdef HedToolsService < HedTools
             %                     warnings.
             %
             %  Returns:
-            %    issue_string - printable string with issues or an empty
+            %    issueString - printable string with issues or an empty
             %                   string if no issues.
             request = obj.getRequestTemplate();
             request.service = 'strings_validate';
@@ -83,30 +115,30 @@ classdef HedToolsService < HedTools
                     'HedToolsServiceValidateHedTags:ServiceError', error_msg));
             end
             if strcmpi(response.results.msg_category, 'warning')
-                issue_string = response.results.data;
+                issueString = response.results.data;
             else
-                issue_string = '';
+                issueString = '';
             end    
         end
 
-        function issue_string = ...
-                validateSidecar(obj, sidecar, check_warnings)
+        function issueString = ...
+                validateSidecar(obj, sidecar, checkWarnings)
             % Validate a sidecar
             % 
             % Parameters:
             %    sidecar - a string, struct, or char array representing
             %              a sidecar
-            %    check_warnings - boolean indicating whether warnings 
+            %    checkWarnings - boolean indicating whether warnings 
             %              should also be reported.
             %
             % Returns:
-            %    issue_string - printable issue string or empty
+            %    issueSstring - printable issue string or empty
             %
             request = obj.getRequestTemplate();
             request.service = 'sidecar_validate';
             request.schema_version = obj.HedVersion;
             request.sidecar_string = HedTools.formatSidecar(sidecar);
-            request.check_for_warnings = check_warnings;
+            request.check_for_warnings = checkWarnings;
             response = webwrite(obj.ServicesUrl, request, obj.WebOptions);
             response = jsondecode(response);
             error_msg = HedToolsService.getResponseError(response);
@@ -115,9 +147,9 @@ classdef HedToolsService < HedTools
                     'HedToolsServiceValidateSidecar:ServiceError', error_msg));
             end
             if strcmpi(response.results.msg_category, 'warning')
-                issue_string = response.results.data;
+                issueString = response.results.data;
             else
-                issue_string = '';
+                issueString = '';
             end    
         end
     end

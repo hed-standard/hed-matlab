@@ -5,7 +5,6 @@ classdef HedToolsPython < HedTools
     properties
         HedVersion
         HedSchema
-        hmod
     end
 
     methods
@@ -16,7 +15,7 @@ classdef HedToolsPython < HedTools
             %  version - string or char array or cellstr
             %               representing a valid HED version.
             %
-            obj.hmod = py.importlib.import_module('hed');
+     
             obj.resetHedVersion(version)
         end
 
@@ -37,15 +36,48 @@ classdef HedToolsPython < HedTools
             %
 
             if ischar(schema)
-                obj.HedSchema = obj.hmod.load_schema_version(schema);
+                obj.HedSchema = py.hed.load_schema_version(schema);
             elseif iscell(schema)
-                obj.HedSchema = obj.hmod.load_schema_version(py.list(schema));
+                obj.HedSchema = py.hed.load_schema_version(py.list(schema));
             elseif py.isinstance(schema, obj.hmod.HedSchema) || ...
                     py.isinstance(schema, obj.hmod.HedSchemaGroup)
                 obj.HedSchema = schema;
             else
                 obj.HedSchema = py.None;
             end
+        end
+
+        function issueString = ...
+                validateEvents(obj, events, sidecar, checkWarnings)
+            % Validate HED in events or other tabular-type input.
+            %
+            % Parameters:
+            %    events - char array
+            %    sidecar - char, string or struct representing sidecar
+            %    checkWarnings - Boolean indicating checking for warnings
+            %
+            % Returns:
+            %     issueString - A string with the validation issues suitable for
+            %                   printing (has newlines).
+            
+            issueString = '';
+            sidecarObj = py.None;
+            ehandler = py.hed.errors.error_reporter.ErrorHandler(...
+                check_for_warnings=checkWarnings);
+            if ~isempty(sidecar) && ~isequal(sidecar, py.None)
+                sidecar = HedTools.formatSidecar(sidecar);
+                sidecarObj = py.hed.tools.analysis.annotation_util.strs_to_sidecar(sidecar);
+                issues = sidecarObj.validate(obj.HedSchema, error_handler=ehandler);
+                issueString = string(py.hed.get_printable_issue_string(issues));
+                if py.hed.errors.error_reporter.check_for_any_errors(issues)
+                     return;
+                end     
+            end
+            events = py.hed.tools.analysis.annotation_util.str_to_tabular(events, sidecarObj);
+            issues = events.validate(obj.HedSchema, error_handler=ehandler);
+            issueString = issueString + ...
+                string(py.hed.get_printable_issue_string(issues));
+   
         end
 
 
@@ -90,7 +122,7 @@ classdef HedToolsPython < HedTools
             % Validate a sidecar containing HED tags.
             %
             % Parameters:
-            %    sidecar - string, struct or char of sidecar
+            %    sidecar - a formatted sidecar
             %    checkWarnings - boolean indicating checking for warnings
             %
             % Returns:
