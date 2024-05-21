@@ -19,6 +19,32 @@ classdef HedToolsPython < HedTools
             obj.resetHedVersion(version)
         end
 
+        function [annotations] = assembleAnnotations(obj, ...
+                events, sidecar, removeTypes, includeContext, replaceDefs)
+            % Return a Python list of HedString objects -- used as input for search.
+            %
+            % Parameters:
+            %      events - a TabularInput obj
+            %      schema - a hedSchema or hedVersion
+            %      remove_types - a cell array of types to remove.
+            %      include_context - boolean true->expand context (usually true).
+            %      replace_defs - boolean true->replace def with definition (usually true).
+            %
+            % Returns:
+            %    hed_string_objs (py.list of HedString objects)
+            %
+            % Note this is used as the basis for HED queries or for assembled HED.
+            % To manipulate directly in MATLAB -- convert to a cell array of char
+            % using string(cell(hedObjs))
+
+            hmod = py.importlib.import_module('hed');
+            eventManager = hmod.EventManager(events, obj.schema);
+            tagManager = hmod.HedTagManager(eventManager, ...
+                py.list(removeTypes));
+            annotations = ...
+                tagManager.get_hed_objs(includeContext, replaceDefs);
+        end
+
         function [] = resetHedVersion(obj, version)
             obj.HedVersion = version;
             obj.setHedSchema(version);
@@ -140,5 +166,91 @@ classdef HedToolsPython < HedTools
                 issueString = string(py.hed.get_printable_issue_string(issues));
             end
         end
+    end
+
+    methods (Static)
+
+        function hedStringObjs = getHedStringObjs(tabular, schema, removeTypes, ...
+                includeContext, replaceDefs)
+            % Return a Python list of HedString objects -- used as input for search.
+            %
+            % Parameters:
+            %      tabular - a TabularInput obj
+            %      schema - a hedSchema or hedVersion
+            %      removeTypes - a cell array of types to remove.
+            %      includeContext - boolean true->expand context (usually true).
+            %      replaceDefs - boolean true->replace def with definition (usually true).
+            %
+            % Returns:
+            %    hedStringObjs (py.list of HedString objects)
+            %
+            % Note this is used as the basis for HED queries or for assembled HED.
+            % To manipulate directly in MATLAB -- convert to a cell array of char
+            % using string(cell(hedObjs))
+
+            hmod = py.importlib.import_module('hed');
+            eventManager = hmod.EventManager(events, schema);
+            tagManager = hmod.HedTagManager(eventManager, ...
+                py.list(removeTypes));
+            hedStringObjs = ...
+                tagManager.get_hed_objs(includeContext, replaceDefs);
+        end
+
+        function sidecarObj = getSidecarObj(sidecar)
+            % Returns a HEDTools Sidecar object extracted from input.
+            %
+            % Parameters:
+            %    sidecar - Sidecar object, string, struct or char
+            %
+            % Returns:
+            %     sidecar_obj - a HEDTools Sidecar object.
+            %
+            hmod = py.importlib.import_module('hed');
+            umod = py.importlib.import_module('hed.tools.analysis.annotation_util');
+            if py.isinstance(sidecar, hmod.Sidecar)
+                sidecarObj = sidecar;
+            elseif ischar(sidecar)
+                sidecarObj = umod.strs_to_sidecar(sidecar);
+            elseif isstring(sidecar)
+                sidecarObj = umod.strs_to_sidecar(char(sidecar));
+            elseif isstruct(sidecar)
+                sidecarObj = umod.strs_to_sidecar(jsonencode(sidecar));
+            else
+                throw(MException('HedToolsPythonGetSidecarObj:BadInputFormat', ...
+                    'Sidecar must be char, string, struct, or Sidecar'));
+            end
+        end
+
+        function tabularObj = getTabularObj(events, sidecar)
+            % Returns a HED TabularInput object representing events or other columnar item.
+            %
+            % Parameters:
+            %    events - string, struct, or TabularInput for tabular data.
+            %    sidecar - Sidecar object, string, or struct or py.None
+            %
+            % Returns:
+            %     tabularObj - HEDTools TabularInput object representing tabular data.
+            %
+            hmod = py.importlib.import_module('hed');
+            umod = py.importlib.import_module('hed.tools.analysis.annotation_util');
+            if py.isinstance(events, hmod.TabularInput)
+                tabularObj = events;
+                return;
+            end
+            if isempty(sidecar) || (isa(sidecar, 'py.NoneType') && sidecar == py.None)
+                sidecarObj = py.None;
+            else
+                sidecarObj = HedToolsPython.getSidecarObj(sidecar);
+            end
+            if isstruct(events)
+                events = struct2string(events);
+                tabularObj = umod.str_to_tabular(events, sidecarObj);
+            elseif ischar(events) || isstring(events)
+                tabularObj = umod.str_to_tabular(events, sidecarObj);
+            else
+                throw(MException('HedToolsPytonGetTabularInput:Invalid input'))
+            end
+        end
+
     end
 end

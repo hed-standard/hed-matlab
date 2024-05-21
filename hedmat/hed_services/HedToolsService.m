@@ -70,7 +70,7 @@ classdef HedToolsService < HedTools
             request.schema_version = obj.HedVersion;
             request.events_string = HedTools.formatEvents(events);
             request.sidecar_string = HedTools.formatSidecar(sidecar);
-            request.check_for_warnings = check_warnings;
+            request.check_for_warnings = checkWarnings;
             response = webwrite(obj.ServicesUrl, request, obj.WebOptions);
             response = jsondecode(response);
             error_msg = HedToolsService.getResponseError(response);
@@ -85,7 +85,7 @@ classdef HedToolsService < HedTools
             end    
         end
     
-        function issueString = validateHedTags(obj, hedtags, check_warnings)
+        function issueString = validateHedTags(obj, hedtags, checkWarnings)
             % Validate a single string of HED tags.
             %
             % Parameters:
@@ -106,7 +106,7 @@ classdef HedToolsService < HedTools
                
             end
             request.string_list = {hedtags};
-            request.check_for_warnings = check_warnings;
+            request.check_for_warnings = checkWarnings;
             response = webwrite(obj.ServicesUrl, request, obj.WebOptions);
             response = jsondecode(response);
             error_msg = HedToolsService.getResponseError(response);
