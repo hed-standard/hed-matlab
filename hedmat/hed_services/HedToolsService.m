@@ -22,11 +22,42 @@ classdef HedToolsService < HedTools
             obj.resetSessionInfo(host);
         end
 
+        function annotations = getHedAnnotations(obj, ...
+                events, sidecar, removeTypes, includeContext, replaceDefs)
+            % Return a Python list of HedString objects -- used as input for search.
+            % Parameters:
+            %    events - char, string or rectified struct.
+            %    sidecar - char, string or struct representing sidecar
+            %    checkWarnings - Boolean indicating checking for warnings
+            %
+            % Returns:
+            %     issueString - A string with the validation issues suitable for
+            %                   printing (has newlines).
+            
+            request = obj.getRequestTemplate();
+            request.service = 'events_validate';
+            request.schema_version = obj.HedVersion;
+            request.events_string = HedTools.formatEvents(events);
+            request.sidecar_string = HedTools.formatSidecar(sidecar);
+            request.check_for_warnings = checkWarnings;
+            response = webwrite(obj.ServicesUrl, request, obj.WebOptions);
+            response = jsondecode(response);
+            error_msg = HedToolsService.getResponseError(response);
+            if error_msg
+                throw(MException(...
+                    'HedToolsServiceValidateEvents:ServiceError', error_msg));
+            end
+            if strcmpi(response.results.msg_category, 'warning')
+                issueString = response.results.data;
+            else
+                issueString = '';
+            end    
+        end
+
         function [] = resetHedVersion(obj, hedVersion)
              obj.HedVersion = hedVersion;
         end
 
-            
         function [] = resetSessionInfo(obj, host)
             %% Reset the session for accessing the HED webservices
             %  Parameters:
@@ -52,8 +83,7 @@ classdef HedToolsService < HedTools
                  'Timeout', 120, 'HeaderFields', header);
         end
 
-        function issueString = ...
-                validateEvents(obj, events, sidecar, checkWarnings)
+        function issueString = validateEvents(obj, events, sidecar, checkWarnings)
             % Validate HED in events or other tabular-type input.
             %
             % Parameters:
@@ -85,7 +115,7 @@ classdef HedToolsService < HedTools
             end    
         end
     
-        function issueString = validateHedTags(obj, hedtags, checkWarnings)
+        function issueString = validateTags(obj, hedtags, checkWarnings)
             % Validate a single string of HED tags.
             %
             % Parameters:
@@ -121,8 +151,7 @@ classdef HedToolsService < HedTools
             end    
         end
 
-        function issueString = ...
-                validateSidecar(obj, sidecar, checkWarnings)
+        function issueString = validateSidecar(obj, sidecar, checkWarnings)
             % Validate a sidecar
             % 
             % Parameters:

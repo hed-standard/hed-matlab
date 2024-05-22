@@ -19,13 +19,13 @@ classdef HedToolsPython < HedTools
             obj.resetHedVersion(version)
         end
 
-        function [annotations] = assembleAnnotations(obj, ...
+        function annotations = getHedAnnotations(obj, ...
                 events, sidecar, removeTypes, includeContext, replaceDefs)
             % Return a Python list of HedString objects -- used as input for search.
             %
             % Parameters:
             %      events - a TabularInput obj
-            %      schema - a hedSchema or hedVersion
+            %      sidecar - a hedSchema or hedVersion
             %      remove_types - a cell array of types to remove.
             %      include_context - boolean true->expand context (usually true).
             %      replace_defs - boolean true->replace def with definition (usually true).
@@ -46,6 +46,11 @@ classdef HedToolsPython < HedTools
         end
 
         function [] = resetHedVersion(obj, version)
+            % Change the HED Version used.
+            %
+            % Parameters:
+            %    version - cell array or char array or string with HED
+            %              version specification.
             obj.HedVersion = version;
             obj.setHedSchema(version);
         end
@@ -73,12 +78,11 @@ classdef HedToolsPython < HedTools
             end
         end
 
-        function issueString = ...
-                validateEvents(obj, events, sidecar, checkWarnings)
+        function issueString = validateEvents(obj, events, sidecar, checkWarnings)
             % Validate HED in events or other tabular-type input.
             %
             % Parameters:
-            %    events - char array
+            %    events - char array, string, or struct.
             %    sidecar - char, string or struct representing sidecar
             %    checkWarnings - Boolean indicating checking for warnings
             %
@@ -106,8 +110,7 @@ classdef HedToolsPython < HedTools
    
         end
 
-
-        function issueString = validateHedTags(obj, hedTags, checkWarnings)
+        function issueString = validateTags(obj, hedTags, checkWarnings)
             % Validate a string containing HED tags.
             %
             % Parameters:
