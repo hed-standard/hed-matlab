@@ -19,7 +19,7 @@ classdef HedToolsPython < HedTools
             obj.resetHedVersion(version)
         end
 
-        function annotations = getHedAnnotations(obj, ...
+        function annotations = getAnnotations(obj, ...
                 events, sidecar, removeTypes, includeContext, replaceDefs)
             % Return a Python list of HedString objects -- used as input for search.
             %
@@ -38,7 +38,10 @@ classdef HedToolsPython < HedTools
             % using string(cell(hedObjs))
 
             hmod = py.importlib.import_module('hed');
-            eventManager = hmod.EventManager(events, obj.schema);
+            events = HedToolsPython.getTabularObj(events, sidecar);
+            HedObjs = getHedStringObjs(tabular, schema, removeTypes, ...
+                includeContext, replaceDefs);
+            eventManager = hmod.EventManager(events, obj.HedSchema);
             tagManager = hmod.HedTagManager(eventManager, ...
                 py.list(removeTypes));
             annotations = ...
@@ -192,7 +195,7 @@ classdef HedToolsPython < HedTools
             % using string(cell(hedObjs))
 
             hmod = py.importlib.import_module('hed');
-            eventManager = hmod.EventManager(events, schema);
+            eventManager = hmod.EventManager(tabular, schema);
             tagManager = hmod.HedTagManager(eventManager, ...
                 py.list(removeTypes));
             hedStringObjs = ...
