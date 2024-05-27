@@ -26,9 +26,9 @@ classdef HedToolsPython < HedTools
             % Parameters:
             %      events - a TabularInput obj
             %      sidecar - a hedSchema or hedVersion
-            %      remove_types - a cell array of types to remove.
-            %      include_context - boolean true->expand context (usually true).
-            %      replace_defs - boolean true->replace def with definition (usually true).
+            %      removeTypes - a cell array of types to remove.
+            %      includeContext - boolean true->expand context (usually true).
+            %      replaceDefs - boolean true->replace def with definition (usually true).
             %
             % Returns:
             %    hed_string_objs (py.list of HedString objects)

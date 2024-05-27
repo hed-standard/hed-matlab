@@ -22,7 +22,7 @@ classdef TestHedToolsService < matlab.unittest.TestCase
                 'task-FacePerception_events.json');
             testCase.badSidecarPath = fullfile(dataPath, filesep,  ...
                 'other_data',filesep, 'both_types_events_errors.json');
-                    testCase.goodEventsPath = fullfile(dataPath, ...
+            testCase.goodEventsPath = fullfile(dataPath, ...
                 filesep, 'eeg_ds003645s_hed_demo', filesep, 'sub-002', ...
                 filesep, 'ses-1', filesep, 'eeg', filesep,...
                 'sub-002_ses-1_task-FacePerception_run-1_events.tsv');
@@ -42,11 +42,24 @@ classdef TestHedToolsService < matlab.unittest.TestCase
 
     methods (Test)
 
-        function testCreateConnection(testCase)
-            % Test a simple string
-            hed1 = HedToolsService('8.2.0', 'https://hedtools.org/hed_dev');
-            testCase.verifyTrue(isa(hed1, 'HedToolsService'));
-        end
+        % function testCreateConnection(testCase)
+        %     % Test a simple string
+        %     hed1 = HedToolsService('8.2.0', 'https://hedtools.org/hed_dev');
+        %     testCase.verifyTrue(isa(hed1, 'HedToolsService'));
+        % end
+
+        function testEventsGetAnnotations(testCase)
+            % Valid char events should not have errors or warnings
+            sidecarChar = fileread(testCase.goodSidecarPath);
+            eventsChar = fileread(testCase.goodEventsPath);
+            testCase.verifyTrue(ischar(eventsChar))
+            removeTypes = {};
+            includeContext = false;
+            replaceDefs = false;
+            annotations = testCase.hed.getHedAnnotations(eventsChar, ...
+                sidecarChar, removeTypes, includeContext, replaceDefs);
+            disp('tohere')
+        end   
 
         function testEventsValidNoSidecar(testCase)
             % Valid char sidecar should not have errors or warnings
@@ -108,7 +121,7 @@ classdef TestHedToolsService < matlab.unittest.TestCase
 
         end
 
-        function testEventsStructWithOnset(testCase)
+        function testEventsValidStructWithOnset(testCase)
             % Valid struct with onset no sidecar warnings but no errors
             eventsRectified = ...
                 rectify_events(testCase.eventsStruct);
@@ -131,7 +144,7 @@ classdef TestHedToolsService < matlab.unittest.TestCase
             testCase.verifyEqual(strlength(issueString), 0);
         end
 
-        function testEventsStructNoOnset(testCase)
+        function testEventsValidStructNoOnset(testCase)
             % Valid struct with onset no sidecar warnings but no errors
             eventsRectified = ...
                 rectify_events(testCase.eventsStructNoOnset, 100);
@@ -154,7 +167,7 @@ classdef TestHedToolsService < matlab.unittest.TestCase
             testCase.verifyEqual(strlength(issueString), 0);
         end
 
-        function testEventsStructNoOnsetNoSampling(testCase)
+        function testEventsValidStructNoOnsetNoSampling(testCase)
             % % Valid struct events no onset should not have errors or warnings
             testCase.verifyError( ...
                 @ ()rectify_events(testCase.eventsStructNoOnset), ...

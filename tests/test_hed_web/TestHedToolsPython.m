@@ -188,7 +188,7 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
         % 
         % end
         % 
-        % function testEventsStructWithOnset(testCase)
+        % function testEventsValidStructWithOnset(testCase)
         %     % Valid struct with onset no sidecar warnings but no errors
         %     eventsRectified = ...
         %         rectify_events(testCase.eventsStruct);
@@ -211,7 +211,7 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
         %     testCase.verifyEqual(strlength(issueString), 0);
         % end
         % 
-        % function testEventsStructNoOnset(testCase)
+        % function testEventsValidStructNoOnset(testCase)
         %     % Valid struct with onset no sidecar warnings but no errors
         %     eventsRectified = ...
         %         rectify_events(testCase.eventsStructNoOnset, 100);
@@ -234,7 +234,7 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
         %     testCase.verifyEqual(strlength(issueString), 0);
         % end
         % 
-        % function testEventsStructNoOnsetNoSampling(testCase)
+        % function testEventsValidStructNoOnsetNoSampling(testCase)
         %     % % Valid struct events no onset should not have errors or warnings
         %     testCase.verifyError( ...
         %         @ ()rectify_events(testCase.eventsStructNoOnset), ...

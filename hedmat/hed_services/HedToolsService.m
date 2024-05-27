@@ -28,30 +28,35 @@ classdef HedToolsService < HedTools
             % Parameters:
             %    events - char, string or rectified struct.
             %    sidecar - char, string or struct representing sidecar
-            %    checkWarnings - Boolean indicating checking for warnings
+            %    removeTypes - a cell array of types to remove.
+            %    includeContext - boolean true->expand context (usually true).
+            %    replaceDefs - boolean true->replace def with definition (usually true).
             %
             % Returns:
-            %     issueString - A string with the validation issues suitable for
-            %                   printing (has newlines).
+            %     annotations - cell array with the HED annotations.
             
             request = obj.getRequestTemplate();
-            request.service = 'events_validate';
+            request.service = 'events_assemble';
             request.schema_version = obj.HedVersion;
             request.events_string = HedTools.formatEvents(events);
             request.sidecar_string = HedTools.formatSidecar(sidecar);
-            request.check_for_warnings = checkWarnings;
+            request.check_for_warnings = false;
+            request.remove_types = removeTypes;
+            request.include_context = includeContext;
+            request.replace_defs = replaceDefs;
             response = webwrite(obj.ServicesUrl, request, obj.WebOptions);
             response = jsondecode(response);
             error_msg = HedToolsService.getResponseError(response);
             if error_msg
                 throw(MException(...
-                    'HedToolsServiceValidateEvents:ServiceError', error_msg));
+                    'HedToolsServiceGetAnnotations:ServiceError', error_msg));
+            elseif strcmpi(response.results.msg_category, 'warning')
+                throwMException( ...
+                    'HedToolsServiceGetAnnotations:InvalidData', ...
+                    "Input errors:\n" + response.results.data);
             end
-            if strcmpi(response.results.msg_category, 'warning')
-                issueString = response.results.data;
-            else
-                issueString = '';
-            end    
+            annotations = str2lines(char(response.results.data));
+            annotations = annotations(:);
         end
 
         function [] = resetHedVersion(obj, hedVersion)
