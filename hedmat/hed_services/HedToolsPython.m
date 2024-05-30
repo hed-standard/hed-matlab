@@ -19,33 +19,34 @@ classdef HedToolsPython < HedTools
             obj.resetHedVersion(version)
         end
 
-        function annotations = getAnnotations(obj, ...
+        function annotations = getHedAnnotations(obj, ...
                 events, sidecar, removeTypes, includeContext, replaceDefs)
-            % Return a Python list of HedString objects -- used as input for search.
+            % Return a cell array of HED annotations of same length as events.
             %
             % Parameters:
-            %      events - a TabularInput obj
-            %      sidecar - a hedSchema or hedVersion
-            %      removeTypes - a cell array of types to remove.
-            %      includeContext - boolean true->expand context (usually true).
-            %      replaceDefs - boolean true->replace def with definition (usually true).
+            %    events - char, string or rectified struct.
+            %    sidecar - char, string or struct representing sidecar
+            %    removeTypes - a cell array of types to remove.
+            %    includeContext - boolean true->expand context (usually true).
+            %    replaceDefs - boolean true->replace def with definition (usually true).
             %
             % Returns:
-            %    hed_string_objs (py.list of HedString objects)
+            %     annotations - cell array with the HED annotations.
             %
-            % Note this is used as the basis for HED queries or for assembled HED.
-            % To manipulate directly in MATLAB -- convert to a cell array of char
-            % using string(cell(hedObjs))
+            % Note: The annotations do not have a header line, while
+            % events in char or string form is assumed to have a header
+            % line.
+            % 
 
             hmod = py.importlib.import_module('hed');
             events = HedToolsPython.getTabularObj(events, sidecar);
-            HedObjs = getHedStringObjs(tabular, schema, removeTypes, ...
-                includeContext, replaceDefs);
-            eventManager = hmod.EventManager(events, obj.HedSchema);
-            tagManager = hmod.HedTagManager(eventManager, ...
-                py.list(removeTypes));
-            annotations = ...
-                tagManager.get_hed_objs(includeContext, replaceDefs);
+            hedObjs = HedToolsPython.getHedStringObjs(events, ...
+                  obj.HedSchema, removeTypes, includeContext, replaceDefs);
+            strs = ...
+                py.hed.tools.analysis.annotation_util.to_strlist(hedObjs);
+            cStrs = cell(strs);
+            % Convert each string object in the cell array to a char array
+            annotations = cellfun(@char, cStrs(:), 'UniformOutput', false);
         end
 
         function [] = resetHedVersion(obj, version)
@@ -65,20 +66,7 @@ classdef HedToolsPython < HedTools
             %    schema - a single string or a cell array of strings representing
             %           the HED schema version or a schema object.
             %
-            % Returns:
-            %     schema_obj - A hedSchema object
-            %
-
-            if ischar(schema)
-                obj.HedSchema = py.hed.load_schema_version(schema);
-            elseif iscell(schema)
-                obj.HedSchema = py.hed.load_schema_version(py.list(schema));
-            elseif py.isinstance(schema, obj.hmod.HedSchema) || ...
-                    py.isinstance(schema, obj.hmod.HedSchemaGroup)
-                obj.HedSchema = schema;
-            else
-                obj.HedSchema = py.None;
-            end
+            obj.HedSchema = HedToolsPython.getHedSchemaObj(schema);
         end
 
         function issueString = validateEvents(obj, events, sidecar, checkWarnings)
@@ -176,8 +164,8 @@ classdef HedToolsPython < HedTools
 
     methods (Static)
 
-        function hedStringObjs = getHedStringObjs(tabular, schema, removeTypes, ...
-                includeContext, replaceDefs)
+        function hedStringObjs = getHedStringObjs(tabular, schema, ...
+                removeTypes, includeContext, replaceDefs)
             % Return a Python list of HedString objects -- used as input for search.
             %
             % Parameters:
@@ -202,6 +190,29 @@ classdef HedToolsPython < HedTools
                 tagManager.get_hed_objs(includeContext, replaceDefs);
         end
 
+        function hedSchemaObj = getHedSchemaObj(schema)
+            % Get a HedSchema or HedSchemaGroup object based on hedVersion
+            %
+            % Parameters:
+            %    schema - a single string or a cell array of strings representing
+            %           the HED schema version or a schema object.
+            %
+            % Returns:
+            %     hedSchemaObj - A hedSchema object
+            %
+
+            if ischar(schema)
+                hedSchemaObj = py.hed.load_schema_version(schema);
+            elseif iscell(schema)
+                hedSchemaObj = py.hed.load_schema_version(py.list(schema));
+            elseif py.isinstance(schema, obj.hmod.HedSchema) || ...
+                    py.isinstance(schema, obj.hmod.HedSchemaGroup)
+                hedSchemaObj = schema;
+            else
+                hedSchemaObj = py.None;
+            end
+        end
+        
         function sidecarObj = getSidecarObj(sidecar)
             % Returns a HEDTools Sidecar object extracted from input.
             %

@@ -24,7 +24,8 @@ classdef HedToolsService < HedTools
 
         function annotations = getHedAnnotations(obj, ...
                 events, sidecar, removeTypes, includeContext, replaceDefs)
-            % Return a Python list of HedString objects -- used as input for search.
+            % Return a cell array of HED annotations of same length as events.
+            %
             % Parameters:
             %    events - char, string or rectified struct.
             %    sidecar - char, string or struct representing sidecar
@@ -34,6 +35,11 @@ classdef HedToolsService < HedTools
             %
             % Returns:
             %     annotations - cell array with the HED annotations.
+            %
+            % Note: The annotations do not have a header line, while
+            % events in char or string form is assumed to have a header
+            % line.
+            % 
             
             request = obj.getRequestTemplate();
             request.service = 'events_assemble';
@@ -55,8 +61,7 @@ classdef HedToolsService < HedTools
                     'HedToolsServiceGetAnnotations:InvalidData', ...
                     "Input errors:\n" + response.results.data);
             end
-            annotations = str2lines(char(response.results.data));
-            annotations = annotations(:);
+            annotations = response.results.data;
         end
 
         function [] = resetHedVersion(obj, hedVersion)
