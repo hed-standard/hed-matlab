@@ -98,71 +98,12 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
             removeTypes = {'Condition-variable', 'Task'};
             includeContext = true;
             replaceDefs = false;
-            assembled = testCase.hed.getHedAnnotations(events, sidecar, ...
-                removeTypes, includeContext, replaceDefs);
+            testCase.verifyError( ...
+             @ ()testCase.hed.getHedAnnotations(events, sidecar, ...
+                removeTypes, includeContext, replaceDefs), ...
+                'HedToolsPythonGetHedAnnotations:InvalidData');
         end
         
-        function testGetSidecarObjSidecarIn(testCase)
-            % Test with incoming sidecar
-            sidecar = testCase.hmod.Sidecar(testCase.goodSidecarPath);
-            testCase.assertTrue(...
-                py.isinstance(sidecar, testCase.hmod.Sidecar));
-            sidecarObj = HedToolsPython.getSidecarObj(sidecar);
-            testCase.assertTrue(...
-                py.isinstance(sidecarObj, testCase.hmod.Sidecar));
-        end
-
-        function testGetSidecarObjCharIn(testCase)
-            % Test with incoming sidecar string
-            jsonChar = fileread(testCase.goodSidecarPath);
-            testCase.verifyTrue(ischar(jsonChar));
-            sidecarObj = HedToolsPython.getSidecarObj(jsonChar);
-            testCase.verifyTrue(...
-                py.isinstance(sidecarObj, testCase.hmod.Sidecar));
-        end
-
-        function testGetSidecarObjStringIn(testCase)
-            % Test with incoming sidecar string
-            jsonString = string(fileread(testCase.goodSidecarPath));
-            testCase.verifyTrue(isstring(jsonString));
-            sidecarObj = testCase.hed.getSidecarObj(jsonString);
-            testCase.verifyTrue(py.isinstance(sidecarObj, ...
-                testCase.hmod.Sidecar));
-        end
-
-        function testGetSidecarObjStructIn(testCase)
-            % Test with incoming sidecar struct
-            jsonStruct = jsondecode(fileread(testCase.goodSidecarPath));
-            testCase.verifyTrue(isstruct(jsonStruct));
-            sidecarObj = HedToolsPython.getSidecarObj(jsonStruct);
-            testCase.assertTrue(py.isinstance(sidecarObj, ...
-                testCase.hmod.Sidecar));
-        end
-
-        function testBadInputs(testCase)
-            % Test for error bad inputs
-            testCase.verifyError(@() get_sidecar_obj([]), ...
-                'get_sidecar_obj:BadInputFormat');
-        end
-
-        function testGetTabularInputSimple(testCase)
-            % Test tabular input with onset column and sidecar
-            events = fileread(testCase.goodEventsPath);
-            sidecar = fileread(testCase.goodSidecarPath);
-            tabularObj = HedToolsPython.getTabularObj(events, sidecar);
-            testCase.assertTrue(py.isinstance(tabularObj, ...
-                testCase.hmod.TabularInput));
-        end
-
-        function testGetTabularInputNoSidecar(testCase)
-            % Test tabular input with no sidecar
-            events = fileread(testCase.goodEventsPath);
-            sidecar = py.None;
-            tabularObj = get_tabular_obj(events, sidecar);
-            testCase.assertTrue(py.isinstance(tabularObj, ...
-                testCase.hmod.TabularInput));
-        end
-
         function testEventsValidNoSidecar(testCase)
             % Valid char sidecar should not have errors or warnings
             eventsChar = fileread(testCase.goodEventsPath);
@@ -273,20 +214,24 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
         end
 
         function testEventsValidStructNoOnsetNoSampling(testCase)
-            % % Valid struct events no onset should not have errors or warnings
-            testCase.verifyError( ...
-                @ ()rectify_events(testCase.eventsStructNoOnset), ...
-                'rectify_events:NeedSamplingRate');
-            % sidecarStruct = jsondecode(sidecarChar);
-            % testCase.verifyTrue(isstruct(sidecarStruct))
-            % issueString = testCase.hed.validateSidecar( ...
-            %     HedTools.formatSidecar(sidecarStruct), false);
-            % testCase.verifyEqual(strlength(issueString), 0, ...
-            %     'Valid char sidecar should not have errors.');
-            % issueString = testCase.hed.validateSidecar(...
-            %     HedTools.formatSidecar(sidecarStruct), true);
-            % testCase.verifyEqual(strlength(issueString), 0, ...
-            %     'Valid char sidecar should not have warnings.');
+            % Unrectified struct events no onset.
+            issueString = testCase.hed.validateEvents( ...
+                testCase.eventsStructNoOnset, ...
+                testCase.sidecarStructGood, false);
+            testCase.verifyEmpty(issueString);
+            issueString = testCase.hed.validateEvents( ...
+                testCase.eventsStructNoOnset, ...
+                testCase.sidecarStructGood, true);
+            testCase.verifyGreaterThan(length(issueString), 0);
+        end
+
+        function testInvalidEvents(testCase)
+            sidecarChar = fileread(testCase.badSidecarPath);
+            eventsChar = fileread(testCase.goodEventsPath);
+            issueString = testCase.hed.validateEvents(...
+                HedTools.formatEvents(eventsChar), sidecarChar, true);
+            testCase.verifyTrue(ischar(issueString));
+            testCase.verifyGreaterThan(length(issueString), 0);
         end
 
         function testSidecarValid(testCase)
@@ -482,10 +427,90 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
 
         function testGetHedSchemaObjs(testCase)
             % Valid char events should not have errors or warnings
-
-            hedSchemaObj = HedToolsPython.getHedSchemaObj('8.2.0');
-            testCase.verifyTrue(py.isinstance(hedSchemaObj, ...
+            schema = HedToolsPython.getHedSchemaObj('8.2.0');
+            testCase.verifyTrue(py.isinstance(schema, ...
                 testCase.hmod.HedSchema));
+            version = char(schema.version);
+            testCase.verifyEqual(version, '8.2.0');
         end
+
+        function testGetHedSchemaObjsMultiple(testCase)
+            % Test complex version with prefix and partnered library
+            version = {'ts:8.2.0', 'score_1.1.0'};
+            schema = HedToolsPython.getHedSchemaObj(version);
+            assertTrue(testCase, py.isinstance(schema, ...
+                       testCase.hmod.HedSchemaGroup));
+            versions = cell(schema.get_schema_versions());
+            testCase.verifyEqual(char(versions{1}), 'ts:8.2.0');
+            testCase.verifyEqual(char(versions{2}), 'score_1.1.0');
+        end
+
+        function testGetHedSchemaObjsNone(testCase)
+            % Test for error when no schema
+            testCase.verifyError(@() HedToolsPython.getHedSchemaObj(''), ...
+                'MATLAB:Python:PyException');
+        end
+   
+        function testGetSidecarObjSidecarIn(testCase)
+            % Test with incoming sidecar
+            sidecar = testCase.hmod.Sidecar(testCase.goodSidecarPath);
+            testCase.assertTrue(...
+                py.isinstance(sidecar, testCase.hmod.Sidecar));
+            sidecarObj = HedToolsPython.getSidecarObj(sidecar);
+            testCase.assertTrue(...
+                py.isinstance(sidecarObj, testCase.hmod.Sidecar));
+        end
+
+        function testGetSidecarObjCharIn(testCase)
+            % Test with incoming sidecar string
+            jsonChar = fileread(testCase.goodSidecarPath);
+            testCase.verifyTrue(ischar(jsonChar));
+            sidecarObj = HedToolsPython.getSidecarObj(jsonChar);
+            testCase.verifyTrue(...
+                py.isinstance(sidecarObj, testCase.hmod.Sidecar));
+        end
+
+        function testGetSidecarObjStringIn(testCase)
+            % Test with incoming sidecar string
+            jsonString = string(fileread(testCase.goodSidecarPath));
+            testCase.verifyTrue(isstring(jsonString));
+            sidecarObj = testCase.hed.getSidecarObj(jsonString);
+            testCase.verifyTrue(py.isinstance(sidecarObj, ...
+                testCase.hmod.Sidecar));
+        end
+
+        function testGetSidecarObjStructIn(testCase)
+            % Test with incoming sidecar struct
+            jsonStruct = jsondecode(fileread(testCase.goodSidecarPath));
+            testCase.verifyTrue(isstruct(jsonStruct));
+            sidecarObj = HedToolsPython.getSidecarObj(jsonStruct);
+            testCase.assertTrue(py.isinstance(sidecarObj, ...
+                testCase.hmod.Sidecar));
+        end
+
+        function testGetSidecarObjBadInputs(testCase)
+            % Test for error bad inputs
+            testCase.verifyError(@() get_sidecar_obj([]), ...
+                'get_sidecar_obj:BadInputFormat');
+        end
+
+        function testGetTabularInputSimple(testCase)
+            % Test tabular input with onset column and sidecar
+            events = fileread(testCase.goodEventsPath);
+            sidecar = fileread(testCase.goodSidecarPath);
+            tabularObj = HedToolsPython.getTabularObj(events, sidecar);
+            testCase.assertTrue(py.isinstance(tabularObj, ...
+                testCase.hmod.TabularInput));
+        end
+
+        function testGetTabularInputNoSidecar(testCase)
+            % Test tabular input with no sidecar
+            events = fileread(testCase.goodEventsPath);
+            sidecar = py.None;
+            tabularObj = get_tabular_obj(events, sidecar);
+            testCase.assertTrue(py.isinstance(tabularObj, ...
+                testCase.hmod.TabularInput));
+        end
+
     end
 end

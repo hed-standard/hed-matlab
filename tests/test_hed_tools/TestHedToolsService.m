@@ -103,11 +103,12 @@ classdef TestHedToolsService < matlab.unittest.TestCase
             removeTypes = {'Condition-variable', 'Task'};
             includeContext = true;
             replaceDefs = false;
-            assembled = testCase.hed.getHedAnnotations(events, sidecar, ...
-                removeTypes, includeContext, replaceDefs);
+            testCase.verifyError( ...
+                @ ()testCase.hed.getHedAnnotations(events, sidecar, ...
+                removeTypes, includeContext, replaceDefs), ...
+                'HedToolsServiceGetHedAnnotations:InvalidData');
         end
-        
-        
+             
         function testEventsValidNoSidecar(testCase)
             % Valid char sidecar should not have errors or warnings
             eventsChar = fileread(testCase.goodEventsPath);
@@ -215,20 +216,15 @@ classdef TestHedToolsService < matlab.unittest.TestCase
         end
 
         function testEventsValidStructNoOnsetNoSampling(testCase)
-            % % Valid struct events no onset should not have errors or warnings
-            testCase.verifyError( ...
-                @ ()rectify_events(testCase.eventsStructNoOnset), ...
-                'rectify_events:NeedSamplingRate');
-            % sidecarStruct = jsondecode(sidecarChar);
-            % testCase.verifyTrue(isstruct(sidecarStruct))
-            % issueString = testCase.hed.validateSidecar( ...
-            %     HedTools.formatSidecar(sidecarStruct), false);
-            % testCase.verifyEqual(strlength(issueString), 0, ...
-            %     'Valid char sidecar should not have errors.');
-            % issueString = testCase.hed.validateSidecar(...
-            %     HedTools.formatSidecar(sidecarStruct), true);
-            % testCase.verifyEqual(strlength(issueString), 0, ...
-            %     'Valid char sidecar should not have warnings.');
+            % Unrectified struct events no onset.
+            issueString = testCase.hed.validateEvents( ...
+                testCase.eventsStructNoOnset, ...
+                testCase.sidecarStructGood, false);
+            testCase.verifyEmpty(issueString);
+            issueString = testCase.hed.validateEvents( ...
+                testCase.eventsStructNoOnset, ...
+                testCase.sidecarStructGood, true);
+            testCase.verifyGreaterThan(length(issueString), 0);
         end
 
         function testSidecarValid(testCase)
