@@ -225,7 +225,7 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
             testCase.verifyGreaterThan(length(issueString), 0);
         end
 
-        function testInvalidEvents(testCase)
+        function testEventsInvalid(testCase)
             sidecarChar = fileread(testCase.badSidecarPath);
             eventsChar = fileread(testCase.goodEventsPath);
             issueString = testCase.hed.validateEvents(...
@@ -235,41 +235,54 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
         end
 
         function testSidecarValid(testCase)
-            % Valid char sidecar should not have errors or warnings
+            % Valid char sidecar should not have errors 
             sidecarChar = fileread(testCase.goodSidecarPath);
             testCase.verifyTrue(ischar(sidecarChar))
             issueString = testCase.hed.validateSidecar( ...
-                HedTools.formatSidecar(sidecarChar), false);
-            testCase.verifyEqual(strlength(issueString), 0, ...
-                'Valid char sidecar should not have errors.');
+                sidecarChar, false);
+            testCase.verifyEqual(strlength(issueString), 0);
+            
+            % Valid char sidecar should not have errors or warnings
             issueString = testCase.hed.validateSidecar(...
-                HedTools.formatSidecar(sidecarChar), true);
-            testCase.verifyEqual(strlength(issueString), 0, ...
-                'Valid char sidecar should not have warnings.');
+                sidecarChar, true);
+            testCase.verifyEqual(strlength(issueString), 0);
 
-            % Valid string sidecar should not have errors or warnings
+            % Valid string sidecar should not have errors
             sidecarString = string(sidecarChar);
             testCase.verifyTrue(isstring(sidecarString))
             issueString = testCase.hed.validateSidecar( ...
-                HedTools.formatSidecar(sidecarString), false);
-            testCase.verifyEqual(strlength(issueString), 0, ...
-                'Valid char sidecar should not have errors.');
+                sidecarString, false);
+            testCase.verifyEqual(strlength(issueString), 0);
+
+            % Valid char sidecar should not have errors or warnings.
             issueString = testCase.hed.validateSidecar(...
-                HedTools.formatSidecar(sidecarString), true);
-            testCase.verifyEqual(strlength(issueString), 0, ...
-                'Valid char sidecar should not have warnings.');
+                sidecarString, true);
+            testCase.verifyEqual(strlength(issueString), 0);
 
             % Valid struct sidecar should not have errors or warnings
             sidecarStruct = jsondecode(sidecarChar);
             testCase.verifyTrue(isstruct(sidecarStruct))
             issueString = testCase.hed.validateSidecar( ...
-                HedTools.formatSidecar(sidecarStruct), false);
-            testCase.verifyEqual(strlength(issueString), 0, ...
-                'Valid char sidecar should not have errors.');
+                sidecarStruct, false);
+            testCase.verifyEqual(strlength(issueString), 0);
+
+            % Valid struct sidecar should not have errors or warnings
             issueString = testCase.hed.validateSidecar(...
-                HedTools.formatSidecar(sidecarStruct), true);
-            testCase.verifyEqual(strlength(issueString), 0, ...
-                'Valid char sidecar should not have warnings.');
+                sidecarStruct, true);
+            testCase.verifyEqual(strlength(issueString), 0);
+
+            % Valid sidecar obj should not have errors or warnings
+            sidecarObj = HedToolsPython.getSidecarObj(sidecarChar);
+            testCase.verifyTrue(py.isinstance(sidecarObj, ...
+                testCase.hmod.Sidecar)) 
+            issueString = testCase.hed.validateSidecar( ...
+                sidecarObj, false);
+            testCase.verifyEqual(strlength(issueString), 0);
+            
+            % Valid sidecar obj should not have errors or warnings
+            issueString = testCase.hed.validateSidecar(...
+                sidecarObj, true);
+            testCase.verifyEqual(strlength(issueString), 0);
         end
 
         function testSidecarInvalid(testCase)
@@ -277,37 +290,50 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
             sidecarChar = fileread(testCase.badSidecarPath);
             testCase.verifyTrue(ischar(sidecarChar))
             issueString = testCase.hed.validateSidecar( ...
-                HedTools.formatSidecar(sidecarChar), false);
-            testCase.verifyGreaterThan(strlength(issueString), 0, ...
-                'Invalid char sidecar should not have errors.');
-            issueString = testCase.hed.validateSidecar(...
-                HedTools.formatSidecar(sidecarChar), true);
-            testCase.verifyGreaterThan(strlength(issueString), 0, ...
-                'Invalid char sidecar should not have warnings.');
+                sidecarChar, false);
+            testCase.verifyGreaterThan(strlength(issueString), 0);
 
-            % Invalid string sidecar should have errors or warnings
+            % Invalid char sidecar should have errors with warning on
+            issueString = testCase.hed.validateSidecar(...
+                sidecarChar, true);
+            testCase.verifyGreaterThan(strlength(issueString), 0);
+
+            % Invalid string sidecar should have errors
             sidecarString = string(sidecarChar);
             testCase.verifyTrue(isstring(sidecarString))
             issueString = testCase.hed.validateSidecar( ...
-                HedTools.formatSidecar(sidecarString), false);
-            testCase.verifyGreaterThan(strlength(issueString), 0, ...
-                'Invalid char sidecar should have errors.');
-            issueString = testCase.hed.validateSidecar(...
-                HedTools.formatSidecar(sidecarString), true);
-            testCase.verifyGreaterThan(strlength(issueString), 0, ...
-                'Invalid char sidecar should have warnings.');
+                sidecarString, false);
+            testCase.verifyGreaterThan(strlength(issueString), 0);
 
-            % Inalid struct sidecar should not have errors or warnings
+            % Invalid string sidecar should have errors with warning on
+            issueString = testCase.hed.validateSidecar(...
+                sidecarString, true);
+            testCase.verifyGreaterThan(strlength(issueString), 0);
+
+            % Inalid struct sidecar should have errors
             sidecarStruct = jsondecode(sidecarChar);
             testCase.verifyTrue(isstruct(sidecarStruct))
             issueString = testCase.hed.validateSidecar( ...
-                HedTools.formatSidecar(sidecarStruct), false);
-            testCase.verifyGreaterThan(strlength(issueString), 0, ...
-                'Invalid char sidecar should have errors.');
+                sidecarStruct, false);
+            testCase.verifyGreaterThan(strlength(issueString), 0);
+
+            % Invalid struct sidecar should have errors with warning on
             issueString = testCase.hed.validateSidecar(...
-                HedTools.formatSidecar(sidecarStruct), true);
-            testCase.verifyGreaterThan(strlength(issueString), 0, ...
-                'Invalid char sidecar should have warnings.');
+                sidecarStruct, true);
+            testCase.verifyGreaterThan(strlength(issueString), 0);
+
+            % Inalid sidecar obj should have errors
+            sidecarObj = HedToolsPython.getSidecarObj(sidecarChar);
+            testCase.verifyTrue(py.isinstance(sidecarObj, ...
+                testCase.hmod.Sidecar)) 
+            issueString = testCase.hed.validateSidecar( ...
+                sidecarObj, false);
+            testCase.verifyGreaterThan(strlength(issueString), 0);
+            
+            % Invalid sidecar obj should have errors with warning on
+            issueString = testCase.hed.validateSidecar(...
+                sidecarObj, true);
+            testCase.verifyGreaterThan(strlength(issueString), 0);
         end
 
         function testTagsValid(testCase)
@@ -316,20 +342,16 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
             testCase.verifyEqual(strlength(issues), 0);
 
             % Test valid check warnings has warnings
-            issues = testCase.hed.validateTags('Red, Blue/Apple', ...
-                true);
+            issues = testCase.hed.validateTags('Red, Blue/Apple', true);
             testCase.verifyGreaterThan(strlength(issues), 0);
 
             % Test valid no check warnings has warnings
-            issues = testCase.hed.validateTags('Red, Blue/Apple', ...
-                false);
+            issues = testCase.hed.validateTags('Red, Blue/Apple', false);
             testCase.verifyEqual(strlength(issues), 0);
 
             % Test with extension and no check warnings
-            issues = testCase.hed.validateTags('Red, Blue/Apple', ...
-                false);
-            testCase.verifyEqual(strlength(issues), 0, ...
-                'Valid HED string with ext has no errors.');
+            issues = testCase.hed.validateTags('Red, Blue/Apple', false);
+            testCase.verifyEqual(strlength(issues), 0);
         end
 
         function testTagsInvalid(testCase)
@@ -354,6 +376,14 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
                 'HedToolsPythonValidateHedTags:InvalidHedTagInput');
         end
     
+        function testGetHedQueryHandler(testCase)
+             query1 = 'Sensory-event';
+             qHandler = HedToolsPython.getHedQueryHandler(query1);
+             testCase.verifyTrue(py.isinstance(qHandler, ...
+                 testCase.hmod.QueryHandler));
+             disp(query1)
+        end
+
         function testGetHedStringObjs(testCase)
             % Valid char events should not have errors or warnings
             sidecarChar = fileread(testCase.goodSidecarPath);

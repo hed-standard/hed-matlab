@@ -107,6 +107,29 @@ classdef HedToolsPython < HedTools
    
         end
 
+        function issueString = validateSidecar(obj, sidecar, checkWarnings)
+            % Validate a sidecar containing HED tags.
+            %
+            % Parameters:
+            %    sidecar - a char, string, struct, or SidecarObj
+            %    checkWarnings - boolean indicating checking for warnings
+            %
+            % Returns:
+            %     issueString - A string with the validation issues suitable for
+            %                   printing (has newlines).
+           
+            ehandler = py.hed.errors.error_reporter.ErrorHandler(...
+                check_for_warnings=checkWarnings);
+            sidecarObj = HedToolsPython.getSidecarObj(sidecar);
+            issues = sidecarObj.validate(obj.HedSchema, error_handler=ehandler);
+            if isempty(issues)
+                issueString = '';
+            else
+                issueString = ...
+                    char(py.hed.get_printable_issue_string(issues));
+            end
+        end
+    
         function issueString = validateTags(obj, hedTags, checkWarnings)
             % Validate a string containing HED tags.
             %
@@ -143,30 +166,7 @@ classdef HedToolsPython < HedTools
                     char(py.hed.get_printable_issue_string(issues));
             end
         end
-
-        function issueString = validateSidecar(obj, sidecar, checkWarnings)
-            % Validate a sidecar containing HED tags.
-            %
-            % Parameters:
-            %    sidecar - a formatted sidecar
-            %    checkWarnings - boolean indicating checking for warnings
-            %
-            % Returns:
-            %     issueString - A string with the validation issues suitable for
-            %                   printing (has newlines).
-           
-            ehandler = py.hed.errors.error_reporter.ErrorHandler(...
-                check_for_warnings=checkWarnings);
-            sidecarObj = py.hed.strs_to_sidecar(...
-                HedTools.formatSidecar(sidecar));
-            issues = sidecarObj.validate(obj.HedSchema, error_handler=ehandler);
-            if isempty(issues)
-                issueString = '';
-            else
-                issueString = ...
-                    char(py.hed.get_printable_issue_string(issues));
-            end
-        end
+    
     end
 
     methods (Static)
@@ -220,6 +220,38 @@ classdef HedToolsPython < HedTools
                 hedSchemaObj = py.None;
             end
         end
+        
+        function queryHandler = getHedQueryHandler(query)
+            % Return a HED query handler.
+            %
+            % Parameters:
+            %     query - a string query
+            %
+            % Returns;
+            %     queryHandler - the query handler object. 
+
+            mmod = py.importlib.import_module('hed.models');
+            if isstring(query)
+                query = char(query);
+            end
+            if ischar(query)
+                try
+                   queryHandler = mmod.QueryHandler(query);
+                catch MException
+                    throw (MException(...
+                        'HedToolsPythonGetHedQueryHandler:InvalidQuery', ...
+                        'Query: %s cannot be parsed.', query));
+                end
+            elseif py.isinstance(query, mmod.QueryHandler)
+                queryHandler = query;
+            else
+                throw (MException( ...
+                    'HedToolsPythonGetHedQueryHandler:InvalidQueryFormat', ...
+                        'Query: %s has an invalid format.', query));
+            end
+
+        end
+
         
         function sidecarObj = getSidecarObj(sidecar)
             % Returns a HEDTools Sidecar object extracted from input.
