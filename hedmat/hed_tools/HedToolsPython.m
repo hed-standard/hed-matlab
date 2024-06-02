@@ -54,6 +54,28 @@ classdef HedToolsPython < HedTools
             annotations = cellfun(@char, cStrs(:), 'UniformOutput', false);
         end
 
+        function factors = getHedFactors(obj, annotations, queries)
+            %% Return an array of 0's and 1's indicating query truth
+            %
+            %  Parameters:
+            %     annotations - cell array of char or string of length n
+            %     queries = cell array HED queries of length m
+            %
+            %  Returns:
+            %     factors - n x m array of 1's and 0's.
+            %
+
+            queries, query_names, issues = ...
+                obj.hed.get_query_handlers(queries);
+            issueString = char(py.hed.get_printable_issue_string(issues));
+            if ~isempty(issueString)
+                throw(MException( ...
+                    'HedToolsPythonGetHedFactors:InvalidQueries', ...
+                    "Input errors:\n" + issueString));
+            end
+            p = py.numpy.array(magic(3))
+            factors = obj.hed.query_service.search_hed_objs()
+
         function [] = resetHedVersion(obj, version)
             % Change the HED Version used.
             %
@@ -307,6 +329,8 @@ classdef HedToolsPython < HedTools
                 throw(MException('HedToolsPytonGetTabularInput:Invalid input'))
             end
         end
+
+        
 
     end
 end

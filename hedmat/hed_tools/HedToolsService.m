@@ -65,29 +65,37 @@ classdef HedToolsService < HedTools
         end
 
         function factors = getHedFactors(obj, annotations, queries)
+            %% Return an array of 0's and 1's indicating query truth
+            %
+            %  Parameters:
+            %     annotations - cell array of char or string of length n
+            %     queries = cell array HED queries of length m
+            %
+            %  Returns:
+            %     factors - n x m array of 1's and 0's.
+            %
             request = getRequestTemplate();
             request.service = 'events_search';
             request.schema_version = obj.HedVersion;
             request.events_string = data.eventsText;
             request.sidecar_string = data.jsonText;
-            request.queries = {'Intended-effect, Cue', 'Sensory-event'};
-            request.expand_defs = true;
-            request.
-            request2 = struct('service', 'events_search', ...
-                'schema_version', '8.2.0', ...
-                'sidecar_string', data.jsonText, ...
-                'events_string', data.eventsText, ...
-                'expand_defs', true, ...
-                'queries', '');
-            request2.queries = {'Intended-effect, Cue', 'Sensory-event'};
-            response2 = webwrite(servicesUrl, request2, options);
-            response2 = jsondecode(response2);
-            outputReport(response2, 'Example 2 Querying an events file with extra columns');
-            if ~isempty(response2.error_type) || ...
-                    ~strcmpi(response2.results.msg_category, 'success')
-                errors{end + 1} = 'Example 2 failed execute the search.';
+            request.queries = queries;
+            request.query_names = query_names;
+            request.include_context = true;
+            request.replace_defs = true;
+            request.remove_types_on = true;
+            response = webwrite(obj.ServicesUrl, request, obj.WebOptions);
+            response = jsondecode(response);
+            error_msg = HedToolsService.getResponseError(response);
+            if error_msg
+                throw(MException(...
+                    'HedToolsServiceGetHedAnnotations:ServiceError', error_msg));
+            elseif strcmpi(response.results.msg_category, 'warning')
+                throw(MException( ...
+                    'HedToolsServiceGetHedFactors:InvalidData', ...
+                    "Input errors:\n" + response.results.data));
             end
-            )
+            factors = {};
         end
 
         function [] = resetHedVersion(obj, hedVersion)
