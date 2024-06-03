@@ -381,7 +381,6 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
              qHandler = HedToolsPython.getHedQueryHandler(query1);
              testCase.verifyTrue(py.isinstance(qHandler, ...
                  testCase.hmod.QueryHandler));
-             disp(query1)
         end
 
         function testGetHedStringObjs(testCase)

@@ -66,7 +66,7 @@ classdef TestHedToolsService < matlab.unittest.TestCase
             testCase.verifyEqual(length(data1_str), 14678);
 
             % With context, no remove, no replace
-            removeTypes = {};
+            removeTypesOn = false;
             includeContext = true;
             replaceDefs = false;
             annotations = testCase.hed.getHedAnnotations(eventsChar, ...
@@ -77,21 +77,21 @@ classdef TestHedToolsService < matlab.unittest.TestCase
             testCase.verifyGreaterThan(length(data2_str), length(data1_str));
 
             % With context, remove, no replace
-            removeTypes = {'Condition-variable', 'Task'};
+            removeTypesOn = true;
             replaceDefs = false;
             includeContext = true;
             annotations = testCase.hed.getHedAnnotations(eventsChar, ...
-                sidecarChar, removeTypes, includeContext, replaceDefs);
+                sidecarChar, removeTypesOn, includeContext, replaceDefs);
             testCase.verifyEqual(length(annotations), 199);
             data3_str = strjoin(annotations, '\n');
             testCase.verifyGreaterThan(length(data2_str), length(data3_str));
 
             % With context, remove, replace
-            removeTypes = {'Condition-variable', 'Task'};
+            removeTypesOn = true;
             replaceDefs = true;
             includeContext = true;
             annotations = testCase.hed.getHedAnnotations(eventsChar, ...
-                sidecarChar, removeTypes, includeContext, replaceDefs);
+                sidecarChar, removeTypesOn, includeContext, replaceDefs);
             testCase.verifyEqual(length(annotations), 199);
             data4_str = strjoin(annotations, '\n');
             testCase.verifyGreaterThan(length(data4_str), length(data3_str));
@@ -100,12 +100,12 @@ classdef TestHedToolsService < matlab.unittest.TestCase
         function testGetHedAnnotationsInvalid(testCase)
             events = fileread(testCase.goodEventsPath);
             sidecar = fileread(testCase.badSidecarPath);
-            removeTypes = {'Condition-variable', 'Task'};
+            removeTypesOn = true;
             includeContext = true;
             replaceDefs = false;
             testCase.verifyError( ...
                 @ ()testCase.hed.getHedAnnotations(events, sidecar, ...
-                removeTypes, includeContext, replaceDefs), ...
+                removeTypesOn, includeContext, replaceDefs), ...
                 'HedToolsServiceGetHedAnnotations:InvalidData');
         end
              

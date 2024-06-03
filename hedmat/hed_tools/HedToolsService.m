@@ -23,13 +23,14 @@ classdef HedToolsService < HedTools
         end
 
         function annotations = getHedAnnotations(obj, ...
-                events, sidecar, removeTypes, includeContext, replaceDefs)
+                events, sidecar, removeTypesOn, includeContext, replaceDefs)
             % Return a cell array of HED annotations of same length as events.
             %
             % Parameters:
             %    events - char, string or rectified struct.
             %    sidecar - char, string or struct representing sidecar
-            %    removeTypes - a cell array of types to remove.
+            %    removeTypesOn - boolean true-> remove Condition-variable
+            %        and Task
             %    includeContext - boolean true->expand context (usually true).
             %    replaceDefs - boolean true->replace def with definition (usually true).
             %
@@ -47,7 +48,7 @@ classdef HedToolsService < HedTools
             request.events_string = HedTools.formatEvents(events);
             request.sidecar_string = HedTools.formatSidecar(sidecar);
             request.check_for_warnings = false;
-            request.remove_types = removeTypes;
+            request.remove_types_on = removeTypesOn;
             request.include_context = includeContext;
             request.replace_defs = replaceDefs;
             response = webwrite(obj.ServicesUrl, request, obj.WebOptions);

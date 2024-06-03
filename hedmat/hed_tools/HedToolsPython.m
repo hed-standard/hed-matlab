@@ -73,8 +73,11 @@ classdef HedToolsPython < HedTools
                     'HedToolsPythonGetHedFactors:InvalidQueries', ...
                     "Input errors:\n" + issueString));
             end
-            p = py.numpy.array(magic(3))
-            factors = obj.hed.query_service.search_hed_objs()
+            hed_objs = py.hed.tools.annotation_util.strs_to_hed_objs(...
+                annotations, obj.HedSchema);
+            factors = obj.hed.query_service.search_hed_objs(...
+                hed_objs, queries);
+        end
 
         function [] = resetHedVersion(obj, version)
             % Change the HED Version used.
