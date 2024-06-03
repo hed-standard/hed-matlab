@@ -20,13 +20,14 @@ classdef HedToolsPython < HedTools
         end
 
         function annotations = getHedAnnotations(obj, ...
-                events, sidecar, removeTypes, includeContext, replaceDefs)
+                events, sidecar, removeTypesOn, includeContext, replaceDefs)
             % Return a cell array of HED annotations of same length as events.
             %
             % Parameters:
             %    events - char, string or rectified struct.
             %    sidecar - char, string or struct representing sidecar
-            %    removeTypes - a cell array of types to remove.
+            %    removeTypesOn - boolean true->remove Condition-variable
+            %       and Task
             %    includeContext - boolean true->expand context (usually true).
             %    replaceDefs - boolean true->replace def with definition (usually true).
             %
@@ -46,7 +47,7 @@ classdef HedToolsPython < HedTools
                     "Input errors:\n" + issueString));
             end
             hedObjs = HedToolsPython.getHedStringObjs(events, ...
-                  obj.HedSchema, removeTypes, includeContext, replaceDefs);
+                  obj.HedSchema, removeTypesOn, includeContext, replaceDefs);
             strs = ...
                 py.hed.tools.analysis.annotation_util.to_strlist(hedObjs);
             cStrs = cell(strs);
@@ -197,13 +198,13 @@ classdef HedToolsPython < HedTools
     methods (Static)
 
         function hedStringObjs = getHedStringObjs(tabular, schema, ...
-                removeTypes, includeContext, replaceDefs)
+                removeTypesOn, includeContext, replaceDefs)
             % Return a Python list of HedString objects -- used as input for search.
             %
             % Parameters:
             %      tabular - a TabularInput obj
             %      schema - a hedSchema or hedVersion
-            %      removeTypes - a cell array of types to remove.
+            %      removeTypesOn - boolean true-> remove Condition-variable and Task.
             %      includeContext - boolean true->expand context (usually true).
             %      replaceDefs - boolean true->replace def with definition (usually true).
             %
@@ -217,6 +218,10 @@ classdef HedToolsPython < HedTools
             hmod = py.importlib.import_module('hed');
             
             eventManager = hmod.EventManager(tabular, schema);
+            if removeTypesOn
+                removeTypes = {'Condition-variable', 'Task'};
+            else
+                removeTypes = {};
             tagManager = hmod.HedTagManager(eventManager, ...
                 py.list(removeTypes));
             hedStringObjs = ...
@@ -276,8 +281,7 @@ classdef HedToolsPython < HedTools
             end
 
         end
-
-        
+      
         function sidecarObj = getSidecarObj(sidecar)
             % Returns a HEDTools Sidecar object extracted from input.
             %
@@ -332,8 +336,6 @@ classdef HedToolsPython < HedTools
                 throw(MException('HedToolsPytonGetTabularInput:Invalid input'))
             end
         end
-
-        
 
     end
 end

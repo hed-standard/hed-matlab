@@ -310,7 +310,7 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
                 sidecarString, true);
             testCase.verifyGreaterThan(strlength(issueString), 0);
 
-            % Inalid struct sidecar should have errors
+            % Invalid struct sidecar should have errors
             sidecarStruct = jsondecode(sidecarChar);
             testCase.verifyTrue(isstruct(sidecarStruct))
             issueString = testCase.hed.validateSidecar( ...
@@ -322,7 +322,7 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
                 sidecarStruct, true);
             testCase.verifyGreaterThan(strlength(issueString), 0);
 
-            % Inalid sidecar obj should have errors
+            % Invalid sidecar obj should have errors
             sidecarObj = HedToolsPython.getSidecarObj(sidecarChar);
             testCase.verifyTrue(py.isinstance(sidecarObj, ...
                 testCase.hmod.Sidecar)) 

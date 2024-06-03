@@ -4,7 +4,7 @@ function [issue_string, has_errors] = validate_sidecar(sidecar_obj, ...
 % 
 % Parameters:
 %    sidecar_obj - Sidecar object
-%    shema - A HED schema object or HED version.
+%    schema - A HED schema object or HED version.
 %    check_warnings - Boolean indicating checking for warnings
 %
 % Returns:

@@ -1,5 +1,5 @@
 function factor_vector = get_hed_factor(query, hed_obj_list)
-% Return a logical vector based on whether the HED query is statisfied.
+% Return a logical vector based on whether the HED query is satisfied.
 %
 % Parameters:
 %     query - a string query
