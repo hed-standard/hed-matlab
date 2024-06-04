@@ -76,15 +76,11 @@ classdef HedToolsService < HedTools
             %     factors - n x m array of 1's and 0's.
             %
             request = getRequestTemplate();
-            request.service = 'events_search';
+            request.service = 'strings_search';
             request.schema_version = obj.HedVersion;
-            request.events_string = data.eventsText;
-            request.sidecar_string = data.jsonText;
+            request.string_list = annotations;
             request.queries = queries;
-            request.query_names = query_names;
-            request.include_context = true;
-            request.replace_defs = true;
-            request.remove_types_on = true;
+            %request.query_names = query_names;
             response = webwrite(obj.ServicesUrl, request, obj.WebOptions);
             response = jsondecode(response);
             error_msg = HedToolsService.getResponseError(response);
@@ -96,7 +92,7 @@ classdef HedToolsService < HedTools
                     'HedToolsServiceGetHedFactors:InvalidData', ...
                     "Input errors:\n" + response.results.data));
             end
-            factors = {};
+            factors = response.results.data;
         end
 
         function [] = resetHedVersion(obj, hedVersion)
@@ -257,7 +253,7 @@ classdef HedToolsService < HedTools
 
         function msg = getResponseError(response)
             if ~isempty(response.error_type)
-                msg = sprintf('%s error %s: %s', response.service, ...
+                msg = sprintf('Error %s: %s', ...
                     response.error_type, response.error_msg);
             else
                 msg = '';
