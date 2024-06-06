@@ -22,12 +22,12 @@ classdef HedToolsService < HedTools
             obj.resetSessionInfo(host);
         end
 
-        function annotations = getHedAnnotations(obj, ...
-                events, sidecar, removeTypesOn, includeContext, replaceDefs)
+        function annotations = getHedAnnotations(obj, eventsIn, ...
+                sidecar, removeTypesOn, includeContext, replaceDefs)
             % Return a cell array of HED annotations of same length as events.
             %
             % Parameters:
-            %    events - char, string or rectified struct.
+            %    eventsIn - char, string or rectified struct.
             %    sidecar - char, string or struct representing sidecar
             %    removeTypesOn - boolean true-> remove Condition-variable
             %        and Task
@@ -45,7 +45,7 @@ classdef HedToolsService < HedTools
             request = obj.getRequestTemplate();
             request.service = 'events_assemble';
             request.schema_version = obj.HedVersion;
-            request.events_string = HedTools.formatEvents(events);
+            request.events_string = HedTools.formatEvents(eventsIn);
             request.sidecar_string = HedTools.formatSidecar(sidecar);
             request.check_for_warnings = false;
             request.remove_types_on = removeTypesOn;

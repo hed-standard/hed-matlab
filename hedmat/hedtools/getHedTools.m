@@ -4,7 +4,7 @@ function hed = getHedTools(hedVersion, host)
 % Parameters:
 %    hedVersion - char or cell array with HED version to be used.
 %    host - web address of service if HedToolsService is to be used.
-    if nargin == 2 || isempty(host)
+    if nargin == 2 && ~isempty(host)
         hed = HedToolsService(hedVersion, host);
     else
         hed = HedToolsPython(hedVersion);

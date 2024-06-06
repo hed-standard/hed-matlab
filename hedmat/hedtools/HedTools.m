@@ -53,7 +53,18 @@ classdef HedTools < handle
     end
 
     methods (Abstract)
-        resetHedVersion(obj)
+        annotations = getHedAnnotations(obj, eventsIn, sidecar, ...
+            removeTypesOn, includeContext, replaceDefs);
+
+        factors = getHedFactors(obj, annotations, queries);
+
+        issueString = validateEvents(obj, eventsIn, sidecar, checkWarnings);
+        
+        issueString = validateSidecar(obj, sidecar, checkWarnings);
+
+        issueString = validateTags(obj, hedtags, checkWarnings);
+        
+        resetHedVersion(obj, hedVersion)
     end
 
 end

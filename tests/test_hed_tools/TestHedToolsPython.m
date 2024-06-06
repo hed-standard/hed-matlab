@@ -98,13 +98,15 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
             queries1 = {'Sensory-event'};
             factors1 = testCase.hed.getHedFactors(annotations, queries1);
             testCase.verifyEqual(length(factors1), 3);
-            testCase.verifyEqual(factors1(2), 1);
+            testCase.verifyTrue(factors1(2) == 1);
 
             % Test 2 queries on 3 strings.
             queries2 = {'Sensory-event', 'Red'};
             factors2 = testCase.hed.getHedFactors(annotations, queries2);
-            testCase.verifyEqual(size(factors2), [3, 2])
+            testCase.verifyTrue(size(factors2, 1) == 3);
+            testCase.verifyTrue(size(factors2, 2) == 2);
         end
+
 
         function testGetHedAnnotationsInvalid(testCase)
             events = fileread(testCase.goodEventsPath);
@@ -555,5 +557,23 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
                 testCase.hmod.TabularInput));
         end
 
+        function testGetHedFromAnnotations(testCase)
+              % Normal array
+              an1 = {'Sensory-event', 'Red'};
+              objs1 = testCase.hed.getHedFromAnnotations(an1, ...
+                  testCase.hed.HedSchema);
+              testCase.assertEqual(double(py.len(objs1)), double(length(an1)));
+              objs1Cell = cell(objs1);
+              testCase.assertNotEqual(objs1Cell{2}, py.None);
+
+              % Includes empty string
+              an2 =  {'Sensory-event', '', 'Red'};
+              objs2 = testCase.hed.getHedFromAnnotations(an2, ...
+                  testCase.hed.HedSchema);
+              testCase.assertEqual(double(py.len(objs2)), double(length(an2)));
+              objs2Cell = cell(objs2);
+              testCase.assertEqual(objs2Cell{2}, py.None);
+
+        end
     end
 end

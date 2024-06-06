@@ -1,6 +1,5 @@
 classdef HedToolsPython < HedTools
-    % Creates a concrete class that uses direct calls to Python for its
-    % implementation.
+    % Concrete class using direct calls to Python for HedTools interface.
 
     properties
         HedVersion
@@ -19,12 +18,12 @@ classdef HedToolsPython < HedTools
             obj.resetHedVersion(version)
         end
 
-        function annotations = getHedAnnotations(obj, ...
-                events, sidecar, removeTypesOn, includeContext, replaceDefs)
+        function annotations = getHedAnnotations(obj, eventsIn, ...
+                sidecar, removeTypesOn, includeContext, replaceDefs)
             % Return a cell array of HED annotations of same length as events.
             %
             % Parameters:
-            %    events - char, string or rectified struct.
+            %    eventsIn - char, string or rectified struct.
             %    sidecar - char, string or struct representing sidecar
             %    removeTypesOn - boolean true->remove Condition-variable
             %       and Task
@@ -39,7 +38,7 @@ classdef HedToolsPython < HedTools
             % line.
             % 
 
-            events = HedToolsPython.getTabularObj(events, sidecar);
+            events = HedToolsPython.getTabularObj(eventsIn, sidecar);
             issueString = obj.validateEvents(events, sidecar, false);
             if ~isempty(issueString)
                 throw(MException( ...
@@ -77,12 +76,11 @@ classdef HedToolsPython < HedTools
                     "Input errors:\n" + issueString));
             end
             queries = results{1};
-            hed_objs = py.hed.tools.analysis.annotation_util.strs_to_hed_objs(...
-                annotations, obj.HedSchema);
+            queryNames = results{2};
+            hed_objs = obj.getHedFromAnnotations(annotations, obj.HedSchema);
             df_factors = py.hed.models.query_service.search_hed_objs(...
-                hed_objs, queries);
-            numpy_array = df_factors.to_numpy();
-            factors = numpy_array.tolist();
+                hed_objs, queries, queryNames);
+            factors = double(df_factors.to_numpy());
         end
 
         function [] = resetHedVersion(obj, version)
@@ -201,6 +199,21 @@ classdef HedToolsPython < HedTools
     end
 
     methods (Static)
+        function hedStringObjs = getHedFromAnnotations(annotations, schema)
+            % Cell array of char or string convert to py.list of HedString
+            hedStringObjs = cell(1, length(annotations));
+
+            for k=1:length(annotations)
+                if isempty(annotations{k}) || ...
+                        strcmpi(char(annotations{k}), 'n/a')
+                    hedStringObjs{k} = py.None;
+                else
+                    hedStringObjs{k} = ...
+                        py.hed.HedString(char(annotations{k}), schema);
+                end
+            end
+            hedStringObjs = py.list(hedStringObjs);
+        end
 
         function hedStringObjs = getHedStringObjs(tabular, schema, ...
                 removeTypesOn, includeContext, replaceDefs)
