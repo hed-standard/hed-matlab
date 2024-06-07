@@ -8,9 +8,9 @@ HED API reference
    :template: custom-module-template.rst
    :recursive:
    
-   data_cleaning
-   hedtools_wrappers
+   hedtools
+   remodeling_demos
    utilities
-   web_services
+   web_services_demos
 
 

@@ -13,7 +13,7 @@ function events_rectified = rectify_events(event_struct, sampling_rate)
     if  ~ismember('duration', fields)
         [event_struct.duration] = deal(NaN);
     end
-    if ~ismember('onset', fields) && nargin == 1
+    if ~ismember('onset', fields) && (nargin == 1 || isnan(sampling_rate))
         throw(MException('rectify_events:NeedSamplingRate', ...
             'Must have sampling rate to compute onset from latency'));
     elseif ~ismember('onset', fields) && ~ismember('latency', fields)
