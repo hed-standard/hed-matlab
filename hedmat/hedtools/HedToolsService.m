@@ -23,16 +23,18 @@ classdef HedToolsService < HedTools
         end
 
         function annotations = getHedAnnotations(obj, eventsIn, ...
-                sidecar, removeTypesOn, includeContext, replaceDefs)
+                sidecar, varargin)
             % Return a cell array of HED annotations of same length as events.
             %
             % Parameters:
             %    eventsIn - char, string or rectified struct.
             %    sidecar - char, string or struct representing sidecar
-            %    removeTypesOn - boolean true-> remove Condition-variable
+            %
+            % Optional name-value:
+            %    'includeContext' - boolean true->expand context (usually true).
+            %    'removeTypesOn' - boolean true-> remove Condition-variable
             %        and Task
-            %    includeContext - boolean true->expand context (usually true).
-            %    replaceDefs - boolean true->replace def with definition (usually true).
+            %    'replaceDefs' - boolean true->replace def with definition (usually true).
             %
             % Returns:
             %     annotations - cell array with the HED annotations.
@@ -41,16 +43,20 @@ classdef HedToolsService < HedTools
             % events in char or string form is assumed to have a header
             % line.
             % 
-            
+            p = inputParser;
+            p.addParameter('includeContext', true,  @(x) islogical(x))
+            p.addParameter('removeTypesOn', true,  @(x) islogical(x))
+            p.addParameter('replaceDefs', true,  @(x) islogical(x))
+            parse(p, varargin{:});
             request = obj.getRequestTemplate();
             request.service = 'events_assemble';
             request.schema_version = obj.HedVersion;
             request.events_string = HedTools.formatEvents(eventsIn);
             request.sidecar_string = HedTools.formatSidecar(sidecar);
             request.check_for_warnings = false;
-            request.remove_types_on = removeTypesOn;
-            request.include_context = includeContext;
-            request.replace_defs = replaceDefs;
+            request.remove_types_on = p.Results.removeTypesOn;
+            request.include_context = p.Results.includeContext;
+            request.replace_defs = p.Results.replaceDefs;
             response = webwrite(obj.ServicesUrl, request, obj.WebOptions);
             response = jsondecode(response);
             error_msg = HedToolsService.getResponseError(response);
@@ -65,7 +71,7 @@ classdef HedToolsService < HedTools
             annotations = response.results.data;
         end
 
-        function factors = getHedFactors(obj, annotations, queries)
+        function factors = searchHed(obj, annotations, queries)
             %% Return an array of 0's and 1's indicating query truth
             %
             %  Parameters:
@@ -86,13 +92,130 @@ classdef HedToolsService < HedTools
             error_msg = HedToolsService.getResponseError(response);
             if error_msg
                 throw(MException(...
-                    'HedToolsServiceGetHedAnnotations:ServiceError', error_msg));
+                    'HedToolsServiceSearchHed:ServiceError', error_msg));
             elseif strcmpi(response.results.msg_category, 'warning')
                 throw(MException( ...
-                    'HedToolsServiceGetHedFactors:InvalidData', ...
+                    'HedToolsServiceSearchHed:InvalidData', ...
                     "Input errors:\n" + response.results.data));
             end
             factors = response.results.data;
+        end
+
+        function issues = validateEvents(obj, events, sidecar, varargin)
+            % Validate HED in events or other tabular-type input.
+            %
+            % Parameters:
+            %    events - char, string or rectified struct.
+            %    sidecar - char, string or struct representing sidecar
+            %
+            % Optional name-value:
+            %    'checkWarnings' - boolean (optional, default false) 
+            %                  indicates whether to include warnings.
+            %
+            % Returns:
+            %     issues - A string with the validation issues suitable for
+            %                   printing (has newlines).
+            
+            p = inputParser;
+            p.addParameter('checkWarnings', false,  @(x) islogical(x))
+            parse(p, varargin{:});
+            request = obj.getRequestTemplate();
+            request.service = 'events_validate';
+            request.schema_version = obj.HedVersion;
+            request.events_string = HedTools.formatEvents(events);
+            request.sidecar_string = HedTools.formatSidecar(sidecar);
+            request.check_for_warnings = p.Results.checkWarnings;
+            response = webwrite(obj.ServicesUrl, request, obj.WebOptions);
+            response = jsondecode(response);
+            error_msg = HedToolsService.getResponseError(response);
+            if error_msg
+                throw(MException(...
+                    'HedToolsServiceValidateEvents:ServiceError', error_msg));
+            end
+            if strcmpi(response.results.msg_category, 'warning')
+                issues = response.results.data;
+            else
+                issues = '';
+            end    
+        end
+
+        function issues = validateSidecar(obj, sidecar, varargin)
+            % Validate a sidecar
+            % 
+            % Parameters:
+            %    sidecar - a string, struct, or char array representing
+            %              a sidecar
+            %
+            % Optional name-value:
+            %    'checkWarnings' - boolean (optional, default false) 
+            %                  indicates whether to include warnings.
+            %
+            % Returns:
+            %    issues - printable issue string or empty
+            %
+            p = inputParser;
+            p.addParameter('checkWarnings', false,  @(x) islogical(x))
+            parse(p, varargin{:});
+  
+            request = obj.getRequestTemplate();
+            request.service = 'sidecar_validate';
+            request.schema_version = obj.HedVersion;
+            request.sidecar_string = HedTools.formatSidecar(sidecar);
+            request.check_for_warnings = p.Results.checkWarnings;
+            response = webwrite(obj.ServicesUrl, request, obj.WebOptions);
+            response = jsondecode(response);
+            error_msg = HedToolsService.getResponseError(response);
+            if error_msg
+                throw(MException(...
+                    'HedToolsServiceValidateSidecar:ServiceError', error_msg));
+            end
+            if strcmpi(response.results.msg_category, 'warning')
+                issues = response.results.data;
+            else
+                issues = '';
+            end    
+        end
+      
+        function issues = validateTags(obj, hedtags, varargin)
+            % Validate a single string of HED tags.
+            %
+            % Parameters:
+            %    hedtags - a string or char array with a hed tag string.
+            %
+            % Optional name-value:
+            %    'checkWarnings' - boolean (optional, default false) 
+            %                  indicates whether to include warnings.
+            %
+            % 
+            %    issues - printable string with issues or an empty
+            %                   string if no issues.
+
+            p = inputParser;
+            p.addParameter('checkWarnings', false,  @(x) islogical(x))
+            parse(p, varargin{:});
+  
+            request = obj.getRequestTemplate();
+            request.service = 'strings_validate';
+            request.schema_version = obj.HedVersion;
+            if ~ischar(hedtags) && ~isstring(hedtags)
+                throw(MException(...
+                    'HedToolsServiceValidateTags:InvalidHedTagInput', ...
+                    'Must provide HED tags as string or char'))         
+            end
+            request.check_for_warnings = p.Results.checkWarnings;                 
+            request.string_list = {hedtags};
+            response = webwrite(obj.ServicesUrl, request, obj.WebOptions);
+            response = jsondecode(response);
+            error_msg = HedToolsService.getResponseError(response);
+            if error_msg
+                throw(MException(...
+                    'HedToolsServiceValidateTags:ServiceError', error_msg));
+            end
+            if strcmpi(response.results.msg_category, 'warning')
+                issues = response.results.data;
+            else
+                issues = '';
+            end    
         end
 
         function [] = resetHedVersion(obj, hedVersion)
@@ -122,105 +245,6 @@ classdef HedToolsService < HedTools
 
             obj.WebOptions = weboptions('MediaType', 'application/json',...
                  'Timeout', 120, 'HeaderFields', header);
-        end
-
-        function issueString = validateEvents(obj, events, sidecar, checkWarnings)
-            % Validate HED in events or other tabular-type input.
-            %
-            % Parameters:
-            %    events - char, string or rectified struct.
-            %    sidecar - char, string or struct representing sidecar
-            %    checkWarnings - Boolean indicating checking for warnings
-            %
-            % Returns:
-            %     issueString - A string with the validation issues suitable for
-            %                   printing (has newlines).
-            
-            request = obj.getRequestTemplate();
-            request.service = 'events_validate';
-            request.schema_version = obj.HedVersion;
-            request.events_string = HedTools.formatEvents(events);
-            request.sidecar_string = HedTools.formatSidecar(sidecar);
-            request.check_for_warnings = checkWarnings;
-            response = webwrite(obj.ServicesUrl, request, obj.WebOptions);
-            response = jsondecode(response);
-            error_msg = HedToolsService.getResponseError(response);
-            if error_msg
-                throw(MException(...
-                    'HedToolsServiceValidateEvents:ServiceError', error_msg));
-            end
-            if strcmpi(response.results.msg_category, 'warning')
-                issueString = response.results.data;
-            else
-                issueString = '';
-            end    
-        end
-
-        function issueString = validateSidecar(obj, sidecar, checkWarnings)
-            % Validate a sidecar
-            % 
-            % Parameters:
-            %    sidecar - a string, struct, or char array representing
-            %              a sidecar
-            %    checkWarnings - boolean indicating whether warnings 
-            %              should also be reported.
-            %
-            % Returns:
-            %    issueSstring - printable issue string or empty
-            %
-            request = obj.getRequestTemplate();
-            request.service = 'sidecar_validate';
-            request.schema_version = obj.HedVersion;
-            request.sidecar_string = HedTools.formatSidecar(sidecar);
-            request.check_for_warnings = checkWarnings;
-            response = webwrite(obj.ServicesUrl, request, obj.WebOptions);
-            response = jsondecode(response);
-            error_msg = HedToolsService.getResponseError(response);
-            if error_msg
-                throw(MException(...
-                    'HedToolsServiceValidateSidecar:ServiceError', error_msg));
-            end
-            if strcmpi(response.results.msg_category, 'warning')
-                issueString = response.results.data;
-            else
-                issueString = '';
-            end    
-        end
-      
-        function issueString = validateTags(obj, hedtags, checkWarnings)
-            % Validate a single string of HED tags.
-            %
-            % Parameters:
-            %    hedtags - a string or char array with a hed tag string.
-            %    check_warnings - boolean indicating whether to include
-            %                     warnings.
-            %
-            %  Returns:
-            %    issueString - printable string with issues or an empty
-            %                   string if no issues.
-            request = obj.getRequestTemplate();
-            request.service = 'strings_validate';
-            request.schema_version = obj.HedVersion;
-            if ~ischar(hedtags) && ~isstring(hedtags)
-                throw(MException(...
-                    'HedToolsServiceValidateHedTags:InvalidHedTagInput', ...
-                    'Must provide HED tags as string or char'))
-               
-            end
-            request.string_list = {hedtags};
-            request.check_for_warnings = checkWarnings;
-            response = webwrite(obj.ServicesUrl, request, obj.WebOptions);
-            response = jsondecode(response);
-            error_msg = HedToolsService.getResponseError(response);
-            if error_msg
-                throw(MException(...
-                    'HedToolsServiceValidateHedTags:ServiceError', error_msg));
-            end
-            if strcmpi(response.results.msg_category, 'warning')
-                issueString = response.results.data;
-            else
-                issueString = '';
-            end    
         end
 
     end
