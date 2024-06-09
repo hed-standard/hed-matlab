@@ -19,16 +19,18 @@ classdef HedToolsPython < HedTools
         end
 
         function annotations = getHedAnnotations(obj, events, ...
-                sidecar, removeTypesOn, includeContext, replaceDefs)
+                sidecar, varargin)
             % Return a cell array of HED annotations of same length as events.
             %
             % Parameters:
             %    events - char, string or rectified struct.
             %    sidecar - char, string or struct representing sidecar
-            %    removeTypesOn - boolean true->remove Condition-variable
-            %       and Task
-            %    includeContext - boolean true->expand context (usually true).
-            %    replaceDefs - boolean true->replace def with definition (usually true).
+            %
+            % Optional name-value:
+            %    'includeContext' - boolean true->expand context (usually true).
+            %    'removeTypesOn' - boolean true-> remove Condition-variable
+            %        and Task
+            %    'replaceDefs' - boolean true->replace def with definition (usually true).
             %
             % Returns:
             %     annotations - cell array with the HED annotations.
@@ -38,15 +40,22 @@ classdef HedToolsPython < HedTools
             % line.
             % 
 
+            p = inputParser;
+            p.addParameter('includeContext', true,  @(x) islogical(x))
+            p.addParameter('removeTypesOn', true,  @(x) islogical(x))
+            p.addParameter('replaceDefs', true,  @(x) islogical(x))
+            parse(p, varargin{:});
             eventsTab = HedToolsPython.getTabularObj(events, sidecar);
-            issueString = obj.validateEvents(eventsTab, sidecar, false);
+            issueString = obj.validateEvents(eventsTab, sidecar, ...
+                'checkWarnings', false);
             if ~isempty(issueString)
                 throw(MException( ...
                     'HedToolsPythonGetHedAnnotations:InvalidData', ...
                     "Input errors:\n" + issueString));
             end
             hedObjs = HedToolsPython.getHedStringObjs(eventsTab, ...
-                  obj.HedSchema, removeTypesOn, includeContext, replaceDefs);
+                  obj.HedSchema, p.Results.removeTypesOn, ...
+                  p.Results.includeContext, p.Results.replaceDefs);
             strs = ...
                 py.hed.tools.analysis.annotation_util.to_strlist(hedObjs);
             cStrs = cell(strs);
@@ -83,23 +92,25 @@ classdef HedToolsPython < HedTools
             factors = double(df_factors.to_numpy());
         end
 
-        function issues = validateEvents(obj, events, sidecar, checkWarnings)
+        function issues = validateEvents(obj, events, sidecar, varargin)
             % Validate HED in events or other tabular-type input.
             %
             % Parameters:
             %    events - char array, string, struct (or tabularInput)
             %    sidecar - char, string or struct representing sidecar
-            %    checkWarnings - boolean (optional, default false) 
-            %                  indicates whether to include warnings.
             %
+            % Optional name-value:
+            %    'checkWarnings' - boolean (optional, default false) 
+            %                  indicates whether to include warnings.
             % Returns:
             %     issues - A string with the validation issues suitable for
             %                   printing (has newlines).
             
             sidecarObj = py.None;
-            if nargin <= 2
-                checkWarnings = false;
-            end
+            p = inputParser;
+            p.addParameter('checkWarnings', false,  @(x) islogical(x))
+            parse(p, varargin{:});
+            checkWarnings = p.Results.checkWarnings;
             issues = '';
             ehandler = py.hed.errors.error_reporter.ErrorHandler(...
                 check_for_warnings=checkWarnings);
@@ -120,23 +131,25 @@ classdef HedToolsPython < HedTools
    
         end
 
-        function issues = validateSidecar(obj, sidecar, checkWarnings)
+        function issues = validateSidecar(obj, sidecar, varargin)
             % Validate a sidecar containing HED tags.
             %
             % Parameters:
             %    sidecar - a char, string, struct, or SidecarObj
-            %    checkWarnings - boolean (optional, default false) 
+            %
+            % Optional name-value:
+            %    'checkWarnings' - boolean (optional, default false) 
             %                  indicates whether to include warnings.
             %
             % Returns:
             %     issues - Char array with the validation issues suitable 
             %                   for printing (has newlines).
            
-            if nargin <= 2
-                checkWarnings = false;
-            end
+            p = inputParser;
+            p.addParameter('checkWarnings', false,  @(x) islogical(x))
+            parse(p, varargin{:});
             ehandler = py.hed.errors.error_reporter.ErrorHandler(...
-                check_for_warnings=checkWarnings);
+                check_for_warnings=p.Results.checkWarnings);
             sidecarObj = HedToolsPython.getSidecarObj(sidecar);
             issues = sidecarObj.validate(obj.HedSchema, error_handler=ehandler);
             if isempty(issues)
@@ -147,12 +160,14 @@ classdef HedToolsPython < HedTools
             end
         end
     
-        function issues = validateTags(obj, hedTags, checkWarnings)
+        function issues = validateTags(obj, hedTags, varargin)
             % Validate a string containing HED tags.
             %
             % Parameters:
             %    hedTags - A MATLAB string or character array.
-            %    checkWarnings - boolean (optional, default false) 
+            %
+            % Optional name-value:
+            %    'checkWarnings' - boolean (optional, default false) 
             %                  indicates whether to include warnings.
             %
             % Returns:
@@ -163,17 +178,16 @@ classdef HedToolsPython < HedTools
            
             if ~ischar(hedTags) && ~isstring(hedTags)
                 throw(MException(...
-                    'HedToolsPythonValidateHedTags:InvalidHedTagInput', ...
+                    'HedToolsPythonValidateTags:InvalidHedTagInput', ...
                     'Must provide a string or char array as input'))
             end
+            p = inputParser;
+            p.addParameter('checkWarnings', false,  @(x) islogical(x))
+            parse(p, varargin{:});
 
-            if nargin <= 2
-                checkWarnings = false;
-            end
-               
             hedStringObj = py.hed.HedString(hedTags, obj.HedSchema);
             ehandler = py.hed.errors.error_reporter.ErrorHandler(...
-                check_for_warnings=checkWarnings);
+                check_for_warnings=p.Results.checkWarnings);
             validator = ...
                 py.hed.validator.hed_validator.HedValidator(obj.HedSchema);
             issues = validator.validate(hedStringObj, false, ...
