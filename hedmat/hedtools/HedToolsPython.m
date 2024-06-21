@@ -116,7 +116,7 @@ classdef HedToolsPython < HedTools
                 check_for_warnings=checkWarnings);
             if ~isempty(sidecar) && ~isequal(sidecar, py.None)
                 sidecar = HedTools.formatSidecar(sidecar);
-                sidecarObj = py.hed.tools.analysis.annotation_util.strs_to_sidecar(sidecar);
+                sidecarObj = py.hed.tools.strs_to_sidecar(sidecar);
                 issues = sidecarObj.validate(obj.HedSchema, error_handler=ehandler);
                 hasErrors = py.hed.errors.error_reporter.check_for_any_errors(issues);
                 issues = char(py.hed.get_printable_issue_string(issues));
@@ -256,16 +256,14 @@ classdef HedToolsPython < HedTools
             % Note this is used as the basis for HED queries or for assembled HED.
             % To manipulate directly in MATLAB -- convert to a cell array of char
             % using string(cell(hedObjs))
-
-            hmod = py.importlib.import_module('hed');
             
-            eventManager = hmod.EventManager(tabular, schema);
+            eventManager = py.hed.tools.EventManager(tabular, schema);
             if removeTypesOn
                 removeTypes = {'Condition-variable', 'Task'};
             else
                 removeTypes = {};
             end
-            tagManager = hmod.HedTagManager(eventManager, ...
+            tagManager = py.hed.tools.HedTagManager(eventManager, ...
                 py.list(removeTypes));
             hedStringObjs = ...
                 tagManager.get_hed_objs(includeContext, replaceDefs);

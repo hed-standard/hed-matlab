@@ -13,8 +13,11 @@ classdef TestHedToolsService < matlab.unittest.TestCase
     methods (TestClassSetup)
         function setUp(testCase)
             testCase.hed = ...
-                HedToolsService('8.2.0', 'https://hedtools.org/hed_dev');
-                % HedToolsService('8.2.0', 'http://127.0.0.1:5000');
+                HedToolsService('8.2.0', 'https://hedtools.org/hed');
+            % testCase.hed = ...
+            %     HedToolsService('8.2.0', 'https://hedtools.org/hed_dev');
+            % testCase.hed = ...
+            %     HedToolsService('8.2.0', 'http://127.0.0.1:5000');
             [curDir, ~, ~] = fileparts(mfilename("fullpath"));
             dataPath = fullfile(curDir, filesep, '..', filesep, '..', ...
                 filesep, 'data', filesep);
