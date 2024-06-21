@@ -1,16 +1,14 @@
 HED API reference
 =================
 
-.. currentmodule:: hedmat
+.. automodule:: hedmat.hedtools
+    :members:
 
-.. autosummary::
-   :toctree: _autosummary
-   :template: custom-module-template.rst
-   :recursive:
-   
-   hedtools
-   remodeling_demos
-   utilities
-   web_services_demos
+.. automodule:: hedmat.remodeling_demos
+    :members:
 
+.. automodule:: hedmat.utilities
+    :members:
 
+.. automodule:: hedmat.web_services_demos
+    :members:
