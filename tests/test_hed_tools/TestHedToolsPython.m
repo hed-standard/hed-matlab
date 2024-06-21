@@ -14,7 +14,7 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
     methods (TestClassSetup)
         function setUp(testCase)
             testCase.hmod = py.importlib.import_module('hed');
-            testCase.hed = HedToolsPython('8.2.0');
+            testCase.hed = HedToolsPython('8.3.0');
             [curDir, ~, ~] = fileparts(mfilename("fullpath"));
             dataPath = fullfile(curDir, filesep, '..', filesep, '..', ...
                 filesep, 'data', filesep);
