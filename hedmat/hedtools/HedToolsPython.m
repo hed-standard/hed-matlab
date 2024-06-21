@@ -28,8 +28,7 @@ classdef HedToolsPython < HedTools
             %
             % Optional name-value:
             %    'includeContext' - boolean true->expand context (usually true).
-            %    'removeTypesOn' - boolean true-> remove Condition-variable
-            %        and Task
+            %    'removeTypesOn' - boolean true-> remove Condition-variable and Task
             %    'replaceDefs' - boolean true->replace def with definition (usually true).
             %
             % Returns:
@@ -167,12 +166,13 @@ classdef HedToolsPython < HedTools
             %    hedTags - A MATLAB string or character array.
             %
             % Optional name-value:
-            %    'checkWarnings' - boolean (optional, default false) 
-            %                  indicates whether to include warnings.
+            %    'checkWarnings' - boolean (optional, default false)
+            %                      indicates whether to include warnings.
             %
             % Returns:
-            %     issues - A string with the validation issues suitable for
-            %                   printing (has newlines).
+            %    issues - A string with the validation issues suitable for
+            %             printing (has newlines).
+
             % ToDo:  Make hedDefinitions optional.
             %
            

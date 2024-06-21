@@ -15,8 +15,7 @@ import sys
 import sphinx_rtd_theme
 from datetime import date
 
-sys.path.insert(0, os.path.abspath('../../'))
-sys.path.insert(0, os.path.abspath('.'))
+
 
 
 # -- Project information -----------------------------------------------------
@@ -29,9 +28,8 @@ author = 'HED Working Group'
 version = '0.0.1'
 release = '0.0.1'
 
-currentdir = os.path.abspath(os.path.dirname(__file__))
 # -- General configuration ---------------------------------------------------
-matlab_src_dir = os.path.abspath(os.path.join(currentdir, '../../hedmat'))
+matlab_src_dir = os.path.abspath(os.path.join("..", ".."))
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
@@ -39,14 +37,6 @@ extensions = [
     "myst_parser",
     "sphinxcontrib.matlab",
     "sphinx.ext.autodoc",
-    "sphinx.ext.autosummary",
-    "sphinx.ext.autosectionlabel",
-    "sphinx.ext.intersphinx",
-    "sphinx.ext.coverage",
-    "sphinx.ext.mathjax",
-    "sphinx.ext.viewcode",
-    "sphinx.ext.githubpages",
-    "sphinx.ext.napoleon"
 ]
 
 

@@ -32,8 +32,7 @@ classdef HedToolsService < HedTools
             %
             % Optional name-value:
             %    'includeContext' - boolean true->expand context (usually true).
-            %    'removeTypesOn' - boolean true-> remove Condition-variable
-            %        and Task
+            %    'removeTypesOn' - boolean true-> remove Condition-variable and Task
             %    'replaceDefs' - boolean true->replace def with definition (usually true).
             %
             % Returns:
@@ -223,7 +222,8 @@ classdef HedToolsService < HedTools
         end
 
         function [] = resetSessionInfo(obj, host)
-            %% Reset the session for accessing the HED webservices
+            % Reset the session for accessing the HED webservices
+            %
             %  Parameters:
             %      host  = URL for the services
             %
