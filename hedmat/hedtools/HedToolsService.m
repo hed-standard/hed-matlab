@@ -22,6 +22,39 @@ classdef HedToolsService < HedTools
             obj.resetSessionInfo(host);
         end
 
+        function sidecar = generateSidecar(obj, eventsIn, valueColumns, ...
+                skipColumns)
+            % Return a sidecar string based on an events data.
+            %
+            % Parameters:
+            %    eventsIn - char, string or rectified struct.
+            %    valueColumns - cell array of char giving names of
+            %         columns to be treated as value columns.
+            %    skipColumns - cell array of char giving names of
+            %         columns to be skipped.
+            %
+            % Returns:
+            %     sidecar - char array with sidecar.
+            %
+            request = obj.getRequestTemplate();
+            request.service = 'events_generate_sidecar';
+            request.events_string = HedTools.formatEvents(eventsIn);
+            request.columns_skip = skipColumns;
+            request.columns_value = valueColumns;
+            response = webwrite(obj.ServicesUrl, request, obj.WebOptions);
+            response = jsondecode(response);
+            error_msg = HedToolsService.getResponseError(response);
+            if error_msg
+                throw(MException(...
+                    'HedToolsServiceGetHedAnnotations:ServiceError', error_msg));
+            elseif strcmpi(response.results.msg_category, 'warning')
+                throw(MException( ...
+                    'HedToolsServiceGenerateSidecar:InvalidData', ...
+                    "Input errors:\n" + response.results.data));
+            end
+            sidecar = response.results.data;
+        end
+
         function annotations = getHedAnnotations(obj, eventsIn, ...
                 sidecar, varargin)
             % Return a cell array of HED annotations of same length as events.

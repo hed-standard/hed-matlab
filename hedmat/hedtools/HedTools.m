@@ -53,6 +53,9 @@ classdef HedTools < handle
     end
 
     methods (Abstract)
+
+        sidecar = generateSidecar(obj, eventsIn, valueColumns, skipColumns);
+        
         annotations = getHedAnnotations(obj, eventsIn, sidecar, ...
             removeTypesOn, includeContext, replaceDefs);
 

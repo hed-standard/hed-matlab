@@ -43,6 +43,22 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
 
     methods (Test)
 
+         function testGenerateSidecar(testCase)
+            % Valid char events should not have errors or warnings
+            eventsChar = fileread(testCase.goodEventsPath);
+            testCase.verifyTrue(ischar(eventsChar))
+
+            % no types, no context, no replace
+            sidecar = testCase.hed.generateSidecar(eventsChar, ...
+               {'trial', 'rep_lag', 'stim_file'}, ...
+               {'onset', 'duration', 'sample'});
+            testCase.verifyTrue(ischar(sidecar));
+            sideStruct = jsondecode(sidecar);
+            testCase.verifyFalse(isfield(sideStruct, 'onset'));
+            testCase.verifyTrue(isstruct(sideStruct.event_type.HED));
+            testCase.verifyTrue(ischar(sideStruct.trial.HED));
+        end
+
         function testGetHedAnnotations(testCase)
             % Valid char events should not have errors or warnings
             sidecarChar = fileread(testCase.goodSidecarPath);
@@ -555,6 +571,28 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
             tabularObj = HedToolsPython.getTabularObj(events, sidecar);
             testCase.assertTrue(py.isinstance(tabularObj, ...
                 testCase.hmod.TabularInput));
+        end
+
+        function testGetTabularSummary(testCase)
+            % Test tabular summary with or without column specifications
+            valueColumns = {'trial', 'rep_lag', 'stim_file'};
+            skipColumns = {'onset', 'duration', 'sample'};
+            tabularSum = HedToolsPython.getTabularSummary(...
+                valueColumns, skipColumns);
+            testCase.assertTrue(py.isinstance(tabularSum, ...
+                testCase.hmod.tools.TabularSummary));
+            tabularSum1 =  HedToolsPython.getTabularSummary({}, {});
+           testCase.assertTrue(py.isinstance(tabularSum1, ...
+                testCase.hmod.tools.TabularSummary));
+        end
+
+        function testGetTabularSummaryInvalid(testCase)
+            % Test tabular input with no sidecar
+            valueColumns = {'onset', 'rep_lag', 'stim_file'};
+            skipColumns = {'onset', 'duration', 'sample'};
+            testCase.verifyError(@() HedToolsPython.getTabularSummary(...
+                valueColumns, skipColumns), ...
+                'HedToolsPythonGetTabularSummary:ColumnNameOverlap');
         end
 
         function testGetHedFromAnnotations(testCase)

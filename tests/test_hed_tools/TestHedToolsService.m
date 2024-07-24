@@ -13,11 +13,11 @@ classdef TestHedToolsService < matlab.unittest.TestCase
     methods (TestClassSetup)
         function setUp(testCase)
             testCase.hed = ...
-                HedToolsService('8.2.0', 'https://hedtools.org/hed');
+               HedToolsService('8.3.0', 'https://hedtools.org/hed');
             % testCase.hed = ...
-            %     HedToolsService('8.2.0', 'https://hedtools.org/hed_dev');
+            %     HedToolsService('8.3.0', 'https://hedtools.org/hed_dev');
             % testCase.hed = ...
-            %     HedToolsService('8.2.0', 'http://127.0.0.1:5000');
+            %    HedToolsService('8.3.0', 'http://127.0.0.1:5000');
             [curDir, ~, ~] = fileparts(mfilename("fullpath"));
             dataPath = fullfile(curDir, filesep, '..', filesep, '..', ...
                 filesep, 'data', filesep);
@@ -50,6 +50,22 @@ classdef TestHedToolsService < matlab.unittest.TestCase
             % Test a simple string
             hed1 = HedToolsService('8.2.0', 'https://hedtools.org/hed_dev');
             testCase.verifyTrue(isa(hed1, 'HedToolsService'));
+        end
+
+        function testGenerateSidecar(testCase)
+            % Valid char events should not have errors or warnings
+            eventsChar = fileread(testCase.goodEventsPath);
+            testCase.verifyTrue(ischar(eventsChar))
+
+            % no types, no context, no replace
+            sidecar = testCase.hed.generateSidecar(eventsChar, ...
+               {'trial', 'rep_lag', 'stim_file'}, ...
+               {'onset', 'duration', 'sample'});
+            testCase.verifyTrue(ischar(sidecar));
+            sideStruct = jsondecode(sidecar);
+            testCase.verifyFalse(isfield(sideStruct, 'onset'));
+            testCase.verifyTrue(isstruct(sideStruct.event_type.HED));
+            testCase.verifyTrue(ischar(sideStruct.trial.HED));
         end
 
         function testGetHedAnnotations(testCase)
@@ -110,7 +126,7 @@ classdef TestHedToolsService < matlab.unittest.TestCase
             factors1 = testCase.hed.searchHed(annotations, queries1);
             testCase.verifyEqual(length(factors1), 3);
             testCase.verifyEqual(factors1(2), 1);
-            
+
             % Test 2 queries on 3 strings.
             queries2 = {'Sensory-event', 'Red'};
             factors2 = testCase.hed.searchHed(annotations, queries2);
