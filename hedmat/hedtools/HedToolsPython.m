@@ -18,6 +18,28 @@ classdef HedToolsPython < HedTools
             obj.resetHedVersion(version)
         end
 
+        function sidecar = generateSidecar(obj, eventsIn, valueColumns, ...
+                skipColumns)
+            % Return a sidecar string based on an events data.
+            %
+            % Parameters:
+            %    eventsIn - char, string or rectified struct.
+            %    valueColumns - cell array of char giving names of
+            %         columns to be treated as value columns.
+            %    skipColumns - cell array of char giving names of
+            %         columns to be skipped.
+            %
+            % Returns:
+            %     sidecar - char array with sidecar.
+            %
+            tabSum = HedToolsPython.getTabularSummary(valueColumns, ...
+                skipColumns);
+            events = HedToolsPython.getTabularObj(eventsIn, py.None);
+            tabSum.update(events.dataframe);
+            hedDict = tabSum.extract_sidecar_template();
+            sidecar = char(py.json.dumps(hedDict));
+        end
+
         function annotations = getHedAnnotations(obj, events, ...
                 sidecar, varargin)
             % Return a cell array of HED annotations of same length as events.
@@ -308,7 +330,7 @@ classdef HedToolsPython < HedTools
             if ischar(query)
                 try
                    queryHandler = mmod.QueryHandler(query);
-                catch MException
+                catch ME
                     throw (MException(...
                         'HedToolsPythonGetHedQueryHandler:InvalidQuery', ...
                         'Query: %s cannot be parsed.', query));
@@ -375,6 +397,30 @@ classdef HedToolsPython < HedTools
                 tabularObj = events;
             else
                 throw(MException('HedToolsPytonGetTabularInput:Invalid input'))
+            end
+        end
+
+        function tabularSum = getTabularSummary(valueColumns, skipColumns)
+            % Returns a HED TabularSummary object.
+            %
+            % Parameters:
+            %    valueColumns - cell array with value column names.
+            %    skipColumns - cell array with skip column names
+            %
+            % Returns:
+            %     tabularSum - TabularSummary object.
+            %
+            % Throws: HedFileError if valueColumns and skipColumns 
+            %    overlap.
+            %
+        
+            try 
+                valueList = py.list(valueColumns);
+                skipList = py.list(skipColumns);
+                tabularSum = py.hed.tools.analysis.tabular_summary.TabularSummary(valueList, skipList);
+            catch ME
+                throw(MException('HedToolsPythonGetTabularSummary:ColumnNameOverlap', ...
+                    'valueColumns and skipColumns can not overlap'))
             end
         end
 
