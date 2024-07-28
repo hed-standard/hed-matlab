@@ -13,8 +13,8 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
 
     methods (TestClassSetup)
         function setUp(testCase)
-            testCase.hmod = py.importlib.import_module('hed');
             testCase.hed = HedToolsPython('8.3.0');
+            testCase.hmod = py.importlib.import_module('hed');
             [curDir, ~, ~] = fileparts(mfilename("fullpath"));
             dataPath = fullfile(curDir, filesep, '..', filesep, '..', ...
                 filesep, 'data', filesep);
@@ -306,7 +306,7 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
             % Valid sidecar obj should not have errors or warnings
             sidecarObj = HedToolsPython.getSidecarObj(sidecarChar);
             testCase.verifyTrue(py.isinstance(sidecarObj, ...
-                testCase.hmod.Sidecar)) 
+                testCase.hmod.models.sidecar.Sidecar)) 
             issueString = testCase.hed.validateSidecar( ...
                 sidecarObj, 'checkWarnings', false);
             testCase.verifyEqual(strlength(issueString), 0);
@@ -357,7 +357,7 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
             % Invalid sidecar obj should have errors
             sidecarObj = HedToolsPython.getSidecarObj(sidecarChar);
             testCase.verifyTrue(py.isinstance(sidecarObj, ...
-                testCase.hmod.Sidecar)) 
+                testCase.hmod.models.sidecar.Sidecar)) 
             issueString = testCase.hed.validateSidecar( ...
                 sidecarObj, 'checkWarnings', false);
             testCase.verifyGreaterThan(strlength(issueString), 0);
@@ -412,7 +412,7 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
              query1 = 'Sensory-event';
              qHandler = HedToolsPython.getHedQueryHandler(query1);
              testCase.verifyTrue(py.isinstance(qHandler, ...
-                 testCase.hmod.QueryHandler));
+                 testCase.hmod.models.query_handler.QueryHandler));
         end
 
         function testGetHedStringObjs(testCase)
@@ -490,7 +490,7 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
             % Valid char events should not have errors or warnings
             schema = HedToolsPython.getHedSchemaObj('8.2.0');
             testCase.verifyTrue(py.isinstance(schema, ...
-                testCase.hmod.HedSchema));
+                testCase.hmod.schema.hed_schema.HedSchema));
             version = char(schema.version);
             testCase.verifyEqual(version, '8.2.0');
         end
@@ -500,7 +500,7 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
             version = {'ts:8.2.0', 'score_1.1.0'};
             schema = HedToolsPython.getHedSchemaObj(version);
             assertTrue(testCase, py.isinstance(schema, ...
-                       testCase.hmod.HedSchemaGroup));
+                 testCase.hmod.schema.hed_schema_group.HedSchemaGroup));
             versions = cell(schema.get_schema_versions());
             testCase.verifyEqual(char(versions{1}), 'ts:8.2.0');
             testCase.verifyEqual(char(versions{2}), 'score_1.1.0');
@@ -514,12 +514,12 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
 
         function testGetSidecarObjSidecarIn(testCase)
             % Test with incoming sidecar
-            sidecar = testCase.hmod.Sidecar(testCase.goodSidecarPath);
-            testCase.assertTrue(...
-                py.isinstance(sidecar, testCase.hmod.Sidecar));
+            sidecar = testCase.hmod.models.sidecar.Sidecar(testCase.goodSidecarPath);
+            testCase.assertTrue(py.isinstance(sidecar, ...
+                testCase.hmod.models.sidecar.Sidecar));
             sidecarObj = HedToolsPython.getSidecarObj(sidecar);
-            testCase.assertTrue(...
-                py.isinstance(sidecarObj, testCase.hmod.Sidecar));
+            testCase.assertTrue(py.isinstance(sidecarObj, ...
+                testCase.hmod.models.sidecar.Sidecar));
         end
 
         function testGetSidecarObjCharIn(testCase)
@@ -527,8 +527,8 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
             jsonChar = fileread(testCase.goodSidecarPath);
             testCase.verifyTrue(ischar(jsonChar));
             sidecarObj = HedToolsPython.getSidecarObj(jsonChar);
-            testCase.verifyTrue(...
-                py.isinstance(sidecarObj, testCase.hmod.Sidecar));
+            testCase.verifyTrue(py.isinstance(sidecarObj, ...
+                testCase.hmod.models.sidecar.Sidecar));
         end
 
         function testGetSidecarObjStringIn(testCase)
@@ -537,7 +537,7 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
             testCase.verifyTrue(isstring(jsonString));
             sidecarObj = testCase.hed.getSidecarObj(jsonString);
             testCase.verifyTrue(py.isinstance(sidecarObj, ...
-                testCase.hmod.Sidecar));
+                testCase.hmod.models.sidecar.Sidecar));
         end
 
         function testGetSidecarObjStructIn(testCase)
@@ -546,7 +546,7 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
             testCase.verifyTrue(isstruct(jsonStruct));
             sidecarObj = HedToolsPython.getSidecarObj(jsonStruct);
             testCase.assertTrue(py.isinstance(sidecarObj, ...
-                testCase.hmod.Sidecar));
+                testCase.hmod.models.sidecar.Sidecar));
         end
 
         function testGetSidecarObjEmptyInputs(testCase)
@@ -561,7 +561,7 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
             sidecar = fileread(testCase.goodSidecarPath);
             tabularObj = HedToolsPython.getTabularObj(events, sidecar);
             testCase.assertTrue(py.isinstance(tabularObj, ...
-                testCase.hmod.TabularInput));
+                testCase.hmod.models.tabular_input.TabularInput));
         end
 
         function testGetTabularInputNoSidecar(testCase)
@@ -570,7 +570,7 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
             sidecar = py.None;
             tabularObj = HedToolsPython.getTabularObj(events, sidecar);
             testCase.assertTrue(py.isinstance(tabularObj, ...
-                testCase.hmod.TabularInput));
+                testCase.hmod.models.tabular_input.TabularInput));
         end
 
         function testGetTabularSummary(testCase)
@@ -580,10 +580,10 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
             tabularSum = HedToolsPython.getTabularSummary(...
                 valueColumns, skipColumns);
             testCase.assertTrue(py.isinstance(tabularSum, ...
-                testCase.hmod.tools.TabularSummary));
+                testCase.hmod.tools.analysis.tabular_summary.TabularSummary));
             tabularSum1 =  HedToolsPython.getTabularSummary({}, {});
            testCase.assertTrue(py.isinstance(tabularSum1, ...
-                testCase.hmod.tools.TabularSummary));
+                testCase.hmod.tools.analysis.tabular_summary.TabularSummary));
         end
 
         function testGetTabularSummaryInvalid(testCase)

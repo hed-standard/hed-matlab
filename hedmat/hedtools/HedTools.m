@@ -56,16 +56,15 @@ classdef HedTools < handle
 
         sidecar = generateSidecar(obj, eventsIn, valueColumns, skipColumns);
         
-        annotations = getHedAnnotations(obj, eventsIn, sidecar, ...
-            removeTypesOn, includeContext, replaceDefs);
+        annotations = getHedAnnotations(obj, eventsIn, sidecar, varargin);
 
         factors = searchHed(obj, annotations, queries);
 
-        issues = validateEvents(obj, eventsIn, sidecar, checkWarnings);
+        issues = validateEvents(obj, eventsIn, sidecar, varargin);
         
-        issues = validateSidecar(obj, sidecar, checkWarnings);
+        issues = validateSidecar(obj, sidecar, varargin);
 
-        issues = validateTags(obj, hedtags, checkWarnings);
+        issues = validateTags(obj, hedtags, varargin);
         
         resetHedVersion(obj, hedVersion)
     end
