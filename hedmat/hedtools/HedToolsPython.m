@@ -3,6 +3,8 @@ classdef HedToolsPython < HedTools
 
     properties
         hmod
+        amod
+        vmod
         HedVersion
         HedSchema
     end
@@ -16,12 +18,14 @@ classdef HedToolsPython < HedTools
             %               representing a valid HED version.
             %
             obj.hmod = py.importlib.import_module('hed');
+            obj.amod = py.importlib.import_module('hed.tools.analysis');
+            obj.vmod = py.importlib.import_module('hed.validator');
             obj.resetHedVersion(version)
         end
 
         function sidecar = generateSidecar(obj, eventsIn, valueColumns, ...
                 skipColumns)
-            % Return a sidecar string based on an events data.
+            % Return a sidecar string based on an events data.py.hed
             %
             % Parameters:
             %    eventsIn - char, string or rectified struct.
@@ -78,8 +82,7 @@ classdef HedToolsPython < HedTools
             hedObjs = HedToolsPython.getHedStringObjs(eventsTab, ...
                   obj.HedSchema, p.Results.removeTypesOn, ...
                   p.Results.includeContext, p.Results.replaceDefs);
-            strs = ...
-                obj.hmod.tools.analysis.annotation_util.to_strlist(hedObjs);
+            strs = obj.amod.annotation_util.to_strlist(hedObjs);
             cStrs = cell(strs);
             % Convert each string object in the cell array to a char array
             annotations = cellfun(@char, cStrs(:), 'UniformOutput', false);
@@ -139,7 +142,7 @@ classdef HedToolsPython < HedTools
                 check_for_warnings=checkWarnings);
             if ~isempty(sidecar) && ~isequal(sidecar, py.None)
                 sidecar = HedTools.formatSidecar(sidecar);
-                sidecarObj = obj.hmod.tools.strs_to_sidecar(sidecar);
+                sidecarObj = obj.amod.annotation_util.strs_to_sidecar(sidecar);
                 issues = sidecarObj.validate(obj.HedSchema, error_handler=ehandler);
                 hasErrors = obj.hmod.errors.error_reporter.check_for_any_errors(issues);
                 issues = char(obj.hmod.get_printable_issue_string(issues));
@@ -211,10 +214,8 @@ classdef HedToolsPython < HedTools
             hedStringObj = obj.hmod.models.hed_string.HedString(hedTags, obj.HedSchema);
             ehandler = obj.hmod.errors.error_reporter.ErrorHandler(...
                 check_for_warnings=p.Results.checkWarnings);
-            validator = ...
-                obj.hmod.validator.hed_validator.HedValidator(obj.HedSchema);
-            issues = validator.validate(hedStringObj, false, ...
-                error_handler=ehandler);
+            val = obj.vmod.hed_validator.HedValidator(obj.HedSchema);
+            issues = val.validate(hedStringObj, false, error_handler=ehandler);
             if isempty(issues)
                 issues = '';
             else
@@ -280,14 +281,14 @@ classdef HedToolsPython < HedTools
             % Note this is used as the basis for HED queries or for assembled HED.
             % To manipulate directly in MATLAB -- convert to a cell array of char
             % using string(cell(hedObjs))
-            umod = py.importlib.import_module('hed.tools.analysis');
-            eventManager = umod.event_manager.EventManager(tabular, schema);
+            amod = py.importlib.import_module('hed.tools.analysis');
+            eventManager = amod.event_manager.EventManager(tabular, schema);
             if removeTypesOn
                 removeTypes = {'Condition-variable', 'Task'};
             else
                 removeTypes = {};
             end
-            tagManager = umod.hed_tag_manager.HedTagManager(eventManager, ...
+            tagManager = amod.hed_tag_manager.HedTagManager(eventManager, ...
                 py.list(removeTypes));
             hedStringObjs = ...
                 tagManager.get_hed_objs(includeContext, replaceDefs);
@@ -308,8 +309,8 @@ classdef HedToolsPython < HedTools
                 hedSchemaObj = smod.load_schema_version(schema);
             elseif iscell(schema)
                 hedSchemaObj = smod.load_schema_version(py.list(schema));
-            elseif py.isinstance(schema, obj.smod.HedSchema) || ...
-                    py.isinstance(schema, obj.smod.HedSchemaGroup)
+            elseif py.isinstance(schema, smod.HedSchema) || ...
+                    py.isinstance(schema, smod.HedSchemaGroup)
                 hedSchemaObj = schema;
             else
                 hedSchemaObj = py.None;
@@ -356,19 +357,19 @@ classdef HedToolsPython < HedTools
             % Returns:
             %     sidecar_obj - a HEDTools Sidecar object.
             %
-            amod = py.importlib.import_module('hed');
-            umod = py.importlib.import_module('hed.tools.analysis.annotation_util');
+            hmod = py.importlib.import_module('hed');
+            amod = py.importlib.import_module('hed.tools.analysis');
             
             if ischar(sidecar)
-                sidecarObj = umod.strs_to_sidecar(sidecar);
+                sidecarObj = amod.annotation_util.strs_to_sidecar(sidecar);
             elseif isstring(sidecar)
-                sidecarObj = umod.strs_to_sidecar(char(sidecar));
+                sidecarObj = amod.annotation_util.strs_to_sidecar(char(sidecar));
             elseif isstruct(sidecar)
-                sidecarObj = umod.strs_to_sidecar(jsonencode(sidecar));
+                sidecarObj = amod.annotation_util.strs_to_sidecar(jsonencode(sidecar));
             elseif isempty(sidecar) || ...
                     (isa(sidecar, 'py.NoneType') && sidecar == py.None)
                 sidecarObj = py.None;
-            elseif py.isinstance(sidecar, amod.Sidecar)
+            elseif py.isinstance(sidecar, hmod.Sidecar)
                 sidecarObj = sidecar;
             else
                 throw(MException('HedToolsPythonGetSidecarObj:BadInputFormat', ...
@@ -386,16 +387,16 @@ classdef HedToolsPython < HedTools
             % Returns:
             %     tabularObj - HEDTools TabularInput object representing tabular data.
             %
-            amod = py.importlib.import_module('hed');
-            umod = py.importlib.import_module('hed.tools.analysis.annotation_util');
+            hmod = py.importlib.import_module('hed');
+            amod = py.importlib.import_module('hed.tools.analysis');
 
             sidecarObj = HedToolsPython.getSidecarObj(sidecar);
             if isstruct(events)
                 events = events2string(events);
-                tabularObj = umod.str_to_tabular(events, sidecarObj);
+                tabularObj = amod.annotation_util.str_to_tabular(events, sidecarObj);
             elseif ischar(events) || isstring(events)
-                tabularObj = umod.str_to_tabular(events, sidecarObj);
-            elseif py.isinstance(events, amod.TabularInput)
+                tabularObj = amod.annotation_util.str_to_tabular(events, sidecarObj);
+            elseif py.isinstance(events, hmod.TabularInput)
                 tabularObj = events;
             else
                 throw(MException('HedToolsPytonGetTabularInput:Invalid input'))
@@ -415,11 +416,11 @@ classdef HedToolsPython < HedTools
             % Throws: HedFileError if valueColumns and skipColumns 
             %    overlap.
             %
-            amod = py.importlib.import_module('hed');
+            amod = py.importlib.import_module('hed.tools.analysis');
             try 
                 valueList = py.list(valueColumns);
                 skipList = py.list(skipColumns);
-                tabularSum = amod.tools.analysis.tabular_summary.TabularSummary(valueList, skipList);
+                tabularSum = amod.tabular_summary.TabularSummary(valueList, skipList);
             catch ME
                 throw(MException('HedToolsPythonGetTabularSummary:ColumnNameOverlap', ...
                     'valueColumns and skipColumns can not overlap'))

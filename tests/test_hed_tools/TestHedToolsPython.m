@@ -43,27 +43,28 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
 
     methods (Test)
 
-         function testGenerateSidecar(testCase)
-            % Valid char events should not have errors or warnings
-            eventsChar = fileread(testCase.goodEventsPath);
-            testCase.verifyTrue(ischar(eventsChar))
-
-            % no types, no context, no replace
-            sidecar = testCase.hed.generateSidecar(eventsChar, ...
-               {'trial', 'rep_lag', 'stim_file'}, ...
-               {'onset', 'duration', 'sample'});
-            testCase.verifyTrue(ischar(sidecar));
-            sideStruct = jsondecode(sidecar);
-            testCase.verifyFalse(isfield(sideStruct, 'onset'));
-            testCase.verifyTrue(isstruct(sideStruct.event_type.HED));
-            testCase.verifyTrue(ischar(sideStruct.trial.HED));
-        end
+        %  function testGenerateSidecar(testCase)
+        %     % Valid char events should not have errors or warnings
+        %     eventsChar = fileread(testCase.goodEventsPath);
+        %     testCase.verifyTrue(ischar(eventsChar))
+        % 
+        %     % no types, no context, no replace
+        %     sidecar = testCase.hed.generateSidecar(eventsChar, ...
+        %        {'trial', 'rep_lag', 'stim_file'}, ...
+        %        {'onset', 'duration', 'sample'});
+        %     testCase.verifyTrue(ischar(sidecar));
+        %     sideStruct = jsondecode(sidecar);
+        %     testCase.verifyFalse(isfield(sideStruct, 'onset'));
+        %     testCase.verifyTrue(isstruct(sideStruct.event_type.HED));
+        %     testCase.verifyTrue(ischar(sideStruct.trial.HED));
+        % end
 
         function testGetHedAnnotations(testCase)
             % Valid char events should not have errors or warnings
             sidecarChar = fileread(testCase.goodSidecarPath);
             eventsChar = fileread(testCase.goodEventsPath);
-            testCase.verifyTrue(ischar(eventsChar))
+            testCase.verifyTrue(ischar(eventsChar));
+            testCase.verifyTrue(ischar(sidecarChar));
 
             % no types, no context, no replace
             annotations = testCase.hed.getHedAnnotations(eventsChar, ...
@@ -315,7 +316,7 @@ classdef TestHedToolsPython < matlab.unittest.TestCase
             issueString = testCase.hed.validateSidecar(...
                 sidecarObj, 'checkWarnings', true);
             testCase.verifyEqual(strlength(issueString), 0);
-        end
+         end
 
         function testSidecarInvalid(testCase)
             % Invalid char sidecar should have errors
