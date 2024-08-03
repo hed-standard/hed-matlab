@@ -7,19 +7,17 @@ Hierarchical Event Descriptor (HED) MATLAB Tools
 
 .. sidebar:: **Links**
 
-   * `PDF docs <https://hed-matlab.readthedocs.io/_/downloads/en/latest/pdf/>`_
+   * `API docs <https://hed-matlab.readthedocs.io/_/downloads/en/latest/pdf/>`_
 
    * `Source code <https://github.com/hed-standard/hed-matlab/>`_
 
-Note:  this is a work in progress. More information is coming.
 
 .. toctree::
    :maxdepth: 6
    :caption: Contents:
 
    introduction.md
-   user_guide.rst
-
+  
 .. toctree::
    :maxdepth: 6
    :caption: HED MATLAB API:

@@ -19,19 +19,9 @@ Why HED?
    so that tools can automatically use this information in analysis.
 
 For more information on using Hierarchical Event Descriptors (HED)
-visit `HED examples <https://hed-examples.readthedocs.io/en/latest/index.html>`_:
+visit the `HED homepage` <https://www.hedtags.org>`_:
+and the `HED resources page <https://www.hed-resources.org/en/latest/HedMatlabTools.html>`_:
 
-
-Installing hedtools
-===================
-Hedtools will be available soon on pypi, but in the meantime,
-you can install directly from the
-`GitHub repository <https://github.com/hed-standard/hed-python>`_
-using the following command:
-
-```code
->>> pip install git+https://github.com/hed-standard/hed-python.git
-```
 
 Finding help
 ============
@@ -44,7 +34,7 @@ Finding help
 
 
 :Issues and problems:
-    * If you notice a bug in the python hedtools code or encounter other problems using the tools, please `open an issue`_ in the
-      hed-python repository on github.
+    * If you notice a bug in the HED tools for matlab code or encounter other problems using the tools, please `open an issue`_ in the
+      hed-matlab repository on github.
 
-.. _open an issue: https://github.com/hed-standard/hed-python/issues
+.. _open an issue: https://github.com/hed-standard/hed-matlab/issues
