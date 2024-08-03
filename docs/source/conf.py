@@ -20,13 +20,13 @@ from datetime import date
 
 # -- Project information -----------------------------------------------------
 
-project = 'HED Resources'
+project = 'HED MATLAB'
 copyright = '2017-{}, HED Working Group'.format(date.today().year)
 author = 'HED Working Group'
 
 # The full version, including alpha/beta/rc tags
-version = '0.0.1'
-release = '0.0.1'
+version = '1.0.0'
+release = '1.0.0'
 
 # -- General configuration ---------------------------------------------------
 matlab_src_dir = os.path.abspath(os.path.join("..", ".."))
