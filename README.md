@@ -33,7 +33,7 @@ back to suitable MATLAB values.
 ### Approach 2: HEDTools Python calls
 
 In this approach, the HEDTools are accessed through MATLAB
-wrapper funtions that package function parameters and
+wrapper functions that package function parameters and
 call the Python `HedTools` directly from MATLAB lab.
 
 **Advantages:** No Internet access needed. Some additional
