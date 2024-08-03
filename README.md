@@ -1,4 +1,4 @@
-[![Documentation Status](https://readthedocs.org/projects/hed-matlab/badge/?version=latest)](https://www.hed-matlab.org/en/latest/?badge=latest)  
+[![Documentation Status](https://readthedocs.org/projects/hed-matlab/badge/?version=latest)](https://www.hed-matlab.org/en/latest/?badge=latest)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13201057.svg)](https://doi.org/10.5281/zenodo.13201057)
 
 # HED-MATLAB
