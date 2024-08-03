@@ -76,3 +76,8 @@ The Python approach requires you to install Python, install the
 Python HedTools, and link to MATLAB.
 See [**Matlab Python Install**](https://www.hed-resources.org/en/latest/HedMatlabTools.html#matlab-python-install)
 for detailed instructions.
+
+## Funding
+
+Partial support for this project was provided by 
+[**NIH 1R01MH126700-01A1**](https://reporter.nih.gov/project-details/10480619).
