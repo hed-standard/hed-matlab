@@ -46,7 +46,7 @@ tricky and requires MATLAB version >= 2022b.
 ## Usage
 
 To use HED tools, you first create a HED object by calling `getHedTools`. 
-If you provide the optional host argument, the services are used, otherwise
+If you provide the optional host argument, the HED tools use services, otherwise
 direct calls to Python. Once created, you simply call the available methods
 using that reference. The process is summarized in the following diagram.
 
