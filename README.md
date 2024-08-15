@@ -43,6 +43,19 @@ functionality not in the `hed-matlab` interface is provided.
 **Disadvantages:** Installation of Python in MATLAB can be
 tricky and requires MATLAB version >= 2022b.
 
+## Usage
+
+To use HED tools, you first create a HED object by calling `getHedTools`. 
+If you provide the optional host argument, the HED tools use services, otherwise
+direct calls to Python. Once created, you simply call the available methods
+using that reference. The process is summarized in the following diagram.
+
+
+![Matlab HED Tools](https://www.hed-resources.org/en/latest/_images/MatLabHedToolsCloseFit.png)
+
+The MATLAB HedTools accept a variety of different types of MATLAB variables
+as input and convert as appropriate for the underlying calls.
+On return, the tools convert back to MATLAB types.
 
 ## Basic installation
 
