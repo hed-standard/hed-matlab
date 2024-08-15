@@ -51,7 +51,7 @@ direct calls to Python. Once created, you simply call the available methods
 using that reference. The process is summarized in the following diagram.
 
 
-![Matlab HED Tools](./docs/source/_static/images/MatLabHedToolsCloseFitNew.png)
+![Matlab HED Tools](https://raw.githubusercontent.com/hed-standard/hed-matlab/main/docs/source/_static/images/MatLabHedToolsCloseFitNew.png/MatLabHedToolsCloseFitNew.png)
 
 The MATLAB HedTools accept a variety of different types of MATLAB variables
 as input and convert as appropriate for the underlying calls.
