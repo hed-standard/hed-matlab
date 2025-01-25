@@ -10,7 +10,7 @@ data_root = fullfile(data_dir, filesep, 'eeg_ds003645s_hed_demo');
 % The backup named name is default_back is created in the subdirectory 
 % derivatives/remodel/backups under bids_root.
 backup_args = {data_root, '-x', 'stimuli', 'derivatives'};
-remodel_backup(backup_args);
+remodelRackup(backup_args);
 
 %% Run the remodeling file on a BIDS dataset 
 % The -b indicates that this is a BIDS dataset and files are located
@@ -23,7 +23,7 @@ remodel(remodel_args);
 %% Restore the data files to originals (usually does not have to be done)
 % This script uses the default backup
 restore_args = {data_root};
-remodel_restore(restore_args);
+remodelRestore(restore_args);
 
 %% An example with more complex command line arguments
 % No backup is used in this case and the summaries are stored in
