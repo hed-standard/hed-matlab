@@ -1,5 +1,9 @@
 Sphinx>=5.2.2
 myst-parser>=0.18.1
-sphinx-rtd-theme>=1.0.0
-sphinxcontrib-matlabdomain
+sphinx-book-theme>=1.0.0
+sphinxcontrib-matlabdomain>=0.11.0
 hedtools>=0.5.0
+sphinx-autodoc-typehints>=1.20.0
+pygments>=2.10.0
+sphinx-design>=0.5.0
+sphinx-copybutton>=0.5.0

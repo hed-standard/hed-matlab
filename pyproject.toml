@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hed-matlab"
+version = "1.0.0"
+description = "MATLAB tools for HED (Hierarchical Event Descriptors)"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "HED Working Group", email = "hed-users@mailman.ucsd.edu"}
+]
+keywords = ["HED", "hierarchical event descriptors", "MATLAB", "neuroscience"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: MATLAB",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+
+[project.urls]
+Homepage = "https://github.com/VisLab/hed-matlab"
+Documentation = "https://hed-matlab.readthedocs.io"
+Repository = "https://github.com/VisLab/hed-matlab"
+"Bug Tracker" = "https://github.com/VisLab/hed-matlab/issues"
+
+[tool.sphinx]
+source-dir = "docs/source"
+build-dir = "docs/_build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+
+[tool.setuptools]
+packages = []
+
+[tool.black]
+line-length = 100
+target-version = ['py38']
+
+[tool.isort]
+profile = "black"
+line_length = 100
