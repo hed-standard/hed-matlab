@@ -100,13 +100,27 @@ cover/
 # Sphinx documentation
 docs/_build/
 
-#machine specific files
-.vimrc
+# Virtual environments
+.venv/
+venv/
+env/
 
-# Pycharm
+# IDE and machine specific files
+.vimrc
 .idea/
-/venv/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Project-specific
+status/
+.github/copilot-instructions.md
 config.py
+
+# Mac-specific
+.DS_Store
+*.swp
 
 ############
 ## Windows

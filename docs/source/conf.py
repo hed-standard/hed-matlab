@@ -12,7 +12,6 @@
 #
 import os
 import sys
-import sphinx_rtd_theme
 from datetime import date
 
 
@@ -37,8 +36,16 @@ extensions = [
     "myst_parser",
     "sphinxcontrib.matlab",
     "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.intersphinx",
+    "sphinx_design",
+    "sphinx_copybutton",
 ]
 
+# MATLAB-specific configurations
+matlab_src_dir = os.path.abspath(os.path.join("..", ".."))
+matlab_short_links = False
+matlab_auto_warn_missing_crefs = True
 
 primary_domain = "mat"
 autosummary_generate = True
@@ -46,7 +53,18 @@ autodoc_default_flags = ['members', 'inherited-members']
 add_module_names = False
 myst_all_links_external = False
 myst_heading_anchors = 4
-myst_enable_extensions = ["deflist"]
+myst_enable_extensions = [
+    "colon_fence",
+    "deflist",
+    "html_admonition",
+    "html_image",
+    "linkify",
+    "replacements",
+    "smartquotes",
+    "substitution",
+    "tasklist",
+    "attrs_inline",
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -61,29 +79,31 @@ exclude_patterns = ['_build', '_templates', 'Thumbs.db', '.DS_Store']
 
 # -- Options for HTML output -------------------------------------------------
 
+# Syntax highlighting style for light mode
 pygments_style = 'sphinx'
-html_theme = "sphinx_rtd_theme"
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+# Syntax highlighting style for dark mode
+pygments_dark_style = 'monokai'
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
+html_theme = "sphinx_book_theme"
+html_title = "HED MATLAB"
+
+# Theme options for sphinx-book-theme
 html_theme_options = {
-    'analytics_id': 'UA-XXXXXXX-1',  # Provided by Google in your dashboard
-    'analytics_anonymize_ip': False,
-    'logo_only': False,
-    'display_version': True,
-    'prev_next_buttons_location': 'top',
-    'style_external_links': False,
-    'vcs_pageview_mode': '',
-    'style_nav_header_background': 'LightSlateGray',
-    # Toc options
-    'collapse_navigation': False,
-    'sticky_navigation': True,
-    'navigation_depth': 4,
-    'includehidden': True,
-    'titles_only': False
+    "repository_url": "https://github.com/VisLab/hed-matlab",
+    "use_repository_button": True,
+    "use_issues_button": True,
+    "use_edit_page_button": True,
+    "path_to_docs": "docs/source",
+    "show_toc_level": 2,
+    "navigation_with_keys": False,
+    "show_navbar_depth": 1,
+    "use_download_button": True,
+    "toc_title": None,
+    "use_fullscreen_button": False,
 }
+
+# Force the sidebar to use toctree titles instead of page titles
+html_sidebars = {"**": ["navbar-logo", "search-field", "sbt-sidebar-nav.html"]}
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
