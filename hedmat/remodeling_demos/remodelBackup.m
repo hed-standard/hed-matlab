@@ -1,4 +1,4 @@
-function remodel_backup(backup_args)
+function remodelBackup(backup_args)
 % Create a remodeling backup.
 % 
 % Parameters:

@@ -1,4 +1,4 @@
-function errors = testGetServices(host)
+function errors = demoGetServices(host)
 %% Get the options and data
 [servicesUrl, options] = getHostOptions(host);
 errors = {};

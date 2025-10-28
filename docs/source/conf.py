@@ -45,7 +45,7 @@ extensions = [
 # MATLAB-specific configurations
 matlab_src_dir = os.path.abspath(os.path.join("..", ".."))
 matlab_short_links = False
-matlab_auto_warn_missing_crefs = True
+matlab_auto_warn_missing_crefs = False
 
 primary_domain = "mat"
 autosummary_generate = True
