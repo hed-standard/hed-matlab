@@ -25,17 +25,15 @@ classdef HedToolsPython < HedTools
 
         function sidecar = generateSidecar(obj, eventsIn, valueColumns, ...
                 skipColumns)
-            % Return a sidecar string based on an events data.py.hed
+            % Return a sidecar string based on an events data.
             %
             % Parameters:
-            %    eventsIn - char, string or rectified struct.
-            %    valueColumns - cell array of char giving names of
-            %         columns to be treated as value columns.
-            %    skipColumns - cell array of char giving names of
-            %         columns to be skipped.
+            %   eventsIn - char, string or rectified struct.
+            %   valueColumns - cell array of char giving names of columns to be treated as value columns.
+            %   skipColumns - cell array of char giving names of columns to be skipped.
             %
             % Returns:
-            %     sidecar - char array with sidecar.
+            %   sidecar - char array with sidecar.
             %
             tabSum = HedToolsPython.getTabularSummary(valueColumns, ...
                 skipColumns);

@@ -7,10 +7,10 @@ name = "hed-matlab"
 version = "1.0.0"
 description = "MATLAB tools for HED (Hierarchical Event Descriptors)"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [
-    {name = "HED Working Group", email = "hed-users@mailman.ucsd.edu"}
+    {name = "HED Working Group", email = "hed.maintainers@gmail.com"}
 ]
 keywords = ["HED", "hierarchical event descriptors", "MATLAB", "neuroscience"]
 classifiers = [
@@ -25,9 +25,9 @@ classifiers = [
 
 [project.urls]
 Homepage = "https://github.com/VisLab/hed-matlab"
-Documentation = "https://hed-matlab.readthedocs.io"
-Repository = "https://github.com/VisLab/hed-matlab"
-"Bug Tracker" = "https://github.com/VisLab/hed-matlab/issues"
+Documentation = "https://www.hedtags.org/hed-matlab"
+Repository = "https://github.com/hed-standard/hed-matlab"
+"Bug Tracker" = "https://github.com/hed-standard/hed-matlab/issues"
 
 [tool.sphinx]
 source-dir = "docs/source"
@@ -42,7 +42,7 @@ packages = []
 
 [tool.black]
 line-length = 100
-target-version = ['py38']
+target-version = ['py310']
 
 [tool.isort]
 profile = "black"
