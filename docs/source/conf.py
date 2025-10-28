@@ -43,13 +43,15 @@ extensions = [
 ]
 
 # MATLAB-specific configurations
-matlab_src_dir = os.path.abspath(os.path.join("..", ".."))
-matlab_short_links = False
-matlab_auto_warn_missing_crefs = False
+# Point to the hedmat directory where the MATLAB code is located
+matlab_src_dir = os.path.abspath(os.path.join("..", "..", "hedmat"))
+matlab_short_links = True
+matlab_auto_link = True
+matlab_keep_package_prefix = False
+matlab_show_property_default_value = True
 
 primary_domain = "mat"
 autosummary_generate = True
-autodoc_default_flags = ['members', 'inherited-members']
 add_module_names = False
 myst_all_links_external = False
 myst_heading_anchors = 4

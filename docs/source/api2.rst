@@ -4,66 +4,104 @@ HED API reference
 HED Tools
 ---------
 
-.. mat:module:: hedmat.hedtools
-
 The HED tools module provides MATLAB interfaces for HED validation and operations.
 
-.. mat:function:: HedTools
+HedTools (Abstract Base Class)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-   Abstract base class for HED tools implementations.
+.. mat:autoclass:: hedtools.HedTools
+   :members:
+   :show-inheritance:
 
-.. mat:function:: HedToolsPython
+HedToolsPython
+~~~~~~~~~~~~~~
 
-   Concrete class using direct calls to Python for HedTools interface.
+.. mat:autoclass:: hedtools.HedToolsPython
+   :members:
+   :show-inheritance:
+   :inherited-members:
 
-.. mat:function:: HedToolsService
+HedToolsService
+~~~~~~~~~~~~~~~
 
-   Creates a connection object for the HED web online services.
+.. mat:autoclass:: hedtools.HedToolsService
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+getHedTools
+~~~~~~~~~~~
+
+.. mat:autofunction:: hedtools.getHedTools
 
 
 Event Remodeling Demos
 ----------------------
 
-.. mat:module:: hedmat.remodeling_demos
-
 Examples demonstrating event data remodeling and processing.
 
-- `remodel.m` - Main remodeling demonstration
-- `remodelBackup.m` - Backup remodeling state
-- `remodelRestore.m` - Restore remodeling state
-- `runRemodelDemos.m` - Run all remodeling demonstrations
+.. mat:autofunction:: remodeling_demos.remodel
+
+.. mat:autofunction:: remodeling_demos.remodelBackup
+
+.. mat:autofunction:: remodeling_demos.remodelRestore
+
+.. mat:autofunction:: remodeling_demos.runRemodelDemos
 
 
 Web Services Demos
 ------------------
 
-.. mat:module:: hedmat.web_services_demos
-
 Examples demonstrating HED web service usage.
 
-- `demoEventRemodelingServices.m` - Event remodeling services
-- `demoEventSearchServices.m` - Event search services
-- `demoEventServices.m` - Event services
-- `demoGetServices.m` - Get services
-- `demoLibraryServices.m` - Library services
-- `demoSidecarServices.m` - Sidecar services
-- `demoSpreadsheetServices.m` - Spreadsheet services
-- `demoStringServices.m` - String services
-- `exampleGenerateSidecar.m` - Example: Generate sidecar
-- `runAllDemos.m` - Run all demonstrations
+.. mat:autofunction:: web_services_demos.demoEventRemodelingServices
+
+.. mat:autofunction:: web_services_demos.demoEventSearchServices
+
+.. mat:autofunction:: web_services_demos.demoEventServices
+
+.. mat:autofunction:: web_services_demos.demoGetServices
+
+.. mat:autofunction:: web_services_demos.demoLibraryServices
+
+.. mat:autofunction:: web_services_demos.demoSidecarServices
+
+.. mat:autofunction:: web_services_demos.demoSpreadsheetServices
+
+.. mat:autofunction:: web_services_demos.demoStringServices
+
+.. mat:autofunction:: web_services_demos.exampleGenerateSidecar
+
+.. mat:autofunction:: web_services_demos.getDemoData
+
+.. mat:autofunction:: web_services_demos.getHostOptions
+
+.. mat:autofunction:: web_services_demos.getRequestTemplate
+
+.. mat:autofunction:: web_services_demos.getSessionInfo
+
+.. mat:autofunction:: web_services_demos.outputReport
+
+.. mat:autofunction:: web_services_demos.runAllDemos
+
+.. mat:autofunction:: web_services_demos.runDemo
 
 
 Utilities
 ---------
 
-.. mat:module:: hedmat.utilities
-
 Helper functions for common operations.
 
-- `events2string.m` - Convert events to string format
-- `filterDirectories.m` - Filter directories
-- `filterFiles.m` - Filter files
-- `getFileList.m` - Get file list
-- `rectify_events.m` - Rectify events
-- `separateFiles.m` - Separate files
-- `str2lines.m` - Convert string to lines
+.. mat:autofunction:: utilities.events2string
+
+.. mat:autofunction:: utilities.filterDirectories
+
+.. mat:autofunction:: utilities.filterFiles
+
+.. mat:autofunction:: utilities.getFileList
+
+.. mat:autofunction:: utilities.rectify_events
+
+.. mat:autofunction:: utilities.separateFiles
+
+.. mat:autofunction:: utilities.str2lines

@@ -7,6 +7,10 @@ echo Installing/updating dependencies...
 pip install -r docs/requirements.txt
 
 echo.
+echo Patching sphinxcontrib-matlabdomain...
+python docs/patch_matlabdomain.py
+
+echo.
 echo Building documentation...
 sphinx-build -b html docs/source docs/_build/html
 
