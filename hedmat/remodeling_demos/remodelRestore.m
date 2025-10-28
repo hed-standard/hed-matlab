@@ -1,4 +1,4 @@
-function remodel_restore(restore_args)
+function remodelRestore(restore_args)
 % Restore the specified remodeling backup.
 % 
 % Parameters:
