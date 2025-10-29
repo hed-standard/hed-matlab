@@ -91,7 +91,7 @@ html_title = "HED MATLAB"
 
 # Theme options for sphinx-book-theme
 html_theme_options = {
-    "repository_url": "https://github.com/VisLab/hed-matlab",
+    "repository_url": "https://github.com/hed-standard/hed-matlab",
     "use_repository_button": True,
     "use_issues_button": True,
     "use_edit_page_button": True,
