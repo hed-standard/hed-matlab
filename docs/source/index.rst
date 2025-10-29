@@ -50,7 +50,7 @@ Getting Started
 ================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 6
 
    api2.rst
 

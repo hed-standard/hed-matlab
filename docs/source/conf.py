@@ -96,7 +96,7 @@ html_theme_options = {
     "use_issues_button": True,
     "use_edit_page_button": True,
     "path_to_docs": "docs/source",
-    "show_toc_level": 2,
+    "show_toc_level": 3,
     "navigation_with_keys": False,
     "show_navbar_depth": 1,
     "use_download_button": True,
