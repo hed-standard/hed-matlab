@@ -34,6 +34,10 @@ https://www.sciencedirect.com/science/article/pii/S1388245717309069
 # HED tools services (programmatic access blocked)
 ^https?://hedtools\.org/hed/services_submit
 
+# Local development servers (localhost/127.0.0.1)
+^https?://127\.0\.0\.1.*
+^https?://localhost.*
+
 # Neuroinformatics registration (certificate issues)
 ^https?://neuroinformatics\.incf\.org/
 

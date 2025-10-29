@@ -24,7 +24,7 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/VisLab/hed-matlab"
+Homepage = "https://github.com/hed-standard/hed-matlab"
 Documentation = "https://www.hedtags.org/hed-matlab"
 Repository = "https://github.com/hed-standard/hed-matlab"
 "Bug Tracker" = "https://github.com/hed-standard/hed-matlab/issues"
