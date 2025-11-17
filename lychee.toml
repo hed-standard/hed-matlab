@@ -30,3 +30,11 @@ max_concurrency = 8
 # User agent string to use for requests
 # Some sites require a browser-like user agent to avoid blocking
 user_agent = "Mozilla/5.0 (X11; Linux x86_64; rv:100.0) Gecko/20100101 Firefox/100.0"
+
+# Exclude patterns - regex patterns to exclude from checking
+# These are Sphinx theme template files with Jinja2 variables that shouldn't be checked
+exclude_path = [
+    "webpack-macros\\.html$",
+    "sbt-webpack-macros\\.html$",
+    ".*-macros\\.html$"
+]
