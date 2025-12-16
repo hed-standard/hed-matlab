@@ -37,6 +37,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r docs/requirements.txt
 
+      - name: Patch sphinxcontrib-matlabdomain
+        run: python docs/patch_matlabdomain.py
+
       - name: Cache Sphinx build
         uses: actions/cache@v5
         with:
