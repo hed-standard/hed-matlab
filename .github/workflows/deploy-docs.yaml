@@ -41,7 +41,7 @@ jobs:
         run: python docs/patch_matlabdomain.py
 
       - name: Cache Sphinx build
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: docs/_build
           key: sphinx-${{ runner.os }}-${{ hashFiles('docs/source/**/*', 'docs/requirements.txt', 'pyproject.toml') }}
@@ -55,7 +55,7 @@ jobs:
 
       - name: Upload Pages artifact
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: docs/_build/html
 
