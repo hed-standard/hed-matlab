@@ -78,7 +78,9 @@ def patch_file(file_path):
         old_code = "members = inspect.get_members(self.object, attr_getter=self.get_attr)"
 
         if old_code in content:
-            new_code = "members = [(name, self.get_attr(self.object, name)) for name in dir(self.object)]"
+            new_code = (
+                "members = [(name, self.get_attr(self.object, name)) for name in dir(self.object)]"
+            )
             content = content.replace(old_code, new_code)
             file_path.write_text(content, encoding="utf-8")
             print("✓ Patch applied successfully!")
