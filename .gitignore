@@ -115,6 +115,7 @@ env/
 
 # Project-specific
 status/
+.status/
 .github/copilot-instructions.md
 config.py
 

@@ -11,21 +11,18 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
-import sys
 from datetime import date
-
-
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'HED MATLAB'
-copyright = '2017-{}, HED Working Group'.format(date.today().year)
-author = 'HED Working Group'
+project = "HED MATLAB"
+copyright = "2017-{}, HED Working Group".format(date.today().year)
+author = "HED Working Group"
 
 # The full version, including alpha/beta/rc tags
-version = '1.0.0'
-release = '1.0.0'
+version = "1.0.0"
+release = "1.0.0"
 
 # -- General configuration ---------------------------------------------------
 matlab_src_dir = os.path.abspath(os.path.join("..", ".."))
@@ -69,44 +66,61 @@ myst_enable_extensions = [
 ]
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
-source_suffix = ['.rst', '.md']
-master_doc = 'index'
+templates_path = ["_templates"]
+source_suffix = {".rst": "restructuredtext", ".md": "markdown"}
+master_doc = "index"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', '_templates', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ["_build", "_templates", "Thumbs.db", ".DS_Store"]
 
 
 # -- Options for HTML output -------------------------------------------------
 
 # Syntax highlighting style for light mode
-pygments_style = 'sphinx'
+pygments_style = "sphinx"
 # Syntax highlighting style for dark mode
-pygments_dark_style = 'monokai'
+pygments_dark_style = "monokai"
 
-html_theme = "sphinx_book_theme"
-html_title = "HED MATLAB"
+html_theme = "furo"
+html_title = "HED MATLAB Tools"
 
-# Theme options for sphinx-book-theme
+# Add logo
+html_logo = "_static/images/croppedWideLogo.png"
+
+# Furo theme options
 html_theme_options = {
-    "repository_url": "https://github.com/hed-standard/hed-matlab",
-    "use_repository_button": True,
-    "use_issues_button": True,
-    "use_edit_page_button": True,
-    "path_to_docs": "docs/source",
-    "show_toc_level": 3,
-    "navigation_with_keys": False,
-    "show_navbar_depth": 1,
-    "use_download_button": True,
-    "toc_title": None,
-    "use_fullscreen_button": False,
+    "sidebar_hide_name": True,
+    "light_css_variables": {
+        "color-brand-primary": "#0969da",
+        "color-brand-content": "#0969da",
+    },
+    "dark_css_variables": {
+        "color-brand-primary": "#58a6ff",
+        "color-brand-content": "#58a6ff",
+    },
+    "source_repository": "https://github.com/hed-standard/hed-matlab/",
+    "source_branch": "main",
+    "source_directory": "docs/source/",
 }
 
-# Force the sidebar to use toctree titles instead of page titles
-html_sidebars = {"**": ["navbar-logo", "search-field", "sbt-sidebar-nav.html"]}
+# Configure sidebar to show logo, search, navigation, and quick links
+html_sidebars = {
+    "**": [
+        "sidebar/brand.html",
+        "sidebar/search.html",
+        "sidebar/scroll-start.html",
+        "sidebar/navigation.html",
+        "quicklinks.html",
+        "sidebar/ethical-ads.html",
+        "sidebar/scroll-end.html",
+    ]
+}
+
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]
+html_css_files = ["custom.css"]
+html_js_files = ["gh_icon_fix.js"]
