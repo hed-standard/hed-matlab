@@ -3,7 +3,7 @@
 - Implements a base class `HedTools` with following interface:
   - `generateSidecar`
   - `getHedAnnotations`
-  - `searchHed
+  - \`searchHed
   - `validateEvents`
   - `validateSidecar`
   - `validateTags`
