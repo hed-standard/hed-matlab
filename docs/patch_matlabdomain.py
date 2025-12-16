@@ -14,9 +14,30 @@ from pathlib import Path
 def find_matlabdomain_file():
     """Find the mat_documenters.py file in installed packages."""
     try:
-        import sphinxcontrib.mat_documenters as md
-
-        return Path(md.__file__)
+        # First try to import the module
+        import sphinxcontrib
+        
+        # Find the package location
+        sphinxcontrib_path = Path(sphinxcontrib.__file__).parent
+        
+        # Look for mat_documenters.py in the sphinxcontrib directory
+        mat_doc_file = sphinxcontrib_path / "mat_documenters.py"
+        
+        if mat_doc_file.exists():
+            return mat_doc_file
+        
+        # Try alternative location in nested package
+        mat_doc_file = sphinxcontrib_path / "matlab" / "mat_documenters.py"
+        if mat_doc_file.exists():
+            return mat_doc_file
+            
+        print(f"Searched in: {sphinxcontrib_path}")
+        print("Could not locate mat_documenters.py")
+        return None
+        
+    except ImportError as e:
+        print(f"Error importing sphinxcontrib: {e}")
+        return None
     except Exception as e:
         print(f"Error finding sphinxcontrib.mat_documenters: {e}")
         return None
