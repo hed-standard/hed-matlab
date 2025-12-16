@@ -1,9 +1,10 @@
 Sphinx>=5.0,<8.0
 myst-parser>=0.18.1,<3.0
-sphinx-book-theme>=1.0.0
+furo>=2024.0.0
 sphinxcontrib-matlabdomain>=0.11.0
 hedtools>=0.7.1
 sphinx-autodoc-typehints>=1.20.0,<2.0
 pygments>=2.10.0
 sphinx-design>=0.5.0
 sphinx-copybutton>=0.5.0
+linkify-it-py>=2.0.0
