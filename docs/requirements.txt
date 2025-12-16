@@ -1,7 +1,7 @@
 Sphinx>=5.0,<9.0
 myst-parser>=0.18.1,<5.0
 furo>=2024.0.0
-sphinxcontrib-matlabdomain>=0.11.0
+sphinxcontrib-matlabdomain==0.22.1
 hedtools>=0.7.1
 sphinx-autodoc-typehints>=1.20.0,<4.0
 pygments>=2.10.0
