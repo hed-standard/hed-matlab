@@ -4,7 +4,7 @@
 
 This repository contains the MATLAB supporting code infrastructure for Hierarchical Event Descriptors (HED). HED is an ecosystem that includes standardized vocabularies and tools for annotating what happened during an experiment. HED is used for human behaviorial and neuroimaging experiments. See the [**HED Homepage**](https://www.hedtags.org) for more information.
 
-The documentation for `hed-matlab` can be found at [**HED MATLAB Tools**](https://www.hed-resources.org/en/latest/HedMatlabTools.html).
+The documentation for `hed-matlab` can be found at [**MATLAB HEDTools**](https://www.hed-resources.org/en/latest/HedMatlabTools.html).
 
 ## Two ways of using HED
 

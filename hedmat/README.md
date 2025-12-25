@@ -3,9 +3,9 @@
 The MATLAB scripts for processing are in two directories: 
 **web_services** and **utility_scripts**.
 
-### HED MATLAB services
+### MATLAB HEDTools services
 
-The HED MATLAB services are located in the
+MATLAB HEDTools services are located in the
 [**web_services**](https://github.com/hed-standard/hed-examples/tree/main/hedcode/matlab_scripts/web_services)
 subdirectory of [**hed-examples**](https://github.com/hed-standard/hed-examples).
 
@@ -19,7 +19,7 @@ the [**HED Online Tools**](https://hedtools.ucsd.edu/hed).
 You can read more about these services in
 [**HED services in MATLAB**](https://hed-examples.readthedocs.io/en/latest/HedInMatlab.html#hed-services-in-matlab).
 
-### HED MATLAB utilities
+### MATLAB HEDTools utilities
 
 Some MATLAB utilities are available in
 [**utility_scripts**](https://github.com/hed-standard/hed-examples/tree/main/hedcode/matlab_scripts/utility_scripts).

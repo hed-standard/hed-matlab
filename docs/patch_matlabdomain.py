@@ -54,7 +54,7 @@ def find_matlabdomain_file():
 
 
 def patch_file(file_path):
-    """Apply the patch to fix the inspect.get_members issue."""
+    """Apply the patch to fix the inspect.get_members issue and MatScript args."""
     if not file_path:
         print("mat_documenters.py not found - this may be expected for newer versions")
         print("Skipping patch (not required)")
@@ -68,26 +68,56 @@ def patch_file(file_path):
 
     try:
         content = file_path.read_text(encoding="utf-8")
+        patched = False
 
-        # Check if already patched
+        # Patch 1: Fix inspect.get_members issue
         if "for name in dir(self.object)" in content:
-            print("Already patched, skipping.")
-            return True
-
-        # Apply the patch only if the buggy code exists
-        old_code = "members = inspect.get_members(self.object, attr_getter=self.get_attr)"
-
-        if old_code in content:
-            new_code = (
-                "members = [(name, self.get_attr(self.object, name)) for name in dir(self.object)]"
-            )
-            content = content.replace(old_code, new_code)
-            file_path.write_text(content, encoding="utf-8")
-            print("✓ Patch applied successfully!")
-            return True
+            print("Already patched (inspect.get_members), skipping.")
         else:
-            print("✓ Bug not found in current version - patch not needed")
-            return True
+            old_code = "members = inspect.get_members(self.object, attr_getter=self.get_attr)"
+            if old_code in content:
+                new_code = (
+                    "members = [(name, self.get_attr(self.object, name)) for name in dir(self.object)]"
+                )
+                content = content.replace(old_code, new_code)
+                print("✓ Patch 1 applied: Fixed inspect.get_members")
+                patched = True
+            else:
+                print("✓ Bug not found in current version - patch 1 not needed")
+
+        # Patch 2: Fix MatScript args formatting warning
+        if "hasattr(self.object, 'args')" not in content:
+            # Find the format_args method and add a check for MatScript
+            old_pattern = "def format_args(self, **kwargs):"
+            if old_pattern in content:
+                # Add check for scripts (which don't have args attribute)
+                lines = content.split('\n')
+                new_lines = []
+                for i, line in enumerate(lines):
+                    new_lines.append(line)
+                    if old_pattern in line:
+                        # Find the indentation of the next line
+                        if i + 1 < len(lines):
+                            next_line = lines[i + 1]
+                            indent = len(next_line) - len(next_line.lstrip())
+                            # Insert check for args attribute (for MatScript objects)
+                            new_lines.append(' ' * indent + "if not hasattr(self.object, 'args'):")
+                            new_lines.append(' ' * indent + "    return ''")
+                content = '\n'.join(new_lines)
+                print("✓ Patch 2 applied: Fixed MatScript args warning")
+                patched = True
+            else:
+                print("✓ format_args method not found - patch 2 not needed")
+        else:
+            print("Already patched (MatScript args), skipping.")
+
+        if patched:
+            file_path.write_text(content, encoding="utf-8")
+            print("✓ All patches applied successfully!")
+        else:
+            print("✓ No patches needed")
+
+        return True
 
     except Exception as e:
         print(f"Error applying patch: {e}")

@@ -16,7 +16,7 @@ from datetime import date
 
 # -- Project information -----------------------------------------------------
 
-project = "HED MATLAB"
+project = "MATLAB HEDTools"
 copyright = "2017-{}, HED Working Group".format(date.today().year)
 author = "HED Working Group"
 
@@ -62,7 +62,6 @@ myst_enable_extensions = [
     "smartquotes",
     "substitution",
     "tasklist",
-    "attrs_inline",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -84,7 +83,7 @@ pygments_style = "sphinx"
 pygments_dark_style = "monokai"
 
 html_theme = "furo"
-html_title = "HED MATLAB Tools"
+html_title = "MATLAB HEDTools"
 
 # Add logo
 html_logo = "_static/images/croppedWideLogo.png"
