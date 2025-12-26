@@ -1,6 +1,6 @@
-# User guide for HED MATLAB
+# MATLAB HEDTools user guide
 
-This guide provides step-by-step instructions for using the HED MATLAB tools for validation, annotation assembly, and searching.
+This guide provides step-by-step instructions for using MATLAB HEDTools for validation, annotation assembly, and searching.
 
 ## Quick links
 
@@ -13,7 +13,7 @@ This guide provides step-by-step instructions for using the HED MATLAB tools for
 ## Table of contents
 
 1. [Tool overview](#tool-overview)
-2. [The HED MATLAB interface](#the-hed-matlab-interface)
+2. [MATLAB HEDTools interface](#the-matlab-hedtools-interface)
 3. [Using MATLAB HEDTools](#using-matlab-hedtools)
 4. [Input of events](#input-of-events)
 5. [Input of sidecars](#input-of-sidecars)
@@ -23,23 +23,23 @@ This guide provides step-by-step instructions for using the HED MATLAB tools for
 
 ## Tool overview
 
-The HED MATLAB tools provide the following interface to HEDTools as explained in more detail in the following sections. The MATLAB HEDTools package provides two interchangeable implementations of these functions -- calling the HED Python tools through a web service or directly calling the Python HEDTools.
+MATLAB HEDTools provide the following interface to HEDTools as explained in more detail in the following sections. The MATLAB HEDTools package provides two interchangeable implementations of these functions -- calling the HED Python tools through a web service or directly calling the Python HEDTools.
 
 To use HED tools, you first create a HED object by calling `getHedTools`. If you provide the optional host argument, the HED tools use services, otherwise direct calls to Python. Once created, you simply call the available methods using that reference. The process is summarized in the following diagram.
 
-![HED MATLAB tools](_static/images/MatLabHedToolsCloseFit.png)
+![MATLAB HEDTools](_static/images/MatLabHedToolsCloseFit.png)
 
 Both approaches take MATLAB data as input and translate these values as needed to access the HEDTools. After making the call, the implementation translates the results back into MATLAB data types. The MATLAB HedTools accept a variety of different types of MATLAB variables as input.
 
-Calling the HED MATLAB tools using web services requires no installation beyond downloading the HED MATLAB package, but its use requires Internet access.
+Calling MATLAB HEDTools using web services requires no installation beyond downloading the MATLAB HEDTools package, but its use requires Internet access.
 
 Using direct calls to the Python HEDTools from MATLAB is more efficient and provides additional functionality not available through the web service interface. However, direct calls require a one-time setup of Python for your MATLAB installation. See [MATLAB Python install](#matlab-python-install) for additional setup information.
 
 Another option is to use the [EEGLAB HEDTools plug-in](https://www.hedtags.org/hed-resources/HedAndEEGLAB.html) integration for HED. The EEGLAB plug-ins provide easy access through the EEGLAB GUI interface.
 
-## The HED MATLAB interface
+## MATLAB HEDTools interface
 
-The HED MATLAB tools provide the following routines for accessing HED:
+MATLAB HEDTools provide the following routines for accessing HED:
 
 | MATLAB function     | Parameters                                                                  | Returns                        |
 | ------------------- | --------------------------------------------------------------------------- | ------------------------------ |
@@ -67,11 +67,11 @@ The parameters are defined as follows:
 
 ## Using MATLAB HEDTools
 
-This section gives some examples of using the HED MATLAB tools.
+This section gives some examples of using MATLAB HEDTools.
 
 ### Getting a HEDTools object
 
-The HED MATLAB tools are all called by getting a `HedTools` object and then making the calls through this object. Use the `getHedTools` function to get a `HedTools` object.
+MATLAB HEDTools are all called by getting a `HedTools` object and then making the calls through this object. Use the `getHedTools` function to get a `HedTools` object.
 
 The following example gets a `HedTools` object using version 8.2.0 of the HED schema (standard vocabulary) and the webservice available at [https://hedtools.org/hed](https://hedtools.org/hed).
 
@@ -87,7 +87,7 @@ hed = getHedTools('8.2.0', 'https://hedtools.org/hed');
 
 The first parameter is number of the HED version to use, and the second parameter is the URL of the web service. The `hed` returned by this call is `HedToolsService`, which implements the interface by calls to HED web services. The [https://hedtools.org/hed](https://hedtools.org/hed) is the primary server for the HED online tools. An alternative server for the web services is [https://hedtools.org/hed_dev](https://hedtools.org/hed_dev). This is the HED development server, which deploys the latest features.
 
-If you have installed the HED Python tools, you can access the HED MATLAB interface using direct calls to Python.
+If you have installed the HED Python tools, you can access the MATLAB HEDTools interface using direct calls to Python.
 
 ```{admonition} Access HED tools through direct Python calls.
 :class: tip
@@ -98,7 +98,7 @@ hed = getHedTools('8.2.0');
 
 ````
 
-If you call the `getHedTools` with only the HED version number parameter, `getHedTools` assumes you are using direct calls to Python and returns a `HedToolsPython` object. The HED MATLAB interface calls and behavior are identical whether you use the services or direct calls. You must have the HED Python tools installed to use direct calls. See [MATLAB Python install](#matlab-python-install).
+If you call the `getHedTools` with only the HED version number parameter, `getHedTools` assumes you are using direct calls to Python and returns a `HedToolsPython` object. TheMATLAB HEDTools interface calls and behavior are identical whether you use the services or direct calls. You must have the HED Python tools installed to use direct calls. See [MATLAB Python install](#matlab-python-install).
 
 ### Calling a tool
 

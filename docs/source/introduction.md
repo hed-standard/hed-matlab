@@ -1,4 +1,4 @@
-# Introduction HED MATLAB
+# Introduction MATLAB HEDTools
 
 ## What is HED?
 
@@ -10,9 +10,9 @@ HED (Hierarchical Event Descriptors) is a framework for systematically describin
 
 For more information, visit the [HED project homepage](https://www.hedtags.org).
 
-## What are HED MATLAB Tools?
+## What are MATLAB HEDTools?
 
-The **HED MATLAB Tools** package provides MATLAB wrappers for working with HED annotations in MATLAB environments. The tools provide:
+The **MATLAB HEDTools** package provides MATLAB wrappers for working with HED annotations in MATLAB environments. The tools provide:
 
 - **MATLAB wrapper functions** for HED validation and services
 - **Web service demonstrations** and client examples
@@ -20,7 +20,7 @@ The **HED MATLAB Tools** package provides MATLAB wrappers for working with HED a
 - **Integration examples** with EEGLAB and other MATLAB-based tools
 - **Comprehensive API documentation** for MATLAB functions
 
-The HED MATLAB tools allow validation, summary, search, factorization, data epoching and other HED processing in MATLAB by providing MATLAB wrappers for the Python HEDTools. These MATLAB wrappers allow MATLAB users to use HED without learning Python.
+The MATLAB HEDTools allow validation, summary, search, factorization, data epoching and other HED processing in MATLAB by providing MATLAB wrappers for the Python HEDTools. These MATLAB wrappers allow MATLAB users to use HED without learning Python.
 
 ### Related tools and resources
 
@@ -34,9 +34,9 @@ The HED MATLAB tools allow validation, summary, search, factorization, data epoc
 
 ## Installation
 
-### Downloading the HED MATLAB Tools
+### Downloading MATLAB HEDTools
 
-The HED MATLAB tools can be downloaded from the [**hed-matlab**](https://github.com/hed-standard/hed-matlab) GitHub repository.
+MATLAB HEDTools can be downloaded from the [**hed-matlab**](https://github.com/hed-standard/hed-matlab) GitHub repository.
 
 **Add the `hedmat` directory and all of its subdirectories to your MATLAB path.**
 
@@ -54,9 +54,9 @@ The following table describes the directories of this repository:
 
 ### Using web services (no installation required)
 
-The simplest way to use HED MATLAB tools is through web services. This approach:
+The simplest way to use MATLAB HEDTools is through web services. This approach:
 
-- **Requires no installation** beyond downloading the HED MATLAB package
+- **Requires no installation** beyond downloading the MATLAB HEDTools package
 - **Requires Internet access** to connect to HED web services
 - Works immediately without any Python setup
 
@@ -94,7 +94,7 @@ Here's a simple example to get you started with HED validation in MATLAB:
 
 ```matlab
 % Get HED tools using web services
-hed = getHedTools('8.2.0', 'https://hedtools.org/hed');
+hed = getHedTools('8.4.0', 'https://hedtools.org/hed');
 
 % Validate a string containing HED tags
 issues = hed.validateTags('Sensory-event,Red,(Image,Face)');
@@ -106,4 +106,4 @@ else
 end
 ```
 
-For more examples and detailed usage, see the [User Guide](user_guide.md).
+For more examples and detailed usage, see the MATLAB HEDTools [user guide](user_guide.md).
