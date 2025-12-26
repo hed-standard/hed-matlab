@@ -1,36 +1,4 @@
-# Introduction MATLAB HEDTools
-
-## What is HED?
-
-HED (Hierarchical Event Descriptors) is a framework for systematically describing events and experimental metadata in machine-actionable form. HED provides:
-
-- **Controlled vocabulary** for annotating experimental data and events
-- **Standardized infrastructure** enabling automated analysis and interpretation
-- **Integration** with major neuroimaging standards (BIDS and NWB)
-
-For more information, visit the [HED project homepage](https://www.hedtags.org).
-
-## What are MATLAB HEDTools?
-
-The **MATLAB HEDTools** package provides MATLAB wrappers for working with HED annotations in MATLAB environments. The tools provide:
-
-- **MATLAB wrapper functions** for HED validation and services
-- **Web service demonstrations** and client examples
-- **Event data remodeling** and processing utilities
-- **Integration examples** with EEGLAB and other MATLAB-based tools
-- **Comprehensive API documentation** for MATLAB functions
-
-The MATLAB HEDTools allow validation, summary, search, factorization, data epoching and other HED processing in MATLAB by providing MATLAB wrappers for the Python HEDTools. These MATLAB wrappers allow MATLAB users to use HED without learning Python.
-
-### Related tools and resources
-
-- **[HED homepage](https://www.hedtags.org)**: Overview and links for HED
-- **[HED Schemas](https://github.com/hed-standard/hed-schemas)**: Standardized vocabularies in XML/MediaWiki/OWL formats
-- **[HED Specification](https://www.hedtags.org/hed-specification/)**: Formal specification defining HED annotation rules
-- **[HED Online Tools](https://hedtools.org/hed)**: Web-based interface requiring no programming
-- **[HED Examples](https://github.com/hed-standard/hed-examples)**: Example datasets annotated with HED
-- **[HED Resources](https://www.hedtags.org/hed-resources)**: Comprehensive tutorials and documentation
-- **[HED Python Tools](https://www.hedtags.org/hed-python)**: Python library that powers these MATLAB tools
+# Getting started
 
 ## Installation
 
@@ -66,32 +34,21 @@ See the [User Guide](user_guide.md) for examples of using web services.
 
 For more efficient operation and additional functionality, you can configure MATLAB to call the Python HEDTools directly. This approach:
 
-- **Requires one-time Python setup** (Python 3.8+, HEDTools package)
+- **Requires one-time Python setup** (Python 3.10+, HEDTools package)
 - **Provides better performance** than web services
 - **Works offline** once configured
 - **Provides access to additional features** not available through web services
 
-For Python installation instructions, see the [Python Installation Guide](user_guide.md#matlab-python-install) in the User Guide.
-
-## Getting help
-
-### Documentation resources
-
-- **[User Guide](user_guide.md)**: Step-by-step instructions and examples
-- **[API reference](api2.rst)**: Detailed MATLAB function documentation
-- **[HED specification](https://hed-specification.readthedocs.io/)**: Formal annotation rules
-- **[HED resources](https://www.hedtags.org/hed-resources)**: HED tutorials and guides
-
-### Support
-
-- **Issues**: Report bugs or request features on [GitHub Issues](https://github.com/hed-standard/hed-matlab/issues)
-- **Questions**: Ask on the [HED forum](https://github.com/hed-standard/hed-specification/discussions)
-- **EEGLAB integration**: See the [EEGLAB HEDTools plug-in](https://www.hedtags.org/hed-resources/HedAndEEGLAB.html) documentation
+For Python installation instructions, see the [Python installation guide](user_guide.md#matlab-python-install) in the user guide.
 
 ## Quick example
 
 Here's a simple example to get you started with HED validation in MATLAB:
 
+````{admonition} HED validation in MATLAB using web services
+---
+class: tip
+---
 ```matlab
 % Get HED tools using web services
 hed = getHedTools('8.4.0', 'https://hedtools.org/hed');
@@ -105,5 +62,30 @@ else
     disp(issues);
 end
 ```
+````
 
 For more examples and detailed usage, see the MATLAB HEDTools [user guide](user_guide.md).
+
+## Related HED resources
+
+- **[HED homepage](https://www.hedtags.org)**: Overview and links for HED
+- **[HED schemas](https://www.hedtags.org/hed-schemas)**: Standardized vocabularies in XML/MediaWiki/OWL formats
+- **[HED specification](https://www.hedtags.org/hed-specification/)**: Formal specification defining HED annotation rules
+- **[HED online tools](https://hedtools.org/hed)**: Web-based interface requiring no programming
+- **[HED resources](https://www.hedtags.org/hed-resources)**: Comprehensive tutorials and documentation
+- **[Python HEDTools](https://www.hedtags.org/hed-python)**: Python library that powers these MATLAB tools
+- **[EEGLAB HEDTools plug-in](https://www.hedtags.org/hed-resources/HedAndEEGLAB.html)**: Integration for EEGLAB users
+
+## Getting help
+
+### Documentation resources
+
+- **[User guide](user_guide.md)**: Step-by-step instructions and examples
+- **[API reference](api2.rst)**: Detailed MATLAB function documentation
+- **[HED specification](https://hed-specification.readthedocs.io/)**: Formal annotation rules
+- **[HED resources](https://www.hedtags.org/hed-resources)**: HED tutorials and guides
+
+### Support
+
+- **Issues**: Report bugs or request features on GitHub [issues](https://github.com/hed-standard/hed-matlab/issues)
+- **EEGLAB integration**: See the [EEGLAB HEDTools plug-in](https://www.hedtags.org/hed-resources/HedAndEEGLAB.html) documentation
