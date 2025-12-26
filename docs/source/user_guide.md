@@ -247,7 +247,7 @@ The queries can be quite complex as described in the [HED search guide](https://
 
 ## MATLAB Python install
 
-Although MATLAB began python support of python in 2014, **you must be using MATLAB version 2020b or later** with the HEDTools because the current version of the HEDTools requires Python 3.8 or later. See [compatible version of Python](https://www.mathworks.com/support/requirements/python-compatibility.html) for a listing of which Python versions are compatible with which versions of MATLAB.
+Although MATLAB began python support of python in 2014, **you must be using MATLAB version 2020b or later** with the HEDTools because the current version of the HEDTools requires Python 3.10 or later. See [compatible version of Python](https://www.mathworks.com/support/requirements/python-compatibility.html) for a listing of which Python versions are compatible with which versions of MATLAB.
 
 **Note:** For your reference, the source for `hedtools` is the [hed-python](https://github.com/hed-standard/hed-python) GitHub repository. The code is fully open-source with an MIT license. The actual API documentation is available [here](https://www.hedtags.org/hed-python), but the tutorials and tool documentation for `hedtools` on [HED Resources](https://www.hedtags.org/hed-resources/index.html) site provides more examples of use.
 
@@ -263,7 +263,7 @@ Thus, once the setup is done, you don't have to learn any Python syntax to use t
 ---
 class: tip
 ---
-**Step 1: Find Python**. If a version >= Python 3.8 is found, skip to Step 3.
+**Step 1: Find Python**. If a version >= Python 3.10 is found, skip to Step 3.
 
 **Step 2: Install Python if needed**.
 
@@ -274,7 +274,7 @@ class: tip
 
 #### Step 1: Find Python
 
-Follow these steps until you find a Python executable that is version 3.8 or greater. If you can't locate one, you will need to install it.
+Follow these steps until you find a Python executable that is version 3.10 or greater. If you can't locate one, you will need to install it.
 
 ````{admonition} Does MATLAB already have a good version of Python you can use?
 
@@ -288,7 +288,7 @@ The following example response shows that MATLAB on Windows is using Python vers
 
 ````
 
-If MATLAB has already knows about a suitable Python version that is at least 3.8, you are ready to go to **Step 4: Install HEDTools**. Keep track of the location of the Python executable.
+If MATLAB has already knows about a suitable Python version that is at least 3.10, you are ready to go to **Step 4: Install HEDTools**. Keep track of the location of the Python executable.
 
 If the `pyenv` did not indicate a suitable Python version, you will need to find the Python on your system (if there is one), or install your own.
 
@@ -300,7 +300,7 @@ There are several likely places to look for Python on your system.
 
 **For Windows users**:
 
-> Likely places for system-space installation are `C:\`, `C:\Python`, `C:\Program Files` or `C:\Program Files\Python`. User-space installations default to your personal account in `C:\Users\yourname\AppData\Local\Programs\Python\python39` where `yourname` is your Windows account name and `python39` will be the particular version (in this case Python 3.9).
+> Likely places for system-space installation are `C:\`, `C:\Python`, `C:\Program Files` or `C:\Program Files\Python`. User-space installations default to your personal account in `C:\Users\yourname\AppData\Local\Programs\Python\python310` where `yourname` is your Windows account name and `python310` will be the particular version (in this case Python 3.10).
 
 If you don't have any success finding a Python executable, you will need to install Python as described in **Step 2: Install Python if needed**.
 
@@ -332,7 +332,7 @@ Setting the Python version uses the MATLAB `pyenv` function with the `'Version'`
 class: tip
 ---
 ```matlab
->> pyenv('Version', 'C:\Program Files\Python\Python39\python.exe')
+>> pyenv('Version', 'C:\Program Files\Python\Python310\python.exe')
 ```
 ````
 
@@ -351,7 +351,7 @@ To install the latest released version of `hedtools` type a `pip` command such a
 class: tip
 ---
 ```matlab
-system('"C:\Program Files\Python\Python39\Scripts\pip" install hedtools')
+system('"C:\Program Files\Python\Python310\Scripts\pip" install hedtools')
 ```
 ````
 
