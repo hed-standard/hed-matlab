@@ -76,9 +76,7 @@ def patch_file(file_path):
         else:
             old_code = "members = inspect.get_members(self.object, attr_getter=self.get_attr)"
             if old_code in content:
-                new_code = (
-                    "members = [(name, self.get_attr(self.object, name)) for name in dir(self.object)]"
-                )
+                new_code = "members = [(name, self.get_attr(self.object, name)) for name in dir(self.object)]"
                 content = content.replace(old_code, new_code)
                 print("✓ Patch 1 applied: Fixed inspect.get_members")
                 patched = True
@@ -91,7 +89,7 @@ def patch_file(file_path):
             old_pattern = "def format_args(self, **kwargs):"
             if old_pattern in content:
                 # Add check for scripts (which don't have args attribute)
-                lines = content.split('\n')
+                lines = content.split("\n")
                 new_lines = []
                 for i, line in enumerate(lines):
                     new_lines.append(line)
@@ -101,9 +99,9 @@ def patch_file(file_path):
                             next_line = lines[i + 1]
                             indent = len(next_line) - len(next_line.lstrip())
                             # Insert check for args attribute (for MatScript objects)
-                            new_lines.append(' ' * indent + "if not hasattr(self.object, 'args'):")
-                            new_lines.append(' ' * indent + "    return ''")
-                content = '\n'.join(new_lines)
+                            new_lines.append(" " * indent + "if not hasattr(self.object, 'args'):")
+                            new_lines.append(" " * indent + "    return ''")
+                content = "\n".join(new_lines)
                 print("✓ Patch 2 applied: Fixed MatScript args warning")
                 patched = True
             else:
