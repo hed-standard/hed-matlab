@@ -33,30 +33,23 @@ Repository = "https://github.com/hed-standard/hed-matlab"
 dev = [
     "ruff>=0.8.0",
     "codespell>=2.2.0",
-    "black>=24.0.0",
+    "black>=26.1.0",
     "mdformat>=0.7.0",
     "mdformat-myst>=0.1.5",
-    "mdformat-tables>=0.4.0",
 ]
 docs = [
-    "Sphinx>=5.0,<10.0",
-    "myst-parser>=0.18.1,<5.0",
-    "furo>=2024.0.0",
+    "sphinx>=7.1.0,<10.0",
+    "furo>=2024.1.29",
+    "sphinx-copybutton>=0.5.2",
+    "myst-parser>=3.0.0",
+    "sphinx-autodoc-typehints>=1.24.0",
     "sphinxcontrib-matlabdomain==0.22.1",
-    "sphinx-autodoc-typehints>=1.20.0,<4.0",
-    "pygments>=2.10.0",
-    "sphinx-design>=0.5.0",
-    "sphinx-copybutton>=0.5.0",
-    "linkify-it-py>=2.0.0",
+    "linkify-it-py>=2.0.3",
 ]
 
 [tool.sphinx]
-source-dir = "docs/source"
+source-dir = "docs"
 build-dir = "docs/_build"
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-python_files = "test_*.py"
 
 [tool.setuptools]
 packages = []

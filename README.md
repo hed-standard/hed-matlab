@@ -4,7 +4,7 @@
 
 This repository contains the MATLAB supporting code infrastructure for Hierarchical Event Descriptors (HED). HED is an ecosystem that includes standardized vocabularies and tools for annotating what happened during an experiment. HED is used for human behaviorial and neuroimaging experiments. See the [**HED Homepage**](https://www.hedtags.org) for more information.
 
-The documentation for `hed-matlab` can be found at [**MATLAB HEDTools**](https://www.hed-resources.org/en/latest/HedMatlabTools.html).
+The documentation for `hed-matlab` can be found at [**MATLAB HEDTools**](https://www.hedtags.org/hed-matlab).
 
 ## Two ways of using HED
 
@@ -30,7 +30,7 @@ In this approach, the HEDTools are accessed through MATLAB wrapper functions tha
 
 To use HED tools, you first create a HED object by calling `getHedTools`. If you provide the optional host argument, the HED tools use services, otherwise direct calls to Python. Once created, you simply call the available methods using that reference. The process is summarized in the following diagram.
 
-![Matlab HED Tools](https://www.hed-resources.org/en/latest/_images/MatLabHedToolsCloseFit.png)
+![Matlab HED Tools](https://www.hedtags.org/hed-matlab/_images/MatLabHedToolsCloseFit.png)
 
 The MATLAB HedTools accept a variety of different types of MATLAB variables as input and convert as appropriate for the underlying calls. On return, the tools convert back to MATLAB types.
 
@@ -55,7 +55,28 @@ Once you have download and unzipped if necessary, you have to add the path of th
 
 ### Additional steps for Python
 
-The Python approach requires you to install Python, install the Python HedTools, and link to MATLAB. See [**Matlab Python Install**](https://www.hed-resources.org/en/latest/HedMatlabTools.html#matlab-python-install) for detailed instructions.
+The Python approach requires you to install Python, install the Python HedTools, and link to MATLAB. See [**Matlab Python Install**](https://www.hedtags.org/hed-matlab/#matlab-python-install) for detailed instructions.
+
+## Contributing
+
+We welcome contributions to MATLAB HEDTools! Whether you want to:
+
+- Report a bug or request a feature
+- Improve documentation
+- Submit code changes
+- Add new functionality
+
+Please see our [**Development Guide**](https://www.hedtags.org/hed-matlab/development.html) for detailed instructions on:
+
+- Setting up your development environment
+- Building documentation locally
+- Running tests
+- Submitting pull requests
+
+For quick contributions, you can also:
+
+- **Report issues**: [GitHub Issues](https://github.com/hed-standard/hed-matlab/issues)
+- **View documentation source**: [docs/](https://github.com/hed-standard/hed-matlab/tree/main/docs)
 
 ## Funding
 

@@ -13,7 +13,6 @@
 import os
 from datetime import date
 
-
 # -- Project information -----------------------------------------------------
 
 project = "MATLAB HEDTools"
@@ -25,7 +24,7 @@ version = "1.0.0"
 release = "1.0.0"
 
 # -- General configuration ---------------------------------------------------
-matlab_src_dir = os.path.abspath(os.path.join("..", ".."))
+
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
@@ -35,13 +34,12 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
-    "sphinx_design",
     "sphinx_copybutton",
 ]
 
 # MATLAB-specific configurations
 # Point to the hedmat directory where the MATLAB code is located
-matlab_src_dir = os.path.abspath(os.path.join("..", "..", "hedmat"))
+matlab_src_dir = os.path.abspath(os.path.join("..", "hedmat"))
 matlab_short_links = True
 matlab_auto_link = True
 matlab_keep_package_prefix = False
@@ -101,7 +99,7 @@ html_theme_options = {
     },
     "source_repository": "https://github.com/hed-standard/hed-matlab/",
     "source_branch": "main",
-    "source_directory": "docs/source/",
+    "source_directory": "docs/",
 }
 
 # Configure sidebar to show logo, search, navigation, and quick links

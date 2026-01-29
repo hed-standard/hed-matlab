@@ -17,7 +17,7 @@ Access to the HED services are also available online through
 the [**HED Online Tools**](https://hedtools.ucsd.edu/hed).
 
 You can read more about these services in
-[**HED services in MATLAB**](https://hed-examples.readthedocs.io/en/latest/HedInMatlab.html#hed-services-in-matlab).
+[**HED services in MATLAB**](https://www.hedtags.org/hed-matlab/user_guide.html#getting-a-hedtools-object).
 
 ### MATLAB HEDTools utilities
 

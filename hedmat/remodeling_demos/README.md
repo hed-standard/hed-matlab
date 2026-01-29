@@ -1,19 +1,10 @@
 # Using the HED remodeling tools in MATLAB
 
 The HED remodeling tools allow users to run a sequence of transformations
-and summaries on tabular files in a BIDS dataset or directory tree.
-
-For an introduction to the HED remodeling tools see:
-[File remodeling Quickstart](https://www.hed-resources.org/en/latest/FileRemodelingQuickstart.html#).
-
-Details can be found in
-[File remodeling tools](https://www.hed-resources.org/en/latest/FileRemodelingTools.html).
+and summaries on tabular files in a BIDS dataset or directory tree. 
 
 Using these tools requires that MATLAB be set up for calling Python and that the
-HED Python tools have been installed.
-
-See {Python HEDTools in MATLAB](https://www.hed-resources.org/en/latest/HedMatlabTools.html#getting-started)
-for information about setting up the needed environment.
+HED Python tools and [Table-remodeler](https://www.hedtags.org/table-remodeler) have been installed in your MATLAB environment. See the [MATLAB Python installation](https://www.hedtags.org/hed-matlab/user_guide.html#matlab-python-install) guide for more information. 
 
 An alternative is to call the remodeling tools from a web-service. 
 See [HED services in MATLAB](https://www.hed-resources.org/en/latest/HedMatlabTools.html#hed-services-in-matlab).
