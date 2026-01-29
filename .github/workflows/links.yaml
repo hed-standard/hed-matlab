@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r docs/requirements.txt
+          pip install -e .[docs]
 
       - name: Patch sphinxcontrib-matlabdomain
         run: python docs/patch_matlabdomain.py
