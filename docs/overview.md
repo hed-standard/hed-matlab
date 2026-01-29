@@ -61,7 +61,7 @@ The following table describes the directories of this repository:
 ```{index} single: installation; web services
 ```
 
-### Using web services (no installation required)
+### Using web services (no installation)
 
 The simplest way to use MATLAB HEDTools is through web services. This approach:
 

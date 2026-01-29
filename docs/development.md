@@ -61,7 +61,7 @@ To build the documentation, you need:
    - Furo theme
    - MyST parser (for Markdown support)
    - sphinxcontrib-matlabdomain (for MATLAB code documentation)
-   - sphinx-copybutton, sphinx-design, and other extensions
+   - sphinx-copybutton and other extensions
 
    **Development tools:**
 
@@ -87,29 +87,6 @@ sphinx-build -b html docs docs/_build/html -E
 ```
 
 The `-E` flag forces a full rebuild of all files, ignoring the cache.
-
-### Serving documentation locally
-
-#### Using the provided batch file (Windows)
-
-From the repository root:
-
-```shell
-serve-sphinx.bat
-```
-
-This will start a local web server and open the documentation in your browser.
-
-#### Using Python's built-in HTTP server
-
-From the repository root:
-
-```shell
-cd docs/_build/html
-python -m http.server 8000
-```
-
-Then open your browser to [http://localhost:8000](http://localhost:8000)
 
 ### Documentation structure
 
