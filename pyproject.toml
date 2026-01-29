@@ -45,7 +45,6 @@ docs = [
     "sphinx-autodoc-typehints>=1.24.0",
     "sphinxcontrib-matlabdomain==0.22.1",
     "linkify-it-py>=2.0.3",
-
 ]
 
 [tool.sphinx]

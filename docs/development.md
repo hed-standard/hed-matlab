@@ -7,7 +7,7 @@
 ```{index} documentation; building
 ```
 
-# Developmet guide
+# Development guide
 
 This guide provides instructions for contributors who want to develop MATLAB HEDTools code or build the documentation locally.
 
