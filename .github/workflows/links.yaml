@@ -34,8 +34,7 @@ jobs:
 
       - name: Build documentation with Sphinx
         run: |
-          cd docs
-          sphinx-build -b html source _build/html
+          sphinx-build -b html docs docs/_build/html
 
       - name: Link Checker on built documentation
         id: lychee

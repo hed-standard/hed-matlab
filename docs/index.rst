@@ -41,7 +41,7 @@ Getting started
 .. toctree::
    :maxdepth: 2
 
-   Introduction <introduction>
+   Overview <overview>
 
 Programming with HEDTools
 -------------------------
@@ -50,6 +50,7 @@ Programming with HEDTools
    :maxdepth: 2
 
    User guide <user_guide>
+   Documentation development <development>
 
 API documentation
 -----------------
@@ -60,8 +61,7 @@ API documentation
    API reference <api2>
 
 
-Indices and tables
+Index
 ==================
 
 * :ref:`genindex`
-* :ref:`search`

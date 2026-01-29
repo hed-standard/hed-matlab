@@ -1,6 +1,12 @@
+```{index} user guide
+```
+
 # User guide
 
-This guide provides step-by-step instructions for using MATLAB HEDTools for validation, annotation assembly, and searching.
+This guide provides step-by-step instructions for using MATLAB HEDTools for validation, annotation assembly, searching, summarization, event remodeling, factorization, and data epoching.
+
+```{index} tool overview
+```
 
 ## Tool overview
 
@@ -17,6 +23,24 @@ Calling MATLAB HEDTools using web services requires no installation beyond downl
 Using direct calls to the Python HEDTools from MATLAB is more efficient and provides additional functionality not available through the web service interface. However, direct calls require a one-time setup of Python for your MATLAB installation. See [MATLAB Python install](#matlab-python-install) for additional setup information.
 
 Another option is to use the [EEGLAB HEDTools plug-in](https://www.hedtags.org/hed-resources/HedAndEEGLAB.html) integration for HED. The EEGLAB plug-ins provide easy access through the EEGLAB GUI interface.
+
+```{index} MATLAB; interface
+```
+
+```{index} getHedAnnotations
+```
+
+```{index} searchHed
+```
+
+```{index} validateEvents
+```
+
+```{index} validateSidecar
+```
+
+```{index} validateTags
+```
 
 ## MATLAB HEDTools interface
 
@@ -49,6 +73,12 @@ The parameters are defined as follows:
 ## Using MATLAB HEDTools
 
 This section gives some examples of using MATLAB HEDTools.
+
+```{index} getHedTools
+```
+
+```{index} HedTools; object
+```
 
 ### Getting a HEDTools object
 
@@ -100,6 +130,15 @@ The `issues` is a printable `char` array. The HED tags string in the above examp
 ```text
 TAG_INVALID: 'Blech' in Blech is not a valid base hed tag.
 TAG_INVALID: 'Banana' in Banana is not a valid base hed tag.
+```
+
+```{index} events
+```
+
+```{index} single: events; tabular input
+```
+
+```{index} single: events; struct array
 ```
 
 ## Input of events
@@ -157,6 +196,15 @@ issues = hed.validateEvents(events, sidecar);
 ```
 ````
 
+```{index} sidecar
+```
+
+```{index} JSON; sidecar
+```
+
+```{index} BIDS; sidecar
+```
+
 ## Input of sidecars
 
 A tabular dataset may have a `HED` column whose entries provide HED annotations for the individual event markers represented by the rows. However, a more typical approach to annotation is to provide an additional dictionary, often called a sidecar. In [BIDS](https://bids.neuroimaging.io/) the sidecar dictionaries are represented in [JSON](https://www.json.org/json-en.html) format. The MATLAB `jsonencode` and `jsondecode` translate various MATLAB data types into a JSON-compliant `char` value.
@@ -187,6 +235,12 @@ class: tip
 ```
 
 ````
+
+```{index} annotations; assembly
+```
+
+```{index} getHedAnnotations; usage
+```
 
 ## Assembling HED annotations
 
@@ -221,6 +275,15 @@ Since no special tags defining extended event processes are used (i.e., `Onset`,
 
 The example annotation does not contain any `Condition-variable` or `Task` tags, so `removeTypesOn` has no effect. Typically `removeTypesOn` should be true to remove the effects of these tags for ordinary assembly and searching as extraction of design matrices is a separate operation. See [HED conditions and design matrices](https://www.hedtags.org/hed-resources/HedConditionsAndDesignMatrices.html) for additional information.
 
+```{index} searching; HED annotations
+```
+
+```{index} searchHed; usage
+```
+
+```{index} queries
+```
+
 ## Searching HED annotations
 
 The `searchHed` tool takes a cell array of *n* HED annotations and a cell array of *m* HED search queries and returns an *n* x *m* array of 1's and 0's indicating whether the annotations satisfy the queries.
@@ -244,6 +307,17 @@ The result of this query is the following:
 | 0        | 1        |
 
 The queries can be quite complex as described in the [HED search guide](https://www.hedtags.org/hed-resources/HedSearchGuide.html).
+
+```{index} Python; installation
+```
+
+```{index} single: installation; Python
+```
+
+```{index} pyenv
+```
+
+(matlab-python-install)=
 
 ## MATLAB Python install
 
@@ -359,6 +433,15 @@ Use the full path of the `pip` associated with the Python that your MATLAB is us
 
 Giving the full path to correct version of `pip` ensures that MATLAB knows about `HEDtools`. (The version of Python that MATLAB is using may not be the same as the Python in the system PATH.)
 
+```{index} best practices
+```
+
+```{index} version management
+```
+
+```{index} error handling
+```
+
 ## Best practices
 
 ### Choosing between web services and Python
@@ -399,6 +482,12 @@ if ~isempty(issues)
 end
 ```
 ````
+
+```{index} troubleshooting
+```
+
+```{index} common issues
+```
 
 ## Troubleshooting
 
