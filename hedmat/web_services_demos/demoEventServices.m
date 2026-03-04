@@ -21,7 +21,7 @@ errors = {};
 %% Example 1: Validate valid events file using HED version.
 request1 = getRequestTemplate();
 request1.service = 'events_validate';
-request1.schema_version = '8.2.0';
+request1.schema_version = '8.4.0';
 request1.events_string = data.eventsText;
 request1.sidecar_string = data.jsonText;
 request1.check_for_warnings = false;
@@ -36,7 +36,7 @@ end
 %% Example 2: Validate invalid events file using a HED URL.
 request2 = getRequestTemplate();
 request2.service = 'events_validate';
-request2.schema_version = '8.2.0';
+request2.schema_version = '8.4.0';
 request2.events_string = data.eventsText;
 request2.sidecar_string = data.jsonBadText;
 request2.check_for_warnings = true;
@@ -52,7 +52,7 @@ end
 %% Example 3: Assemble valid events file uploading a HED schema
 request3 = getRequestTemplate();
 request3.service = 'events_assemble';
-request3.schema_version = '8.2.0';
+request3.schema_version = '8.4.0';
 request3.events_string = data.eventsText;
 request3.sidecar_string = data.jsonText;
 request3.expand_defs = false;
@@ -67,7 +67,7 @@ end
 %%  Example 4: Assemble valid event HED strings(expand defs on).
 request4 = getRequestTemplate();
 request4.service = 'events_assemble';
-request4.schema_version = '8.2.0';
+request4.schema_version = '8.4.0';
 request4.events_string = data.eventsText;
 request4.sidecar_string = data.jsonText;
 request4.expand_defs = true;

@@ -43,7 +43,7 @@ end
 %% Example 3: Summarize files including HED
 request3 = getRequestTemplate();
 request3.service = 'events_remodel';
-request3.schema_version = '8.2.0';
+request3.schema_version = '8.4.0';
 request3.remodel_string = data.remodelSummarizeColumnsText;
 request3.events_string = data.eventsText;
 request3.sidecar_string = data.jsonText;
@@ -58,7 +58,7 @@ end
 %% Example 4: Factor HED types
 request4 = getRequestTemplate();
 request4.service = 'events_remodel';
-request4.schema_version = '8.2.0';
+request4.schema_version = '8.4.0';
 request4.remodel_string = data.remodelFactorTypesText;
 request4.events_string = data.eventsText;
 request4.sidecar_string = data.jsonText;

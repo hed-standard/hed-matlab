@@ -19,7 +19,7 @@ errors = {};
 %% Example 1: Validate valid list of strings using HED URL.
 request1 = getRequestTemplate();
 request1.service = 'strings_validate';
-request1.schema_version = '8.2.0';
+request1.schema_version = '8.4.0';
 request1.string_list = data.goodStrings;
 request1.check_for_warnings = true;
 response1 = webwrite(servicesUrl, request1, options);
@@ -33,7 +33,7 @@ end
 %% Example 2: Validate a list of invalid strings. HED schema is URL.
 request2 = getRequestTemplate();
 request2.service = 'strings_validate';
-request2.schema_url = '8.2.0';
+request2.schema_url = '8.4.0';
 request2.string_list = data.badStrings;
 request2.check_for_warnings = true;
 response2 = webwrite(servicesUrl, request2, options);
@@ -61,7 +61,7 @@ end
 %% Example 4: Convert valid strings to long using HED version.
 request4 = getRequestTemplate();
 request4.service = 'strings_to_long';
-request4.schema_version = '8.2.0';
+request4.schema_version = '8.4.0';
 request4.string_list = data.goodStrings;   
 response4 = webwrite(servicesUrl, request4, options);
 response4 = jsondecode(response4);

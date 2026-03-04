@@ -63,7 +63,7 @@ classdef HedToolsService < HedTools
             %
             % Optional name-value:
             %    'includeContext' - boolean true->expand context (usually true).
-            %    'removeTypesOn' - boolean true-> remove Condition-variable and Task
+            %    'removeTypesO' - boolean true-> remove Condition-variable and Task
             %    'replaceDefs' - boolean true->replace def with definition (usually true).
             %
             % Returns:
@@ -75,7 +75,7 @@ classdef HedToolsService < HedTools
             % 
             p = inputParser;
             p.addParameter('includeContext', true,  @(x) islogical(x))
-            p.addParameter('removeTypesOn', true,  @(x) islogical(x))
+            p.addParameter('removeTypes', true,  @(x) islogical(x))
             p.addParameter('replaceDefs', true,  @(x) islogical(x))
             parse(p, varargin{:});
             request = obj.getRequestTemplate();
@@ -84,7 +84,7 @@ classdef HedToolsService < HedTools
             request.events_string = HedTools.formatEvents(eventsIn);
             request.sidecar_string = HedTools.formatSidecar(sidecar);
             request.check_for_warnings = false;
-            request.remove_types_on = p.Results.removeTypesOn;
+            request.remove_types = p.Results.removeTypes;
             request.include_context = p.Results.includeContext;
             request.replace_defs = p.Results.replaceDefs;
             response = webwrite(obj.ServicesUrl, request, obj.WebOptions);
