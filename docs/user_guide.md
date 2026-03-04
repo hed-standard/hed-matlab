@@ -1,9 +1,117 @@
 ```{index} user guide
 ```
 
+```{index} single: HED; MATLAB HEDTools
+```
+
+```{index} MATLAB HEDTools
+```
+
 # User guide
 
-This guide provides step-by-step instructions for using MATLAB HEDTools for validation, annotation assembly, searching, summarization, event remodeling, factorization, and data epoching.
+HED (Hierarchical Event Descriptors) is a framework for annotating behavioral, physiological, and other events in scientific data using standardized, machine-readable vocabulary organized in hierarchical tag trees. HED is used for human behavioral and neuroimaging experiments.
+
+MATLAB HEDTools provides a convenient interface for MATLAB users to validate HED annotations, search and summarize events, remodel event data, perform factorization and data epoching, and integrate HED with MATLAB-based analysis workflows such as EEGLAB.
+
+```{index} installation
+```
+
+(installation)=
+
+## Installation
+
+### Downloading MATLAB HEDTools
+
+MATLAB HEDTools can be downloaded from the [**hed-matlab**](https://github.com/hed-standard/hed-matlab) GitHub repository.
+
+**Using Git:**
+
+```shell
+git clone https://github.com/hed-standard/hed-matlab.git
+```
+
+**Using zip download:**
+
+You can also download the latest release as a zip file from the [**hed-matlab releases**](https://github.com/hed-standard/hed-matlab/releases) tab on GitHub.
+
+**Setting up your MATLAB path:**
+
+Once you have downloaded (and unzipped if necessary), add the `hedmat` directory and all of its subdirectories to your MATLAB path:
+
+```matlab
+myPath = 'xxx';  % This should be the full path to hedmat
+addpath(genpath(myPath));
+```
+
+The following table describes the directories of this repository:
+
+| Directory                   | Description                                                           |
+| --------------------------- | --------------------------------------------------------------------- |
+| `data`                      | Data used for the demos and tests.                                    |
+| `docs`                      | Source code for the documentation.                                    |
+| `hedmat/hedtools`           | MATLAB interface for the HED tools.                                   |
+| `hedmat/remodeling_demos`   | Demos of calling the table remodeler.                                 |
+| `hedmat/utilities`          | General purpose utilities.                                            |
+| `hedmat/web_services_demos` | Demos of directly using the HED web services (without hedtools).      |
+| `tests`                     | Unit tests for MATLAB. (Execute `run_tests.m` to run all unit tests.) |
+
+```{index} web services
+```
+
+```{index} single: installation; web services
+```
+
+### Using web services (no installation)
+
+The simplest way to use MATLAB HEDTools is through web services. This approach:
+
+- **Requires no installation** beyond downloading the MATLAB HEDTools package
+- **Requires Internet access** to connect to HED web services
+- Works immediately without any Python setup
+
+```{index} Python; direct calls
+```
+
+```{index} single: installation; Python
+```
+
+### Using direct Python calls (optional)
+
+For more efficient operation and additional functionality, you can configure MATLAB to call the Python HEDTools directly. This approach:
+
+- **Requires one-time Python setup** (Python 3.10+, HEDTools package)
+- **Provides better performance** than web services
+- **Works offline** once configured
+- **Provides access to additional features** not available through web services
+- Some additional functionality not in the MATLAB HEDTools interface is directly accessible through Python
+
+For Python installation instructions, see [MATLAB Python install](#matlab-python-install).
+
+```{index} examples
+```
+
+## Quick example
+
+Here's a simple example to get you started with HED validation in MATLAB:
+
+````{admonition} HED validation in MATLAB using web services
+---
+class: tip
+---
+```matlab
+% Get HED tools using web services
+hed = getHedTools('8.4.0', 'https://hedtools.org/hed');
+
+% Validate a string containing HED tags
+issues = hed.validateTags('Sensory-event,Red,(Image,Face)');
+
+if isempty(issues)
+    disp('HED string is valid!');
+else
+    disp(issues);
+end
+```
+````
 
 ```{index} tool overview
 ```
@@ -17,10 +125,6 @@ To use HED tools, you first create a HED object by calling `getHedTools`. If you
 ![MATLAB HEDTools](_static/images/MatLabHedToolsCloseFit.png)
 
 Both approaches take MATLAB data as input and translate these values as needed to access the HEDTools. After making the call, the implementation translates the results back into MATLAB data types. The MATLAB HedTools accept a variety of different types of MATLAB variables as input.
-
-Calling MATLAB HEDTools using web services requires no installation beyond downloading the MATLAB HEDTools package, but its use requires Internet access.
-
-Using direct calls to the Python HEDTools from MATLAB is more efficient and provides additional functionality not available through the web service interface. However, direct calls require a one-time setup of Python for your MATLAB installation. See [MATLAB Python install](#matlab-python-install) for additional setup information.
 
 Another option is to use the [EEGLAB HEDTools plug-in](https://www.hedtags.org/hed-resources/HedAndEEGLAB.html) integration for HED. The EEGLAB plug-ins provide easy access through the EEGLAB GUI interface.
 
@@ -517,8 +621,250 @@ ______________________________________________________________________
 
 ### Getting help
 
+Additional documentation resources:
+
+- **[API reference](api2.rst)**: Detailed MATLAB function documentation
+- **[HED specification](https://www.hedtags.org/hed-specification)**: Formal annotation rules
+- **[HED resources](https://www.hedtags.org/hed-resources)**: HED tutorials and guides
+
 If you encounter issues not covered here:
 
-1. Check the GitHub [issues](https://github.com/hed-standard/hed-matlab/issues) page
-2. Review the [HED resources](https://www.hedtags.org/hed-resources) documentation
-3. Open a new issue with a minimal reproducible example
+1. Check [GitHub issues](https://github.com/hed-standard/hed-matlab/issues) to see if the problem is already reported.
+2. If not, open a new issue with:
+   - A clear, descriptive title
+   - Detailed description of the problem
+   - Steps to reproduce
+   - Expected vs. actual behavior
+   - MATLAB version and operating system
+3. For HED-specific questions, see the [HED resources](https://www.hedtags.org/hed-resources) site.
+
+```{index} resources
+```
+
+```{index} HED; resources
+```
+
+## Related HED resources
+
+- **[HED homepage](https://www.hedtags.org)**: Overview and links for HED
+- **[HED schemas](https://www.hedtags.org/hed-schemas)**: Standardized vocabularies in XML/MediaWiki/OWL formats
+- **[HED specification](https://www.hedtags.org/hed-specification/)**: Formal specification defining HED annotation rules
+- **[HED online tools](https://hedtools.org/hed)**: Web-based interface requiring no programming
+- **[HED resources](https://www.hedtags.org/hed-resources)**: Comprehensive tutorials and documentation
+- **[Python HEDTools](https://www.hedtags.org/hed-python)**: Python library that powers these MATLAB tools
+- **[EEGLAB HEDTools plug-in](https://www.hedtags.org/hed-resources/HedAndEEGLAB.html)**: Integration for EEGLAB users
+- **[Sphinx documentation](https://www.sphinx-doc.org/)**: Documentation generator used to build these docs
+- **[MyST parser](https://myst-parser.readthedocs.io/)**: Markdown parser for Sphinx
+
+```{index} funding
+```
+
+## Funding
+
+Partial support for this project was provided by [NIH 1R01MH126700-01A1](https://reporter.nih.gov/project-details/10480619).
+
+```{index} development
+```
+
+```{index} contributing
+```
+
+```{index} documentation; building
+```
+
+## Development
+
+This section provides instructions for contributors who want to develop MATLAB HEDTools code or build the documentation locally.
+
+### Setting up the development environment
+
+**Prerequisites:**
+
+- Python 3.10 or later
+- Git (to clone the repository)
+
+**Create and activate a virtual environment** (recommended):
+
+**On Windows (PowerShell)**:
+
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+```
+
+**On Linux/macOS**:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+```
+
+**Install development dependencies:**
+
+The development and documentation dependencies are defined in `pyproject.toml`. Install them using:
+
+```shell
+pip install -e .[dev,docs]
+```
+
+This installs all required packages including:
+
+**Documentation tools:**
+
+- Sphinx (documentation generator)
+- Furo theme
+- MyST parser (for Markdown support)
+- sphinxcontrib-matlabdomain (for MATLAB code documentation)
+- sphinx-copybutton and other extensions
+
+**Development tools:**
+
+- ruff (linter and formatter)
+- codespell (spell checker)
+- mdformat (Markdown formatter)
+
+### Building the documentation
+
+From the repository root, run:
+
+```shell
+sphinx-build -b html docs docs/_build/html
+```
+
+The generated HTML documentation will be in `docs/_build/html/`. Open `docs/_build/html/index.html` in your browser to view it.
+
+**To rebuild from scratch** (clean build):
+
+```shell
+sphinx-build -b html docs docs/_build/html -E
+```
+
+The `-E` flag forces a full rebuild of all files, ignoring the cache.
+
+### Documentation structure
+
+The documentation source files are organized as follows:
+
+| File/Directory        | Description                                     |
+| --------------------- | ----------------------------------------------- |
+| `docs/user_guide.md`  | This user guide                                 |
+| `docs/development.md` | Development guide                               |
+| `docs/api2.rst`       | API reference (auto-generated from MATLAB code) |
+| `docs/conf.py`        | Sphinx configuration file                       |
+| `docs/_static/`       | Static assets (images, CSS, etc.)               |
+| `docs/_templates/`    | Custom Sphinx templates                         |
+
+### Making changes to documentation
+
+1. **Edit Markdown files**: Most documentation is written in Markdown (`.md` files) using the MyST parser.
+
+2. **Rebuild documentation**: After making changes, rebuild the docs to see your changes:
+
+   ```shell
+   sphinx-build -b html docs docs/_build/html
+   ```
+
+3. **Check for errors**: Review the build output for any warnings or errors.
+
+4. **Preview changes**: Open the generated HTML in your browser to verify your changes.
+
+### Documentation style guidelines
+
+- Use clear, descriptive headings following the hierarchy: `#` for titles, `##` for sections, `###` for subsections
+- Include code examples with proper language tags (```` ```matlab ```` for MATLAB code)
+- Use MyST directives for admonitions: ```` ```{admonition} ```` blocks
+- Link to files using workspace-relative paths: `[text](path/file.md)`
+- Add index entries for important terms using ```` ```{index} term ```` blocks
+- Follow the existing style in current documentation files
+
+### MATLAB code development
+
+#### Running tests
+
+The MATLAB unit tests are located in the `tests/` directory. To run all tests:
+
+1. Open MATLAB.
+
+2. Add hedmat to your path:
+
+   ```matlab
+   addpath(genpath('hedmat'));
+   addpath(genpath('tests'));
+   ```
+
+3. Run the test suite:
+
+   ```matlab
+   run_tests
+   ```
+
+This executes all test files matching the pattern `Test*.m` in the `tests/` directory.
+
+#### Testing individual components
+
+- **HED tools tests**: `tests/test_hed_tools/`
+- **Utilities tests**: `tests/test_utilities/`
+
+To run tests for a specific component, navigate to the test directory and run the individual test file.
+
+#### Code style guidelines
+
+- Use clear, descriptive function and variable names
+- Include comprehensive doc comments using `%%` section markers
+- Follow MATLAB naming conventions: camelCase for functions, UPPER_CASE for constants
+- Include examples in function documentation
+- Test your code with the unit test framework before submitting
+
+### Contributing workflow
+
+#### Reporting issues
+
+If you find a bug or have a feature request, see [Getting help](#getting-help) above for what to include when opening a GitHub issue.
+
+#### Submitting changes
+
+1. **Fork the repository** on GitHub.
+
+2. **Create a feature branch**:
+
+   ```shell
+   git checkout -b feature/your-feature-name
+   ```
+
+3. **Make your changes**:
+
+   - Write clear, focused commits
+   - Follow the code style guidelines
+   - Add or update tests as needed
+   - Update documentation if needed
+
+4. **Test your changes**:
+
+   - Run the MATLAB test suite
+   - Build and review the documentation
+
+5. **Commit your changes**:
+
+   ```shell
+   git add .
+   git commit -m "Brief description of your changes"
+   ```
+
+6. **Push to your fork**:
+
+   ```shell
+   git push origin feature/your-feature-name
+   ```
+
+7. **Create a Pull Request** on GitHub with:
+
+   - Clear description of the changes
+   - Reference to related issues (if any)
+   - Any breaking changes or migration notes
+
+#### Code review process
+
+- All contributions require review before merging
+- Be responsive to feedback and questions
+- Update your PR based on review comments
+- Maintain a clean commit history

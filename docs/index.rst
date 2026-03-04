@@ -35,22 +35,15 @@ Key features
 * **Web services**: Access HED online tools and validators via web services
 * **Multiple formats**: Work with JSON sidecars, TSV files, Excel spreadsheets, and MATLAB structures
 
-Getting started
----------------
 
-.. toctree::
-   :maxdepth: 2
 
-   Overview <overview>
-
-Programming with HEDTools
--------------------------
+HED progrmamming in MATLAB
+---------------------------
 
 .. toctree::
    :maxdepth: 2
 
    User guide <user_guide>
-   Documentation development <development>
 
 API documentation
 -----------------
