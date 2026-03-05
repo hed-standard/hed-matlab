@@ -12,13 +12,12 @@ classdef TestHedToolsService < matlab.unittest.TestCase
 
     methods (TestClassSetup)
         function setUp(testCase)
+            % testCase.hed = ...
+               % HedToolsService('8.4.0', 'https://hedtools.org/hed');
             testCase.hed = ...
-               HedToolsService('8.4.0', 'https://hedtools.org/hed');
-            % testCase.hed = ...
-            %     HedToolsService('8.4.0', 'https://hedtools.org/hed_dev');
-            % testCase.hed = ...
-            %    HedToolsService('8.4.0', 'http://127.0.0.1:5000');
-
+               HedToolsService('8.4.0', 'https://hedtools.org/hed_dev');
+            % testCase.hed = HedToolsService('8.4.0', 'http://127.0.0.1:5000');
+            
             [curDir, ~, ~] = fileparts(mfilename("fullpath"));
             dataPath = fullfile(curDir, filesep, '..', filesep, '..', ...
                 filesep, 'data', filesep);
@@ -49,7 +48,7 @@ classdef TestHedToolsService < matlab.unittest.TestCase
 
         function testCreateConnection(testCase)
             % Test a simple string
-            hed1 = HedToolsService('8.2.0', 'https://hedtools.org/hed_dev');
+            hed1 = HedToolsService('8.4.0', 'https://hedtools.org/hed_dev');
             testCase.verifyTrue(isa(hed1, 'HedToolsService'));
         end
 
@@ -77,16 +76,16 @@ classdef TestHedToolsService < matlab.unittest.TestCase
 
             % no types, no context, no replace
             annotations = testCase.hed.getHedAnnotations(eventsChar, ...
-                sidecarChar, 'removeTypesOn', true, ...
+                sidecarChar, 'removeTypes', true, ...
                 'includeContext', false, 'replaceDefs', false);
             testCase.verifyEqual(length(annotations), 199);
             testCase.verifyEmpty(annotations{195});
             data1_str = strjoin(annotations, '\n');
-            testCase.verifyEqual(length(data1_str), 10547);
+            testCase.verifyFalse(contains(data1_str, 'Unfamiliar-face-cond'));
 
             % With context, no remove, no replace         
             annotations = testCase.hed.getHedAnnotations(eventsChar, ...
-                sidecarChar, 'removeTypesOn', false, ...
+                sidecarChar, 'removeTypes', false, ...
                 'includeContext', true, 'replaceDefs', false);
             testCase.verifyEqual(length(annotations), 199);        
             testCase.verifyGreaterThan(length(annotations{195}), 0);
@@ -95,7 +94,7 @@ classdef TestHedToolsService < matlab.unittest.TestCase
 
             % With context, remove, no replace
             annotations = testCase.hed.getHedAnnotations(eventsChar, ...
-                sidecarChar, 'removeTypesOn', true, ...
+                sidecarChar, 'removeTypes', true, ...
                 'includeContext', true, 'replaceDefs', false);
             testCase.verifyEqual(length(annotations), 199);
             data3_str = strjoin(annotations, '\n');
@@ -103,7 +102,7 @@ classdef TestHedToolsService < matlab.unittest.TestCase
 
             % With context, remove, replace
             annotations = testCase.hed.getHedAnnotations(eventsChar, ...
-                sidecarChar, 'removeTypesOn', true, ...
+                sidecarChar, 'removeTypes', true, ...
                 'includeContext', true, 'replaceDefs', true);
             testCase.verifyEqual(length(annotations), 199);
             data4_str = strjoin(annotations, '\n');
@@ -115,7 +114,7 @@ classdef TestHedToolsService < matlab.unittest.TestCase
             sidecar = fileread(testCase.badSidecarPath);
             testCase.verifyError( ...
                 @ ()testCase.hed.getHedAnnotations(events, sidecar, ...
-                'removeTypesOn', true, ...
+                'removeTypes', true, ...
                 'includeContext', true, 'replaceDefs', false), ...
                 'HedToolsServiceGetHedAnnotations:InvalidData');
         end

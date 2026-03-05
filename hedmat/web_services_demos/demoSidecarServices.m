@@ -21,7 +21,7 @@ errors = {};
 %% Example 1: Validate valid JSON sidecar using a HED version.
 request1 = getRequestTemplate();
 request1.service = 'sidecar_validate';
-request1.schema_version = '8.2.0';
+request1.schema_version = '8.4.0';
 request1.sidecar_string = data.jsonText;
 request1.check_for_warnings = true;
 response1 = webwrite(servicesUrl, request1, options);
@@ -64,7 +64,7 @@ end
 %%  Example 4: Convert valid JSON sidecar to short using a HED version.
 request4 = getRequestTemplate();
 request4.service = 'sidecar_to_short';
-request4.schema_version = '8.2.0';
+request4.schema_version = '8.4.0';
 request4.sidecar_string = data.jsonText;
 request4.expand_defs = true;
 response4 = webwrite(servicesUrl, request4, options);

@@ -17,7 +17,7 @@ errors = {};
 %% Example 1: Validate valid spreadsheet file using schema version.
 request1 = getRequestTemplate();
 request1.service = 'spreadsheet_validate';
-request1.schema_version = '8.2.0';
+request1.schema_version = '8.4.0';
 request1.spreadsheet_string = data.spreadsheetText;
 request1.sidecar_string = data.jsonText;
 request1.check_for_warnings = true;
@@ -33,7 +33,7 @@ end
 
 %% Example 2: Validate invalid spreadsheet file using HED URL.
 request2.service = 'spreadsheet_validate';
-request2.schema_version = '8.2.0';
+request2.schema_version = '8.4.0';
 request2.spreadsheet_string = data.spreadsheetTextInvalid;
 request2.check_for_warnings = true;
 request2.tag_columns = {'HED tags'};

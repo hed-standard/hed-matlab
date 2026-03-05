@@ -33,7 +33,6 @@ Repository = "https://github.com/hed-standard/hed-matlab"
 dev = [
     "ruff>=0.8.0",
     "codespell>=2.2.0",
-    "black>=26.1.0",
     "mdformat>=0.7.0",
     "mdformat-myst>=0.1.5",
 ]
@@ -54,10 +53,14 @@ build-dir = "docs/_build"
 [tool.setuptools]
 packages = []
 
-[tool.black]
-line-length = 100
-target-version = ['py310']
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
 
 [tool.isort]
 profile = "black"
-line_length = 100
+line_length = 120
