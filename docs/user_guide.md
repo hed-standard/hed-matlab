@@ -741,19 +741,6 @@ sphinx-build -b html docs docs/_build/html -E
 
 The `-E` flag forces a full rebuild of all files, ignoring the cache.
 
-### Documentation structure
-
-The documentation source files are organized as follows:
-
-| File/Directory        | Description                                     |
-| --------------------- | ----------------------------------------------- |
-| `docs/user_guide.md`  | This user guide                                 |
-| `docs/development.md` | Development guide                               |
-| `docs/api2.rst`       | API reference (auto-generated from MATLAB code) |
-| `docs/conf.py`        | Sphinx configuration file                       |
-| `docs/_static/`       | Static assets (images, CSS, etc.)               |
-| `docs/_templates/`    | Custom Sphinx templates                         |
-
 ### Making changes to documentation
 
 1. **Edit Markdown files**: Most documentation is written in Markdown (`.md` files) using the MyST parser.

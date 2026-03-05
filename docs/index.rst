@@ -37,7 +37,7 @@ Key features
 
 
 
-HED progrmamming in MATLAB
+HED programming in MATLAB
 ---------------------------
 
 .. toctree::

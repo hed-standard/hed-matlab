@@ -63,7 +63,7 @@ classdef HedToolsService < HedTools
             %
             % Optional name-value:
             %    'includeContext' - boolean true->expand context (usually true).
-            %    'removeTypesO' - boolean true-> remove Condition-variable and Task
+            %    'removeTypes' - boolean true-> remove Condition-variable and Task
             %    'replaceDefs' - boolean true->replace def with definition (usually true).
             %
             % Returns:

@@ -33,7 +33,7 @@ end
 %% Example 2: Validate a list of invalid strings. HED schema is URL.
 request2 = getRequestTemplate();
 request2.service = 'strings_validate';
-request2.schema_url = '8.4.0';
+request2.schema_url = 'https://raw.githubusercontent.com/hed-standard/hed-schemas/main/standard_schema/hedxml/HED8.4.0.xml';
 request2.string_list = data.badStrings;
 request2.check_for_warnings = true;
 response2 = webwrite(servicesUrl, request2, options);
