@@ -20,9 +20,9 @@ MATLAB HEDTools provides a convenient interface for MATLAB users to validate HED
 
 ## Installation
 
-### Downloading MATLAB HEDTools
+### Downloading hed-matlab
 
-MATLAB HEDTools can be downloaded from the [**hed-matlab**](https://github.com/hed-standard/hed-matlab) GitHub repository.
+MATLAB HEDTools can be downloaded from the [hed-matlab](https://github.com/hed-standard/hed-matlab) GitHub repository.
 
 **Using Git:**
 
@@ -61,7 +61,7 @@ The following table describes the directories of this repository:
 ```{index} single: installation; web services
 ```
 
-### Using web services (no installation)
+### Web services (no install)
 
 The simplest way to use MATLAB HEDTools is through web services. This approach:
 
@@ -75,7 +75,7 @@ The simplest way to use MATLAB HEDTools is through web services. This approach:
 ```{index} single: installation; Python
 ```
 
-### Using direct Python calls (optional)
+### Using Python directly
 
 For more efficient operation and additional functionality, you can configure MATLAB to call the Python HEDTools directly. This approach:
 
@@ -126,7 +126,7 @@ To use HED tools, you first create a HED object by calling `getHedTools`. If you
 
 Both approaches take MATLAB data as input and translate these values as needed to access the HEDTools. After making the call, the implementation translates the results back into MATLAB data types. The MATLAB HedTools accept a variety of different types of MATLAB variables as input.
 
-Another option is to use the [EEGLAB HEDTools plug-in](https://www.hedtags.org/hed-resources/HedAndEEGLAB.html) integration for HED. The EEGLAB plug-ins provide easy access through the EEGLAB GUI interface.
+Another option is to use [CTagger](https://www.hedtags.org/CTagger) integration for HED. The EEGLAB plug-ins provide easy access through the EEGLAB GUI interface.
 
 ```{index} MATLAB; interface
 ```
@@ -445,7 +445,7 @@ class: tip
 
 **Step 2: Install Python if needed**.
 
-**Step 3: Connect Python to MATLAB**. If already connected, skip to Step 4.
+**Step 3: Connect Python**. If already connected, skip to Step 4.
 
 **Step 4: Install HEDtools**
 ```
@@ -488,7 +488,7 @@ Otherwise, you can skip to **Step 3: Connect Python to MATLAB**.
 **You need to keep track of the path to your Python executable for Step 3.**
 ```
 
-#### Step 2: Install Python if needed
+#### Step 2: Install Python
 
 If you don't have Python on your system, you will need to install it. Go to [Python downloads](https://www.python.org/downloads/) and pick the correct installer for your operating system and version.
 
@@ -548,7 +548,7 @@ Giving the full path to correct version of `pip` ensures that MATLAB knows about
 
 ## Best practices
 
-### Choosing between web services and Python
+### Web services vs Python
 
 - **Use web services** for:
 
@@ -676,14 +676,14 @@ Partial support for this project was provided by [NIH 1R01MH126700-01A1](https:/
 
 This section provides instructions for contributors who want to develop MATLAB HEDTools code or build the documentation locally.
 
-### Setting up the development environment
+### Environment setup
 
 **Prerequisites:**
 
 - Python 3.10 or later
 - Git (to clone the repository)
 
-**Create and activate a virtual environment** (recommended):
+**Create virtual environment** (recommended):
 
 **On Windows (PowerShell)**:
 
@@ -699,7 +699,7 @@ python -m venv .venv
 source .venv/bin/activate
 ```
 
-**Install development dependencies:**
+**Install dependencies:**
 
 The development and documentation dependencies are defined in `pyproject.toml`. Install them using:
 
@@ -723,7 +723,7 @@ This installs all required packages including:
 - codespell (spell checker)
 - mdformat (Markdown formatter)
 
-### Building the documentation
+### Building the docs
 
 From the repository root, run:
 
@@ -741,7 +741,7 @@ sphinx-build -b html docs docs/_build/html -E
 
 The `-E` flag forces a full rebuild of all files, ignoring the cache.
 
-### Making changes to documentation
+### Modifying the docs
 
 1. **Edit Markdown files**: Most documentation is written in Markdown (`.md` files) using the MyST parser.
 
@@ -787,7 +787,7 @@ The MATLAB unit tests are located in the `tests/` directory. To run all tests:
 
 This executes all test files matching the pattern `Test*.m` in the `tests/` directory.
 
-#### Testing individual components
+#### Testing components
 
 - **HED tools tests**: `tests/test_hed_tools/`
 - **Utilities tests**: `tests/test_utilities/`
