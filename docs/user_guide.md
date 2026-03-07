@@ -128,6 +128,8 @@ Both approaches take MATLAB data as input and translate these values as needed t
 
 Another option is to use [CTagger](https://www.hedtags.org/CTagger) integration for HED. The EEGLAB plug-ins provide easy access through the EEGLAB GUI interface.
 
+A third option is the EEGLAB [HEDTools plugin](https://github.com/sccn/HEDTools) which performs validation and epoching on EEG datasets.
+
 ```{index} MATLAB; interface
 ```
 
@@ -443,7 +445,7 @@ class: tip
 ---
 **Step 1: Find Python**. If a version >= Python 3.10 is found, skip to Step 3.
 
-**Step 2: Install Python if needed**.
+**Step 2: Install Python**.
 
 **Step 3: Connect Python**. If already connected, skip to Step 4.
 
@@ -480,9 +482,9 @@ There are several likely places to look for Python on your system.
 
 > Likely places for system-space installation are `C:\`, `C:\Python`, `C:\Program Files` or `C:\Program Files\Python`. User-space installations default to your personal account in `C:\Users\yourname\AppData\Local\Programs\Python\python310` where `yourname` is your Windows account name and `python310` will be the particular version (in this case Python 3.10).
 
-If you don't have any success finding a Python executable, you will need to install Python as described in **Step 2: Install Python if needed**.
+If you don't have any success finding a Python executable, you will need to install Python as described in **Step 2: Install Python** if you don't have an appropriate version of Python already installed.
 
-Otherwise, you can skip to **Step 3: Connect Python to MATLAB**.
+Otherwise, you can skip to **Step 3: Connect Python**.
 
 ```{warning}
 **You need to keep track of the path to your Python executable for Step 3.**
@@ -501,7 +503,7 @@ Depending on your OS and the installer options you selected, Python may be insta
 MATLAB installs add-ons such as the HEDTools in a specific user directory as described below. This makes user-installed Python modules available to all MATLAB projects. **For this reason, we do not recommend trying to set up a virtual environment.**
 ```
 
-#### Step 3: Connect Python to MATLAB
+#### Step 3: Connect Python
 
 Setting the Python version uses the MATLAB `pyenv` function with the `'Version'` argument as illustrated by the following example.
 
