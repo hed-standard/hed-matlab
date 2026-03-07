@@ -37,8 +37,8 @@ Key features
 
 
 
-HED programming in MATLAB
----------------------------
+HED in MATLAB
+-----------------
 
 .. toctree::
    :maxdepth: 2
