@@ -39,7 +39,7 @@ extensions = [
 
 # MATLAB-specific configurations
 # Point to the hedmat directory where the MATLAB code is located
-matlab_src_dir = os.path.abspath(os.path.join("..", "hedmat"))
+matlab_src_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "hedmat"))
 matlab_short_links = True
 matlab_auto_link = True
 matlab_keep_package_prefix = False
