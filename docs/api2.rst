@@ -46,7 +46,7 @@ Examples demonstrating event data remodeling and processing.
 
 .. mat:autofunction:: remodeling_demos.remodelRestore
 
-.. mat:autofunction:: remodeling_demos.runRemodelDemos
+.. mat:autoscript:: remodeling_demos.runRemodelDemos
 
 
 Web Services Demos
@@ -70,7 +70,7 @@ Examples demonstrating HED web service usage.
 
 .. mat:autofunction:: web_services_demos.demoStringServices
 
-.. mat:autofunction:: web_services_demos.exampleGenerateSidecar
+.. mat:autoscript:: web_services_demos.exampleGenerateSidecar
 
 .. mat:autofunction:: web_services_demos.getDemoData
 
@@ -82,9 +82,9 @@ Examples demonstrating HED web service usage.
 
 .. mat:autofunction:: web_services_demos.outputReport
 
-.. mat:autofunction:: web_services_demos.runAllDemos
+.. mat:autoscript:: web_services_demos.runAllDemos
 
-.. mat:autofunction:: web_services_demos.runDemo
+.. mat:autoscript:: web_services_demos.runDemo
 
 
 Utilities
