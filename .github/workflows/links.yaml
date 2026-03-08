@@ -22,7 +22,7 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v7
         with:
-          python-version: '3.12'
+          python-version: '3.10'
           enable-cache: true
           cache-dependency-glob: "**/pyproject.toml"
 
@@ -34,7 +34,15 @@ jobs:
       - name: Install dependencies
         run: uv pip install -e ".[docs]"
 
-      - name: Build documentation with Sphinx
+      - name: Patch sphinxcontrib-matlabdomain
+        run: python docs/patch_matlabdomain.py
+
+      - name: Configure Git for GitHub Pages
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+      - name: Build documentation
         run: |
           sphinx-build -b html docs docs/_build/html
 
