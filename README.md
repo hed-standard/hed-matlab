@@ -1,10 +1,10 @@
-[![Documentation Status](https://readthedocs.org/projects/hed-matlab/badge/?version=latest)](https://www.hed-matlab.org/en/latest/?badge=latest) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13201056.svg)](https://doi.org/10.5281/zenodo.13201056)
+[![Docs](https://img.shields.io/badge/docs-hed--matlab-blue.svg)](https://www.hedtags.org/hed-matlab) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13201056.svg)](https://doi.org/10.5281/zenodo.13201056)
 
 # HED-MATLAB
 
-This repository contains the MATLAB supporting code infrastructure for Hierarchical Event Descriptors (HED). HED is an ecosystem that includes standardized vocabularies and tools for annotating what happened during an experiment. HED is used for human behaviorial and neuroimaging experiments. See the [**HED Homepage**](https://www.hedtags.org) for more information.
+This repository contains the MATLAB supporting code infrastructure for Hierarchical Event Descriptors (HED). HED is an ecosystem that includes standardized vocabularies and tools for annotating what happened during an experiment. HED is used for human behaviorial and neuroimaging experiments. See the [HED Homepage](https://www.hedtags.org) for more information.
 
-The documentation for `hed-matlab` can be found at [**MATLAB HEDTools**](https://www.hedtags.org/hed-matlab).
+The documentation for `hed-matlab` can be found at [MATLAB HEDTools](https://www.hedtags.org/hed-matlab).
 
 ## Two ways of using HED
 
@@ -38,13 +38,13 @@ The MATLAB HedTools accept a variety of different types of MATLAB variables as i
 
 To use the HED tools for MATLAB you need to download the tools either by downloading from GitHub or from MATHWorks File Exchange.
 
-Go to the directory that you want to download the library into. If you are using Git, clone the [**hed-matlab**](https://github.com/hed-standard/hed-matlab) repository.
+Go to the directory that you want to download the library into. If you are using Git, clone the [hed-matlab](https://github.com/hed-standard/hed-matlab) repository.
 
 ```shell
 git clone https://github.com/hed-standard/hed-matlab.git
 ```
 
-You can also download the latest release as a zip file from the [**hed-matlab releases**](https://github.com/hed-standard/hed-matlab/releases) tab on GitHub.
+You can also download the latest release as a zip file from the [hed-matlab releases](https://github.com/hed-standard/hed-matlab/releases) tab on GitHub.
 
 Once you have download and unzipped if necessary, you have to add the path of the `hedmat` subdirectory of `hed-matlab` to your workspace:
 
@@ -55,7 +55,7 @@ Once you have download and unzipped if necessary, you have to add the path of th
 
 ### Additional steps for Python
 
-The Python approach requires you to install Python, install the Python HedTools, and link to MATLAB. See [**Matlab Python Install**](https://www.hedtags.org/hed-matlab/#matlab-python-install) for detailed instructions.
+The Python approach requires you to install Python, install the Python HedTools, and link to MATLAB. See [Matlab Python Install](https://www.hedtags.org/hed-matlab/#matlab-python-install) for detailed instructions.
 
 ## Contributing
 
@@ -66,7 +66,7 @@ We welcome contributions to MATLAB HEDTools! Whether you want to:
 - Submit code changes
 - Add new functionality
 
-Please see our [**Development Guide**](https://www.hedtags.org/hed-matlab/development.html) for detailed instructions on:
+Please see our [User guide](https://www.hedtags.org/hed-matlab/user_guide.html) for detailed instructions on:
 
 - Setting up your development environment
 - Building documentation locally
@@ -80,4 +80,4 @@ For quick contributions, you can also:
 
 ## Funding
 
-Partial support for this project was provided by [**NIH 1R01MH126700-01A1**](https://reporter.nih.gov/project-details/10480619).
+Partial support for this project was provided by [NIH 1R01MH126700-01A1](https://reporter.nih.gov/project-details/10480619).
