@@ -654,7 +654,6 @@ If you encounter issues not covered here:
 - **[HED online tools](https://hedtools.org/hed)**: Web-based interface requiring no programming
 - **[HED resources](https://www.hedtags.org/hed-resources)**: Comprehensive tutorials and documentation
 - **[Python HEDTools](https://www.hedtags.org/hed-python)**: Python library that powers these MATLAB tools
-- **[EEGLAB HEDTools plug-in](https://www.hedtags.org/hed-resources/HedAndEEGLAB.html)**: Integration for EEGLAB users
 - **[Sphinx documentation](https://www.sphinx-doc.org/)**: Documentation generator used to build these docs
 - **[MyST parser](https://myst-parser.readthedocs.io/)**: Markdown parser for Sphinx
 
