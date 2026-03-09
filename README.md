@@ -73,10 +73,13 @@ Please see our [User guide](https://www.hedtags.org/hed-matlab/user_guide.html) 
 - Running tests
 - Submitting pull requests
 
-For quick contributions, you can also:
+## Support
 
-- **Report issues**: [GitHub Issues](https://github.com/hed-standard/hed-matlab/issues)
-- **View documentation source**: [docs/](https://github.com/hed-standard/hed-matlab/tree/main/docs)
+- Report issues: [GitHub Issues](https://github.com/hed-standard/hed-matlab/issues)
+- HED documentation: [www.hedtags.org/hed-resources](https://www.hedtags.org/hed-resources)
+- HED homepage: [www.hedtags.org](https://www.hedtags.org)
+- Questions or ideas: [HED discussions](https://github.com/orgs/hed-standard/discussions)
+- Contact: [hed-maintainers@gmail.com](mailto:hed-maintainers@gmail.com)
 
 ## Funding
 
