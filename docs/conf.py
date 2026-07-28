@@ -11,12 +11,12 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
-from datetime import date
+from datetime import datetime, timezone
 
 # -- Project information -----------------------------------------------------
 
 project = "MATLAB HEDTools"
-copyright = "2017-{}, HED Working Group".format(date.today().year)
+copyright = f"2017-{datetime.now(timezone.utc).year}, HED Working Group"
 author = "HED Working Group"
 
 # The full version, including alpha/beta/rc tags
