@@ -7,9 +7,9 @@ inspect.get_members() which doesn't exist in Python's standard library.
 The correct function is inspect.getmembers(), but it has a different signature.
 """
 
+import importlib.util
 import sys
 from pathlib import Path
-import importlib.util
 
 
 def find_matlabdomain_file():
@@ -48,7 +48,7 @@ def find_matlabdomain_file():
     except ImportError as e:
         print(f"Error importing sphinxcontrib: {e}")
         return None
-    except Exception as e:
+    except (AttributeError, FileNotFoundError, ModuleNotFoundError) as e:
         print(f"Error finding sphinxcontrib.mat_documenters: {e}")
         return None
 
@@ -93,14 +93,13 @@ def patch_file(file_path):
                 new_lines = []
                 for i, line in enumerate(lines):
                     new_lines.append(line)
-                    if old_pattern in line:
+                    if old_pattern in line and i + 1 < len(lines):
                         # Find the indentation of the next line
-                        if i + 1 < len(lines):
-                            next_line = lines[i + 1]
-                            indent = len(next_line) - len(next_line.lstrip())
-                            # Insert check for args attribute (for MatScript objects)
-                            new_lines.append(" " * indent + "if not hasattr(self.object, 'args'):")
-                            new_lines.append(" " * indent + "    return ''")
+                        next_line = lines[i + 1]
+                        indent = len(next_line) - len(next_line.lstrip())
+                        # Insert check for args attribute (for MatScript objects)
+                        new_lines.append(" " * indent + "if not hasattr(self.object, 'args'):")
+                        new_lines.append(" " * indent + "    return ''")
                 content = "\n".join(new_lines)
                 print("✓ Patch 2 applied: Fixed MatScript args warning")
                 patched = True
@@ -116,8 +115,7 @@ def patch_file(file_path):
             print("✓ No patches needed")
 
         return True
-
-    except Exception as e:
+    except OSError as e:
         print(f"Error applying patch: {e}")
         return False
 
