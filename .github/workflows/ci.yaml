@@ -34,7 +34,7 @@ jobs:
           pip install hedtools
 
       - name: Run MATLAB tests
-        uses: matlab-actions/run-command@75644028e1e2aa374bbfdc968a65718a178cc264 # v3.2.1
+        uses: matlab-actions/run-command@bfa857648f4895aa98a446fe41c85e0788421ed5 # v3.3.0
         with:
           command: |
             addpath(genpath("hedmat")), addpath(genpath("tests")), run_tests
