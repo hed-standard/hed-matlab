@@ -78,10 +78,10 @@ def patch_file(file_path):
             if old_code in content:
                 new_code = "members = [(name, self.get_attr(self.object, name)) for name in dir(self.object)]"
                 content = content.replace(old_code, new_code)
-                print("✓ Patch 1 applied: Fixed inspect.get_members")
+                print("OK: Patch 1 applied: Fixed inspect.get_members")
                 patched = True
             else:
-                print("✓ Bug not found in current version - patch 1 not needed")
+                print("OK: Bug not found in current version - patch 1 not needed")
 
         # Patch 2: Fix MatScript args formatting warning
         if "hasattr(self.object, 'args')" not in content:
@@ -101,18 +101,18 @@ def patch_file(file_path):
                         new_lines.append(" " * indent + "if not hasattr(self.object, 'args'):")
                         new_lines.append(" " * indent + "    return ''")
                 content = "\n".join(new_lines)
-                print("✓ Patch 2 applied: Fixed MatScript args warning")
+                print("OK: Patch 2 applied: Fixed MatScript args warning")
                 patched = True
             else:
-                print("✓ format_args method not found - patch 2 not needed")
+                print("OK: format_args method not found - patch 2 not needed")
         else:
             print("Already patched (MatScript args), skipping.")
 
         if patched:
             file_path.write_text(content, encoding="utf-8")
-            print("✓ All patches applied successfully!")
+            print("OK: All patches applied successfully!")
         else:
-            print("✓ No patches needed")
+            print("OK: No patches needed")
 
         return True
     except OSError as e:

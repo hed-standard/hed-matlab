@@ -111,14 +111,14 @@ env/
 # IDE and machine specific files
 .vimrc
 .idea/
-.vscode/
+.vscode/*
+!.vscode/settings.json
 *.swp
 *.swo
 *~
 
 # Project-specific
 status/
-.status/
 config.py
 
 # Mac-specific
@@ -139,3 +139,18 @@ Desktop.ini
 schema_cache_test/
 hed_cache/
 **/remodel/summaries/*
+
+# Personal per-repo Claude Code notes (imports .status/local-environment.md)
+CLAUDE.local.md
+
+# Personal per-repo settings (absolute paths, claudeMdExcludes)
+.claude/settings.local.json
+
+# Real tokens and machine values; .env.example is the committed documentation
+.env
+
+# Working notes, plans, prompts, and decision records. Deliberately NOT
+# committed: these repos are public and .status/ holds half-formed thinking.
+# The consequence is that it lives on one machine only and is absent from
+# fresh clones and from `claude --worktree` worktrees.
+.status/

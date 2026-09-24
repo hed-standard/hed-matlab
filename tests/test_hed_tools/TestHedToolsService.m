@@ -12,12 +12,11 @@ classdef TestHedToolsService < matlab.unittest.TestCase
 
     methods (TestClassSetup)
         function setUp(testCase)
-            %testCase.hed = ...
-            %   HedToolsService('8.4.0', 'https://hedtools.org/hed');
+            testCase.hed = ...
+               HedToolsService('8.4.0', 'https://hedtools.org/hed');
             % testCase.hed = ...
             %    HedToolsService('8.4.0', 'https://hedtools.org/hed_dev');
-            testCase.hed = HedToolsService('8.4.0', 'http://192.168.0.24/hed');
-            
+
             [curDir, ~, ~] = fileparts(mfilename("fullpath"));
             dataPath = fullfile(curDir, filesep, '..', filesep, '..', ...
                 filesep, 'data', filesep);
@@ -83,11 +82,11 @@ classdef TestHedToolsService < matlab.unittest.TestCase
             data1_str = strjoin(annotations, '\n');
             testCase.verifyFalse(contains(data1_str, 'Unfamiliar-face-cond'));
 
-            % With context, no remove, no replace         
+            % With context, no remove, no replace
             annotations = testCase.hed.getHedAnnotations(eventsChar, ...
                 sidecarChar, 'removeTypes', false, ...
                 'includeContext', true, 'replaceDefs', false);
-            testCase.verifyEqual(length(annotations), 199);        
+            testCase.verifyEqual(length(annotations), 199);
             testCase.verifyGreaterThan(length(annotations{195}), 0);
             data2_str = strjoin(annotations, '\n');
             testCase.verifyGreaterThan(length(data2_str), length(data1_str));
@@ -107,7 +106,7 @@ classdef TestHedToolsService < matlab.unittest.TestCase
             testCase.verifyEqual(length(annotations), 199);
             data4_str = strjoin(annotations, '\n');
             testCase.verifyGreaterThan(length(data4_str), length(data3_str));
-        end   
+        end
 
         function testGetHedAnnotationsInvalid(testCase)
             events = fileread(testCase.goodEventsPath);
@@ -271,7 +270,7 @@ classdef TestHedToolsService < matlab.unittest.TestCase
         end
 
         function testSidecarValid(testCase)
-            % Valid char sidecar should not have errors 
+            % Valid char sidecar should not have errors
             sidecarChar = fileread(testCase.goodSidecarPath);
             testCase.verifyTrue(ischar(sidecarChar))
             issueString = testCase.hed.validateSidecar( ...
