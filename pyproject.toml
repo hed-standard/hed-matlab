@@ -83,6 +83,7 @@ ignore = [
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
+line-ending = "lf"
 
 [tool.typos.files]
 extend-exclude = [
